@@ -1,5 +1,5 @@
 <?php
-class BDautenticacion extends PDO {
+class bdCarritoCompras extends PDO {
   
     private $engine;
     private $host;
