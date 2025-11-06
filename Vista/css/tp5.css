@@ -1,0 +1,64 @@
+.tarjeta-pagina-segura {
+    background-color: #d4edda;
+    padding: 30px;
+    max-width: 400px;
+    margin: 100px auto;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.tarjeta-pagina-segura h1 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.tarjeta-pagina-segura p {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+/* Actualizar usuario */
+.form-actualizar-usuario .card {
+    width: 100%;
+    max-width: 500px; 
+    border-radius: 15px;
+    border: none;
+}
+
+.form-actualizar-usuario h2 {
+    font-weight: 600;
+    color: #333;
+}
+
+.form-actualizar-usuario .form-label {
+    font-weight: 500;
+    color: #444;
+}
+
+.form-actualizar-usuario .form-control {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.form-actualizar-usuario .btn-primary {
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #007bff, #0056d2);
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-actualizar-usuario .btn-primary:hover {
+    background: linear-gradient(90deg, #0056d2, #007bff);
+    transform: scale(1.02);
+}
+
+.form-actualizar-usuario main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}

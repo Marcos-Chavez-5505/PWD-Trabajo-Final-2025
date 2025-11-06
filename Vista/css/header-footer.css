@@ -1,0 +1,366 @@
+:root {
+    --color-cinder: #1E2B2F;
+    --color-cinder-darker: hsl(from var(--color-cinder) h s calc(l - 5));       /* RELATIVE COLORS */
+    --color-flame: #FF7F50;
+    --color-white-foam: #F4F2F1;
+
+    --color-creme-brulee: #DAD3C9;
+    --color-wood: #5D564D;
+    --color-stone: #272626;
+
+    --color-coffee-bean: #2E0D14;
+
+    --color-yellow-accent: hsl(from #f7b433 h s calc(l - 10));
+    --color-reddish-accent: #be5624;
+}
+.lightmode {
+    --color-cinder: #e3e7e9;
+    --color-cinder-darker: hsl(from var(--color-cinder) h s calc(l - 5));       /* RELATIVE COLORS */
+    --color-flame: #FF7F50;
+    --color-white-foam: #1E2B2F;
+
+    --color-creme-brulee: #252e31;
+    --color-wood: #5D564D;
+    --color-stone: #272626;
+
+    --color-coffee-bean: #2E0D14;
+
+    --color-yellow-accent: hsl(from #f7b433 h s calc(l - 10));
+    --color-reddish-accent: #be5624;
+}
+
+/* html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+} */
+header, footer {
+    font-family: 'Roboto', sans-serif !important;
+    color: var(--color-white-foam);
+}
+
+
+/*======================================== Header =======================================*/
+header {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;    /* para que se mantenga siempre en pantalla */
+    top: 0;
+    left: 0;
+
+    z-index: 1000;
+}
+/*=======================================================================================*/
+
+/*========================================= Body ========================================*/
+body {
+    background-color: var(--color-cinder-darker);
+    z-index: -1;
+    overflow-x: hidden;
+
+    /* orientación del contenido de la página */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* para incluir padding y borders en el cálculo del ancho */
+    min-height: 100vh;
+}
+/*=======================================================================================*/
+
+/*========================================= Main ========================================*/
+main {
+    width: 100%;
+    /* min-height: 100%; */
+    flex: 1;
+    margin-top: 50px; /* para que no quede tapado por el header (número arbitrario)*/
+    display: flex;
+    justify-content: center;
+}
+/*=======================================================================================*/
+
+/*=============================== Fondo granulado (body) ================================*/
+body:before {
+    content: "";
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 172px;
+    opacity: 0.11;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+
+    z-index: -999;
+}
+/*=======================================================================================*/
+
+/*======================================== Navbar =======================================*/
+h1 {
+    font-weight: bold;
+    font-size: 2rem;
+}
+nav {
+    background-color: var(--color-cinder);
+    width: 100%;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+    margin: 0;
+}
+nav ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+
+    position: relative;
+}
+nav ul li {
+    height: 50px;
+}
+nav ul li a {
+    height: 100%;
+    padding: 0 30px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: var(--color-white-foam);
+}
+nav ul li a i {
+    color: var(--color-white-foam);
+    font-size: inherit;
+}
+nav ul li a:hover, nav ul li a:active {
+    background-color: hsl(from var(--color-cinder) h s calc(l - 1.5));
+}
+nav li:first-child {
+    margin-right: auto;
+}
+nav button {
+    margin-right: 1rem;
+}
+/*=======================================================================================*/
+
+/*================================= Sidebar (Navbar x2) =================================*/
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0; /* cambiar a left */
+    height: 100%;
+    width: 300px;
+    z-index: 910;
+    background-color: var(--color-cinder);
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    
+    transition: transform 0.4s ease;
+    padding-top: 1.5rem;
+}
+.sidebar li {
+    width: 100%;
+}
+.sidebar a {
+    width: 100%;
+}
+#menuBtn {
+    display: none;
+}
+
+/*------------ sidebar escondida ------------*/
+.sidebar-hidden {
+    transform: translateX(100%);
+}
+/*-------------------------------------------*/
+/*-------------- menu button ---------------*/
+li#menuBtn {
+    align-items: center;
+    justify-content: center;
+    padding-right: 25px;
+    cursor: pointer;
+}
+li#menuBtn i {
+    font-size: 30px;
+}
+/*------------------------------------------*/
+
+div#container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100%;
+    width: 100%;
+}
+
+div#container .card{
+    height: 5rem;
+    width: 15rem;
+    padding: auto;
+    margin: .5rem;
+    border-radius: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.228);
+    transition: 200ms;
+    
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+
+    background-color: var(--color-reddish-accent);
+
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: bolder;
+
+    cursor: pointer;
+}
+div#container .card:hover{
+    translate: 0 -5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.228);
+}
+div#container .card i {
+    text-shadow: 0px 0px 10px var(--color-flame);
+}
+
+
+/*=======================================================================================*/
+
+/*=============================== Boton switch modo claro ===============================*/
+button.theme-switch {
+    background-color: hsl(from var(--color-cinder) h s calc(l - 5));
+    box-shadow: 0 1px 5px rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    height: 2.5rem;
+    width: 2.5rem;
+    font-size: 1.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* position: absolute;
+    right: 50%;
+    top: 50%;
+ */
+    cursor: pointer;
+}
+.theme-switch i:last-child {
+    display: none;
+}
+
+.lightmode .theme-switch {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.lightmode .theme-switch i:first-child {
+    display: none;
+}
+.lightmode .theme-switch i:last-child {
+    display: block;
+}
+/*=======================================================================================*/
+
+/*============================= Fondo oscuro sidebar activo =============================*/
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* oscuridad */
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+/*=======================================================================================*/
+
+
+
+/*======================================== Footer =======================================*/
+footer {
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+    background-color: var(--color-cinder-darker);
+    font-size: 1rem;
+    width: 100%;
+    text-align: center;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+}
+footer h3 {
+    border-bottom: var(--color-creme-brulee) solid 1px;
+    padding-bottom: 10px;
+}
+.footer-contactos a {
+    text-decoration: none;
+}
+.footer-contactos a:active, .footer-contactos a:hover {
+    color: var(--color-reddish-accent);
+}
+.footer-descripcion {
+    font-size: .9rem;    
+}
+.footer-contactos p {
+    margin-top: .1rem;
+    margin-bottom: .1rem;
+}
+.footer-contactos {
+    margin-bottom: 1rem;
+}
+/*=======================================================================================*/
+
+
+
+/*====================================== Responsive =====================================*/
+@media (max-width: 800px){      /* estos cambios surgen en móvil */
+    .hideOnMobile {
+        display: none;
+    }
+    
+    button.theme-switch {
+        position: absolute;
+        right: 5%;
+        bottom: 10%;
+    }
+    
+    footer {
+        flex-direction: column;
+    }
+    .footer-descripcion p {
+        color: var(--color-creme-brulee);
+    }
+}
+/*=======================================================================================*/
+#menuBtn {
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
