@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/tp5/rol.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/rol.php';
 
 class ControlRol {
 

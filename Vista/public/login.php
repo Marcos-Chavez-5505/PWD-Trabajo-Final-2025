@@ -1,7 +1,7 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/header.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/control/5/controlUsuario.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/control/session.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/control/5/controlUsuario.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/control/session.php';
 
 //tengo que cambiar los nombres de la bd usuario por que los nombre sson diferentes ahora :´v
 
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $session = new Session();
         $session->iniciar($usuario->getNombreUsuario(), $usuario->getPassword());
 
-        header('Location: /PWD/vista/privada/inicio.php');
+        header('Location: /PWD-TP-FINAL/vista/privada/inicio.php');
         exit();
     } else {
         $mensaje = 'Usuario o contraseña incorrectos';
@@ -47,4 +47,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>

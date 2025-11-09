@@ -1,6 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/header.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/conector/bdCarritoCompras.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/conector/bdCarritoCompras.php';
 
 $bd = new bdCarritoCompras();
 $productos = [];
@@ -45,4 +45,4 @@ if ($bd->Iniciar()) {
 <?php endforeach; ?>
 </div>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>

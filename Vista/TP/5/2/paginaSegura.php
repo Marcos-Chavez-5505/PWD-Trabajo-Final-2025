@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: /PWD/vista/login.php?error=Debes iniciar sesión");
+    header("Location: /PWD-TP-FINAL/vista/login.php?error=Debes iniciar sesión");
     exit();
 }
 ?>
@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <title>Página Segura</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/PWD/vista/css/tp5.css">
+    <link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tp5.css">
 </head>
 <body>
     <div class="tarjeta-pagina-segura">

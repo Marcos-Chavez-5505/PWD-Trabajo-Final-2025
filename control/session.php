@@ -21,7 +21,7 @@ class Session{
         $valido = false;
 
         if(isset($_SESSION['usuario']) && isset($_SESSION['pwd'])){
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/tp5/usuario.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
             $usuario = new Usuario();
 
             //se busca al usuario por el nombre
@@ -65,7 +65,7 @@ class Session{
         $rol = null;
 
         if($this->validar()){
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/tp5/usuario.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
             $usuario = new Usuario();
             $lista = $usuario->listar("nombreUsuario = '{$_SESSION['usuario']}'");
 

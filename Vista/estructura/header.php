@@ -23,9 +23,9 @@ if (session_status() === PHP_SESSION_NONE) {
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="/PWD/vista/public/index.php">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" href="/PWD/vista/public/contacto.php">Contacto</a></li>
-        <li class="nav-item"><a class="nav-link" href="/PWD/vista/public/login.php">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/vista/public/index.php">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/vista/public/contacto.php">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/vista/public/login.php">Login</a></li>
       </ul>
     </div>
   </div>

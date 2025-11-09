@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/conector/BDautenticacion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/conector/BDautenticacion.php';
 
 class Rol {
     private $idRol;

@@ -1,12 +1,12 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $controlUsuario = new ControlUsuario();
 $listaUsuarios = $controlUsuario->listarUsuarios();
 ?>
 
 <!DOCTYPE html>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/header.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php'; ?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -86,4 +86,4 @@ function confirmarEliminacion() {
 </body>
 </html>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>

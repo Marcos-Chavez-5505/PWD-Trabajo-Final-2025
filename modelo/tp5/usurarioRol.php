@@ -1,8 +1,8 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/conector/BDautenticacion.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/usuario.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/modelo/rol.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/conector/BDautenticacion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
 
 class UsuarioRol {
     private $idUsuarioRol;

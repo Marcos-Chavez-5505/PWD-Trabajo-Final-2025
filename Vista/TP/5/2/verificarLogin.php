@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 if (!isset($_POST['nombreUsuario'], $_POST['password'])) {
-    header("Location: /PWD/vista/TP/5/2/login.php?error=Faltan datos");
+    header("Location: /PWD-TP-FINAL/vista/TP/5/2/login.php?error=Faltan datos");
     exit();
 }
 
@@ -16,10 +16,10 @@ $usuario = $controlUsuario->autenticar($nombreUsuario, $password);
 
 if ($usuario) {
     $_SESSION['usuario'] = $usuario->getNombreUsuario();
-    header("Location: /PWD/vista/TP/5/2/paginaSegura.php");
+    header("Location: /PWD-TP-FINAL/vista/TP/5/2/paginaSegura.php");
     exit();
 } else {
-    header("Location: /PWD/vista/TP/5/2/login.php?error=Usuario o contraseña incorrectos");
+    header("Location: /PWD-TP-FINAL/vista/TP/5/2/login.php?error=Usuario o contraseña incorrectos");
     exit();
 }
 ?>

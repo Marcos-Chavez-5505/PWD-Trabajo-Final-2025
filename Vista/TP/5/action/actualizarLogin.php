@@ -1,11 +1,11 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $control = new ControlUsuario();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['idUsuario'])) {
-        header("Location: /PWD/vista/TP/5/2/listarUsuario.php");
+        header("Location: /PWD-TP-FINAL/vista/TP/5/2/listarUsuario.php");
         exit();
     }
 
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $usuario = $control->buscarUsuario($idUsuario);
 
     if (!$usuario) {
-        header("Location: /PWD/vista/TP/5/2/listarUsuario.php?error=Usuario no encontrado");
+        header("Location: /PWD-TP-FINAL/vista/TP/5/2/listarUsuario.php?error=Usuario no encontrado");
         exit();
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,22 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     ];
 
     if ($control->modificarUsuario($datos)) {
-        header("Location: /PWD/vista/TP/5/1/listarUsuarios.php?exito=Usuario actualizado correctamente");
+        header("Location: /PWD-TP-FINAL/vista/TP/5/1/listarUsuarios.php?exito=Usuario actualizado correctamente");
     } else {
-        header("Location: /PWD/vista/TP/5/1/listarUsuarios.php?error=No se pudo actualizar el usuario");
+        header("Location: /PWD-TP-FINAL/vista/TP/5/1/listarUsuarios.php?error=No se pudo actualizar el usuario");
     }
     exit();
 }
 ?>
 
 <!DOCTYPE html>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/header.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php'; ?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Actualizar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/PWD/vista/css/tp5.css">
+    <link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tp5.css">
 </head>
 <body>
 <main class="container py-5 my-5 form-actualizar-usuario">
@@ -99,4 +99,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 </body>
 </html>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>
