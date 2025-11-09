@@ -29,6 +29,21 @@ if (session_status() === PHP_SESSION_NONE) {
       </ul>
     </div>
   </div>
+  <div class="dropdown-center">
+    <button class="btn btn-secondary dropdown-toggle" 
+            type="button" 
+            data-bs-toggle="dropdown">
+        <nav class="navbar-toggler-icon"></nav>
+    </button>
+    
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">Opción 1</a></li>
+        <li><a class="dropdown-item" href="#">Opción 2</a></li>
+        <li><a class="dropdown-item" href="#">Opción 3</a></li>
+    </ul>
+</div>
 </nav>
 
 <div class="container mt-4">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
