@@ -1,36 +1,30 @@
 <?php
-//iniciamos la clase
-class Session{
-    //implementamos el metodo constructor
-    public function __construct(){
-        if (session_status() === PHP_SESSION_NONE);
-        session_start(); //creara una sesion si no estraba previamente iniciada
+class Session {
+
+    public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
-    //implementamos la funcion iniciar
-    //en $_SESSION se guardaran los datos del usuario que se logueo
-    public function iniciar($nombreUsuario, $constraseña){
-        $_SESSION['usuario'] = $nombreUsuario;
-        $_SESSION['constraseña'] = $constraseña;
-        $_SESSION['activa'] = true; //con true marcamos la sesion como activa
+    public function iniciar($idusuario, $usnombre, $uspass) {
+        $_SESSION['idusuario'] = $idusuario;
+        $_SESSION['usnombre'] = $usnombre;
+        $_SESSION['uspass'] = $uspass;
+        $_SESSION['activa'] = true;
     }
 
-    //implementamos la funcion de validar
-    //se verifica qur las variables de la sesion existan y que conincidadn con un usuario valido en la base 
-    public function validar(){
+    public function validar() {
         $valido = false;
 
-        if(isset($_SESSION['usuario']) && isset($_SESSION['pwd'])){
+        if (isset($_SESSION['usnombre']) && isset($_SESSION['uspass'])) {
             include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
             $usuario = new Usuario();
+            $lista = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
 
-            //se busca al usuario por el nombre
-            $lista = $usuario->listar("nombreUsuario = '{$_SESSION['usuario']}'");
-
-            if(count($lista) > 0){
+            if (count($lista) > 0) {
                 $objUsuario = $lista[0];
-                //se verifica que la contraseña
-                if($objUsuario->getPassword() === $_SESSION['contraseña']){
+                if ($objUsuario->getUspass() === $_SESSION['uspass']) {
                     $valido = true;
                 }
             }
@@ -39,50 +33,51 @@ class Session{
         return $valido;
     }
 
-    //implementamos la funcion activa
-    //devolvera true si la sesion esta activa, en caso contrario devolvera false
-    public function activa(){
+    public function activa() {
         $activa = false;
-        if(isset($_SESSION['activa']) && $_SESSION['activa'] === true){
+        if (isset($_SESSION['activa']) && $_SESSION['activa'] === true) {
             $activa = true;
         }
         return $activa;
     }
 
-    //implementamos el funcion getUsuario()
-    //que nos devolvera el nombre del usuario logeado
-    public function getUsuario(){
+    public function getUsuario() {
         $usuario = null;
-        if(isset($_SESSION['usuario'])){
-            $usuario = $_SESSION['usuario'];
+        if (isset($_SESSION['usnombre'])) {
+            $usuario = $_SESSION['usnombre'];
         }
         return $usuario;
     }
 
-    //implementamos el funcion getRol()
-    //que nos devolvera el rol del usuario logeado y que tambien este diponible
-    public function getRol(){
+    public function getRol() {
         $rol = null;
 
-        if($this->validar()){
+        if ($this->validar()) {
             include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
             $usuario = new Usuario();
-            $lista = $usuario->listar("nombreUsuario = '{$_SESSION['usuario']}'");
+            $lista = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
 
-            if(count($lista) > 0) {
+            if (count($lista) > 0) {
                 $objUsuario = $lista[0];
-                $rol = $objUsuario->getIdRol();
+                $rol = $objUsuario->getIdrol();
             }
         }
 
         return $rol;
     }
 
-    //implementamos la funcion cerrar
-    //que va a destruir la sesion actual
-    public function cerrar(){
-        session_unset();//limpia las variables
-        session_destroy();//destruye la sesion
+
+    public function getIdUsuario() {
+        $id = null;
+        if (isset($_SESSION['idusuario'])) {
+            $id = $_SESSION['idusuario'];
+        }
+        return $id;
+    }
+
+    public function cerrar() {
+        session_unset();
+        session_destroy();
         $_SESSION = [];
     }
 }

@@ -6,11 +6,13 @@
    * |  para que funcione header()             |
    * \-----------------------------------------/
    */
-  session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
   header('Content-Type: text/html; charset=utf-8');
   header("Cache-Control: no-cache, must-revalidate ");
   
-  $PROYECTO = 'PWD';
+  $PROYECTO = 'PWD-TP-FINAL';
   
   define('ROOT', $_SERVER['DOCUMENT_ROOT'] . "/$PROYECTO/");
   define('BASE_URL', "http://" . $_SERVER['HTTP_HOST'] . "/$PROYECTO/");
