@@ -54,17 +54,30 @@ class Session {
 
         if ($this->validar()) {
             include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
-            $usuario = new Usuario();
-            $lista = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuarioRol.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/rol.php';
 
-            if (count($lista) > 0) {
-                $objUsuario = $lista[0];
-                $rol = $objUsuario->getIdrol();
+            $usuario = new Usuario();
+            $listaUsuarios = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
+
+            if (count($listaUsuarios) > 0) {
+                $objUsuario = $listaUsuarios[0];
+                $idUsuario = $objUsuario->getIdusuario();
+
+                $usuarioRol = new UsuarioRol();
+                $listaRoles = $usuarioRol->listar("idUsuario = {$idUsuario}");
+
+                if (count($listaRoles) > 0) {
+                    $objUsuarioRol = $listaRoles[0];
+                    $objRol = $objUsuarioRol->getObjRol();
+                    $rol = $objRol->getDescripcionRol();
+                }
             }
         }
 
         return $rol;
     }
+
 
 
     public function getIdUsuario() {

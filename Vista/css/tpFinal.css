@@ -1,9 +1,59 @@
+/* =========================================
+   PALETA Y REDEFINICIÓN DE BOOTSTRAP
+========================================= */
+
+:root {
+  --bs-primary: #EF360A;
+  --bs-primary-rgb: 239, 54, 10;
+}
+
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+}
+
+.btn-primary:hover {
+  background-color: #cc3b00 !important;
+  border-color: #cc3b00 !important;
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 0.25rem rgba(239, 54, 10, 0.25) !important;
+}
+
+.form-control:focus {
+  border-color: #EF360A !important;
+  box-shadow: 0 0 0 0.25rem rgba(239, 54, 10, 0.25) !important;
+}
+
+.input-group-text {
+  color: #EF360A !important;
+}
+
+
+/* =========================================
+   ESTILO GENERAL DEL SITIO
+========================================= */
 
 body {
   background-color: #f8f9fa;
   font-family: 'Segoe UI', Roboto, sans-serif;
   color: #333;
 }
+
+h1, h2, h3 {
+  color: #EF360A;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   BARRA DE NAVEGACIÓN
+========================================= */
 
 .navbar {
   background-color: #111;
@@ -16,7 +66,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background-color 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .navbar-brand:hover {
@@ -26,65 +76,115 @@ body {
 .navbar .nav-link {
   color: #ddd !important;
   margin-left: 1rem;
+  transition: color 0.3s ease;
 }
 
 .navbar .nav-link:hover {
   color: #EF360A !important;
 }
 
-h1, h2 {
-  color: #EF360A;
-  font-weight: 700;
-  text-shadow: 0 0 2px #fff;
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 75vh;
 }
 
-.card {
+.login-card {
+  background-color: #fff;
   border: 2px solid #EF360A;
   border-radius: 15px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  text-align: center;
 }
 
-.card:hover {
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+.login-header {
+  margin-bottom: 1.5rem;
 }
 
-.card img {
-  padding: 20px;
-  height: 200px;
-  object-fit: contain;
+.login-icon {
+  font-size: 3rem;
+  color: #EF360A;
 }
 
-.card-title {
-  font-weight: 600;
+.login-header h2 {
   color: #111;
+  font-weight: 700;
+  margin-top: 0.5rem;
 }
 
-.card-text {
+.login-header p {
   color: #555;
   font-size: 0.95rem;
-  min-height: 50px;
 }
 
-.btn-compra {
-  background-color: #EF360A;
+.login-body label {
+  font-weight: 500;
+  color: #333;
+}
+
+.input-group-text {
+  border: 1px solid #EF360A;
+}
+
+.input-group .form-control {
+  border: 1px solid #EF360A;
+  box-shadow: none;
+}
+
+.input-group .form-control:focus {
+  border-color: #cc3b00;
+  box-shadow: 0 0 4px rgba(239, 54, 10, 0.3);
+}
+
+.btn-login {
+  background-color: #EF360A !important;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
   border-radius: 25px;
+  border: none;
   transition: background-color 0.3s ease;
 }
 
-.btn-compra:hover {
-  background-color: #cc3b00;
+.btn-login:hover {
+  background-color: #cc3b00 !important;
   color: #fff;
 }
 
-.btn-compra i {
-  margin-right: 5px;
+.forgot-link {
+  color: #EF360A !important;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-/* ======== PIE DE PÁGINA ======== */
+.forgot-link:hover {
+  text-decoration: underline;
+  color: #cc3b00;
+}
+
+.alert {
+  border-radius: 10px;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+}
+
+
+/* =========================================
+   PIE DE PÁGINA
+========================================= */
+
 footer {
   background-color: #111;
   color: #ccc;
   font-size: 0.9rem;
+  padding: 1rem 0;
+  text-align: center;
 }

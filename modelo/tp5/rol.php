@@ -70,11 +70,11 @@ class Rol {
         $resultado = false;
 
         if ($baseDatos->Iniciar()) {
-            $sql = "SELECT * FROM rol WHERE idRol = {$idRol}";
+            $sql = "SELECT * FROM rol WHERE idrol = {$idRol}";
             if ($baseDatos->Ejecutar($sql) > 0) {
                 $fila = $baseDatos->Registro();
-                $this->idRol = $fila['idRol'];
-                $this->descripcionRol = $fila['descripcionRol'];
+                $this->idRol = $fila['idrol'];
+                $this->descripcionRol = $fila['rodescripcion'];
                 $resultado = true;
             }
         }
