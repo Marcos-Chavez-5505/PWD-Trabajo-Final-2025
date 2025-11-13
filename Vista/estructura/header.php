@@ -43,7 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/index.php">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/contacto.php">Contacto</a></li>
-        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/login.php">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/perfil.php">Perfil</a></li>
       </ul>
     </div>
   </div>
