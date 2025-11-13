@@ -1,11 +1,11 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $session = new Session();
 
 if (!$session->activa() || !$session->validar()) {
-    header('Location: /PWD-TP-FINAL/vista/public/perfil.php');
+    header('Location: /PWD-TP-FINAL/Vista/public/perfil.php');
     exit();
 }
 
@@ -16,7 +16,7 @@ $usuarioRol = trim(strtolower((string)$usuarioRolRaw));
 $currentScript = basename($_SERVER['SCRIPT_NAME']);
 
 if ($usuarioRol === 'cliente' && $currentScript !== 'cliente.php') {
-    header('Location: /PWD-TP-FINAL/vista/public/index.php');
+    header('Location: /PWD-TP-FINAL/Vista/public/index.php');
     exit();
 }
 ?>
@@ -31,16 +31,16 @@ if ($usuarioRol === 'cliente' && $currentScript !== 'cliente.php') {
 
         <div class="row text-center mt-4">
             <div class="col-md-3">
-                <a href="/PWD-TP-FINAL/vista/admin/usuarios.php" class="btn btn-dark w-100 mb-3">Gestionar Usuarios</a>
+                <a href="/PWD-TP-FINAL/Vista/admin/usuarios.php" class="btn btn-dark w-100 mb-3">Gestionar Usuarios</a>
             </div>
             <div class="col-md-3">
-                <a href="/PWD-TP-FINAL/vista/admin/roles.php" class="btn btn-dark w-100 mb-3">Gestionar Roles</a>
+                <a href="/PWD-TP-FINAL/Vista/admin/roles.php" class="btn btn-dark w-100 mb-3">Gestionar Roles</a>
             </div>
             <div class="col-md-3">
-                <a href="/PWD-TP-FINAL/vista/admin/menu.php" class="btn btn-dark w-100 mb-3">Gestionar Menú</a>
+                <a href="/PWD-TP-FINAL/Vista/admin/menu.php" class="btn btn-dark w-100 mb-3">Gestionar Menú</a>
             </div>
             <div class="col-md-3">
-                <a href="/PWD-TP-FINAL/vista/admin/productos.php" class="btn btn-dark w-100 mb-3">Gestionar Productos</a>
+                <a href="/PWD-TP-FINAL/Vista/admin/productos.php" class="btn btn-dark w-100 mb-3">Gestionar Productos</a>
             </div>
         </div>
     <?php endif; ?>
@@ -50,4 +50,4 @@ if ($usuarioRol === 'cliente' && $currentScript !== 'cliente.php') {
     </div>
 </div>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>

@@ -1,88 +1,45 @@
 <?php
-/**
- * La función spl_autoload_register es PHP, se usa para registrar funciones o métodos que
- * cargan automáticamente clases o interfaces cuando se intenta usarlas y aún no fueron
- * incluídas.
- * Ejemplo:
- * $obj = new Usuario();
- * esto usa automáticamente 'Usuario' como $clase
-*/
-spl_autoload_register(function ($clase){
-  //echo "Se cargó la clase: ".$clase;
-  $directories = array(
-    ROOT . '/modelo/',
-    ROOT . '/modelo/conector/',
-    ROOT . '/control/',
-    ROOT
-  );
-  $modelo = ['conector', 'tp4', 'tp5'];
+spl_autoload_register(function ($clase) {
+    echo "🎯 PHP está buscando la clase: '" . $clase . "'\n";
 
-  // //print_r($directories);
-  // foreach($directories as $i=>$directory){
-  //   if(file_exists($directory . $clase . '.php')) {
-  //     //echo "se incluyó ".$directory. $class_name . '.php';
-  //     require_once($directory . $clase . '.php');
-  //     return;
-  //   }
-  //   if ($i == 2){
-  //     for ($j=1; $j<10; $j++){
-  //       if(file_exists($directory . $j . '/' . $clase . '.php')) {
-  //         require_once($directory . $j . '/' . $clase . '.php');
-  //         return;
-  //       }
-  //     }
-  //   }
-  //   if ($i == 0){
-  //     $max = count($modelo);
-  //     for ($j=0; $j<$max; $j++){
-  //       if(file_exists($directory . $modelo[$j] . '/' . $clase . '.php')) {
-  //         require_once($directory . $modelo[$j] . '/' . $clase . '.php');
-  //         return;
-  //       }
-  //     }
-  //   }
-  // }
-  
-  //print_r($directories);
-  $bandera = false;
-  $i = 0;
-  $max = count($directories);
-  while (!$bandera && $i<$max){
-    $directory = $directories[$i];
+    $rutas = [
+        //*MODELO CASE SENSITIVE
+        ROOT . 'modelo/' . $clase . '.php',
+        ROOT . 'modelo/conector/' . $clase . '.php',
+        //*MODELO CASE INSENSITIVE
+        ROOT . 'modelo/conector/' . strtolower($clase) . '.php',
+        ROOT . 'modelo/' . strtolower($clase) . '.php',
 
-    if(file_exists($directory . $clase . '.php')) {
-      //echo "se incluyó ".$directory. $class_name . '.php';
-      require_once($directory . $clase . '.php');
-      $bandera = true;
-    }
+        //*CONTROL CASE SENSITIVE
+        ROOT . 'control/' . $clase . '.php',
+        //*CONTROL CASE INSENSITIVE
+        ROOT . 'control/' . strtolower($clase) . '.php',
 
-    if ($i==2){  // /control
-      $j = 1;
-      $jmax = 10; // número mágico
-      while (!$bandera && $j<$jmax){
-        if(file_exists($directory . $j . '/' . $clase . '.php')) {
-          require_once($directory . $j . '/' . $clase . '.php');
-          $bandera = true;
+        ROOT . 'util/' . strtolower($clase) . '.php',
+        
+    ];
+    
+    $encontrado = false;
+    
+    foreach ($rutas as $ruta) {
+        if (!$encontrado) {
+            echo "  🔍 Probando ruta: " . $ruta . "\n";
+            
+            if (file_exists($ruta)) {
+                echo "  ✅ ENCONTRADO! Cargando: " . $ruta . "\n";
+                require_once $ruta;
+                $encontrado = true;
+            } else {
+                echo "  ❌ No existe\n";
+            }
         }
-        $j++;
-      }
     }
-
-    if ($i==0){  // /modelo
-      $j = 0;
-      $maxModelos = count($modelo);
-      while (!$bandera && $j<$maxModelos){
-        if(file_exists($directory . $modelo[$j] . '/' . $clase . '.php')) {
-          require_once($directory . $modelo[$j] . '/' . $clase . '.php');
-          $bandera = true;
-        }
-        $j++;
-      }
+    
+    if (!$encontrado) {
+        echo "🚨 ERROR: No se encontró la clase '" . $clase . "'\n";
     }
-
-    $i++;
-  }
-  return;
+    
+    echo "----------------------------------------\n";
 });
 
 function verEstructura($e){

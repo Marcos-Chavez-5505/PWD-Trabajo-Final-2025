@@ -1,4 +1,4 @@
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php'; ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -15,7 +15,7 @@
         <h3 class="text-center mb-4">Iniciar Sesión</h3>
 
         <!-- FORMULARIO -->
-        <form id="loginForm" action="/PWD-TP-FINAL/vista/TP/5/2/verificarLogin.php" method="post" novalidate>
+        <form id="loginForm" action="/PWD-TP-FINAL/Vista/verificarLogin.php" method="post" novalidate>
             <div class="mb-3">
                 <label for="usuario" class="form-label">Usuario:</label>
                 <input type="text" name="nombreUsuario" id="usuario" class="form-control" required>
@@ -45,4 +45,4 @@
 </body>
 </html>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>

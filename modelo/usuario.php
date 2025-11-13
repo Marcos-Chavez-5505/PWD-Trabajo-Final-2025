@@ -1,113 +1,116 @@
-CREATE TABLE usuario (
-    idusuario BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-    usnombre VARCHAR(50),
-    uspass INT(11),
-    usmail VARCHAR(50),
-    usdeshabilitado TIMESTAMP NULL
-);
-
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/conector/BDautenticacion.php';
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
-class Usuario{
-    private $objPdo;
+class Usuario {
     private $idusuario;
     private $usnombre;
     private $uspass;
     private $usmail;
     private $usdeshabilitado;
+    private $objBaseDatos;
 
-    // === Getters & Setters ===
+    public function __construct($objBaseDatos = null) {
+        $this->idusuario = null;
+        $this->usnombre = "";
+        $this->uspass = "";
+        $this->usmail = "";
+        $this->usdeshabilitado = null;
+        $this->objBaseDatos = $objBaseDatos ?? new BDautenticacion();
+    }
+
     public function getIdusuario() { return $this->idusuario; }
-    public function setIdusuario($v) { $this->idusuario = $idusuario; }
-
     public function getUsnombre() { return $this->usnombre; }
-    public function setUsnombre($v) { $this->usnombre = $usnombre; }
-
     public function getUspass() { return $this->uspass; }
-    public function setUspass($v) { $this->uspass = $uspass; }
-
     public function getUsmail() { return $this->usmail; }
-    public function setUsmail($v) { $this->usmail = $usmail; }
-
     public function getUsdeshabilitado() { return $this->usdeshabilitado; }
-    public function setUsdeshabilitado($v) { $this->usdeshabilitado = $usdeshabilitado; }
 
-    public function __construct() {
-        $this->objPdo = new bdCarritoCompras();
-    }
+    public function setIdusuario($idusuario) { $this->idusuario = $idusuario; }
+    public function setUsnombre($usnombre) { $this->usnombre = $usnombre; }
+    public function setUspass($uspass) { $this->uspass = $uspass; }
+    public function setUsmail($usmail) { $this->usmail = $usmail; }
+    public function setUsdeshabilitado($usdeshabilitado) { $this->usdeshabilitado = $usdeshabilitado; }
 
-    // Insertar Usuario
     public function insertar() {
-        $rta = false;
-        if ($this->objPdo->Iniciar()) {
-            $deshab = $this->getUsdeshabilitado() ? "'{$this->getUsdeshabilitado()}'" : "NULL";
+        $baseDatos = new BDautenticacion();
+        $resultado = false;
+        if ($baseDatos->Iniciar()) {
             $sql = "INSERT INTO usuario (usnombre, uspass, usmail, usdeshabilitado)
-                    VALUES ('{$this->getUsnombre()}', '{$this->getUspass()}', '{$this->getUsmail()}', $deshab)";
-            $rta = $this->objPdo->Ejecutar($sql);
+                    VALUES ('{$this->usnombre}', '{$this->uspass}', '{$this->usmail}', NULL)";
+            $idInsertado = $baseDatos->Ejecutar($sql);
+            if ($idInsertado != -1) {
+                $this->idusuario = $idInsertado;
+                $resultado = true;
+            }
         }
-        return $rta;
+        return $resultado;
     }
 
-    // Modificar Usuario
     public function modificar() {
-        $rta = false;
-        if ($this->objPdo->Iniciar()) {
-            $deshab = $this->getUsdeshabilitado() ? "'{$this->getUsdeshabilitado()}'" : "NULL";
+        $baseDatos = new BDautenticacion();
+        $resultado = false;
+        if ($baseDatos->Iniciar()) {
             $sql = "UPDATE usuario SET 
-                        usnombre = '{$this->getUsnombre()}',
-                        uspass = '{$this->getUspass()}',
-                        usmail = '{$this->getUsmail()}',
-                        usdeshabilitado = $deshab
-                    WHERE idusuario = {$this->getIdusuario()}";
-            $rta = $this->objPdo->Ejecutar($sql);
+                        usnombre = '{$this->usnombre}',
+                        uspass = '{$this->uspass}',
+                        usmail = '{$this->usmail}',
+                        usdeshabilitado = " . ($this->usdeshabilitado ? "'{$this->usdeshabilitado}'" : "NULL") . "
+                    WHERE idusuario = {$this->idusuario}";
+            if ($baseDatos->Ejecutar($sql) >= 0) {
+                $resultado = true;
+            }
         }
-        return $rta;
+        return $resultado;
     }
 
-    // Borrado lógico 
-    public function deshabilitar() {
-        $rta = false;
-        if ($this->objPdo->Iniciar()) {
-            $sql = "UPDATE usuario SET usdeshabilitado = CURRENT_TIMESTAMP 
-                    WHERE idusuario = {$this->getIdusuario()}";
-            $rta = $this->objPdo->Ejecutar($sql);
+    public function borradoLogico() {
+        $baseDatos = new BDautenticacion();
+        $resultado = false;
+        if ($baseDatos->Iniciar()) {
+            $sql = "UPDATE usuario SET usdeshabilitado = CURRENT_TIMESTAMP WHERE idusuario = {$this->idusuario}";
+            if ($baseDatos->Ejecutar($sql) >= 0) {
+                $resultado = true;
+            }
         }
-        return $rta;
+        return $resultado;
     }
 
-    // Habilitar
-    public function habilitar() {
-        $rta = false;
-        if ($this->objPdo->Iniciar()) {
-            $sql = "UPDATE usuario SET usdeshabilitado = NULL 
-                    WHERE idusuario = {$this->getIdusuario()}";
-            $rta = $this->objPdo->Ejecutar($sql);
+    public function buscar($idusuario) {
+        $baseDatos = new BDautenticacion();
+        $resultado = false;
+        if ($baseDatos->Iniciar()) {
+            $sql = "SELECT * FROM usuario WHERE idusuario = {$idusuario}";
+            if ($baseDatos->Ejecutar($sql) > 0) {
+                $fila = $baseDatos->Registro();
+                $this->idusuario = $fila['idusuario'];
+                $this->usnombre = $fila['usnombre'];
+                $this->uspass = $fila['uspass'];
+                $this->usmail = $fila['usmail'];
+                $this->usdeshabilitado = $fila['usdeshabilitado'];
+                $resultado = true;
+            }
         }
-        return $rta;
+        return $resultado;
     }
 
-    // Listar
     public function listar($condicion = "") {
-        $arreglo = [];
-        if ($this->objPdo->Iniciar()) {
-            $sql = "SELECT * FROM usuario";
-            if ($condicion !== "") {
-                $sql .= " WHERE " . $condicion;
-            }
-            $result = $this->objPdo->Ejecutar($sql);
+        $listaUsuarios = [];
+        $baseDatos = new BDautenticacion();
+        $sql = "SELECT * FROM usuario";
 
-            if ($result) {
-                foreach ($result as $row) {
-                    $obj = new Usuario();
-                    $obj->cargarDesdeArray($row);
-                    $arreglo[] = $obj;
-                }
+        if ($condicion != "") {
+            $sql .= " WHERE " . $condicion;
+        }
+
+        if ($baseDatos->Iniciar() && $baseDatos->Ejecutar($sql) > 0) {
+            while ($filaUsuario = $baseDatos->Registro()) {
+                $usuario = new Usuario();
+                $usuario->buscar($filaUsuario['idusuario']);
+                $listaUsuarios[] = $usuario;
             }
         }
-        return $arreglo;
+
+        return $listaUsuarios;
     }
 
 }
 ?>
-

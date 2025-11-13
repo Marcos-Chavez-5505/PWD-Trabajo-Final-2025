@@ -1,7 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/control/Session.php';
 
 $session = new Session();
 $usuario = $session->activa() ? $session->getUsuario() : null;
@@ -67,7 +66,7 @@ if ($bd->Iniciar()) {
                         <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars($p['prodetalle']); ?></p>
                         <p><strong>Precio:</strong> $<?php echo number_format($p['proprecio'], 2); ?></p>
                         <p><strong>Stock:</strong> <?php echo (int)$p['procantstock']; ?></p>
-                        <a href="#" class="btn btn-compra mt-auto w-100">
+                        <a href="#" class="btn btn-compra mt-auto w-100" style="background-color: #ee370a;">
                             <i class="bi bi-cart-fill"></i> Agregar al carrito
                         </a>
                     </div>

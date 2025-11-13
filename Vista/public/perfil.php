@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/header.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $session = new Session();
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario->getUsnombre(),
             $usuario->getUspass()
         );
-        header('Location: /PWD-TP-FINAL/vista/public/index.php');
+        header('Location: /PWD-TP-FINAL/Vista/public/index.php');
         exit();
     } else {
         $mensaje = 'Usuario o contraseña incorrectos';
@@ -39,7 +39,7 @@ if ($session->activa() && $session->validar()) {
 <title>Perfil</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tpFinal.css">
+<link rel="stylesheet" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 </head>
 
 <body class="bg-light">
@@ -100,7 +100,7 @@ if ($session->activa() && $session->validar()) {
                   <p class="text-muted mb-0"><?= htmlspecialchars($usuario->getUsmail()) ?></p>
                 </div>
               </div>
-              <a href="/PWD-TP-FINAL/vista/private/editarPerfil.php" class="btn btn-outline-primary w-100">
+              <a href="/PWD-TP-FINAL/Vista/private/editarPerfil.php" class="btn btn-outline-primary w-100">
                 <i class="bi bi-pencil-square me-2"></i>Modificar mis datos
               </a>
             </div>
@@ -116,7 +116,7 @@ if ($session->activa() && $session->validar()) {
           </div>
 
           <div class="text-center mt-4">
-            <a href="/PWD-TP-FINAL/vista/private/logout.php" class="btn btn-outline-danger w-50">
+            <a href="/PWD-TP-FINAL/Vista/private/logout.php" class="btn btn-outline-danger w-50">
               <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
             </a>
           </div>
@@ -126,7 +126,7 @@ if ($session->activa() && $session->validar()) {
   <?php endif; ?>
 </main>
 
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/vista/estructura/footer.php'; ?>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

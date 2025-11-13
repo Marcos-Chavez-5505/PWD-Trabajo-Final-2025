@@ -1,5 +1,5 @@
 <?php
-class Session {
+class session {
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
@@ -18,7 +18,7 @@ class Session {
         $valido = false;
 
         if (isset($_SESSION['usnombre']) && isset($_SESSION['uspass'])) {
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
             $usuario = new Usuario();
             $lista = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
 
@@ -53,9 +53,9 @@ class Session {
         $rol = null;
 
         if ($this->validar()) {
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuario.php';
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/usuarioRol.php';
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/tp5/rol.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
 
             $usuario = new Usuario();
             $listaUsuarios = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
