@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($rol === "admin") {
-            header('Location: /PWD-TP-FINAL/vista/admin/listarUsuarios.php');
+            header('Location: /PWD-TP-FINAL/Vista/admin/listarUsuarios.php');
         } else {
-            header('Location: /PWD-TP-FINAL/vista/public/index.php');
+            header('Location: /PWD-TP-FINAL/Vista/public/index.php');
         }
         exit();
     } else {
