@@ -1,78 +1,82 @@
-CREATE TABLE menurol (
-    idmenu BIGINT(20) NOT NULL,
-    idrol BIGINT(20) NOT NULL,
-    PRIMARY KEY (idmenu, idrol),
-    FOREIGN KEY (idmenu) REFERENCES menu(idmenu),
-    FOREIGN KEY (idrol) REFERENCES rol(idrol)
-);
-
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
 
 class menuRol{
+    private $objMenu;
+    private $objRol;
     private $objPdo;
-    private $idmenu;
-    private $idrol;
 
     // Getters y Setters
-    public function getIdmenu() { return $this->idmenu; }
-    public function setIdmenu($v) { $this->idmenu = $idmenu; }
+    public function getObjMenu() { return $this->objMenu; }
+    public function setObjMenu($v) { $this->objMenu = $v; }
 
-    public function getIdrol() { return $this->idrol; }
-    public function setIdrol($v) { $this->idrol = $idrol; }
+    public function getObjRol() { return $this->objRol; }
+    public function setObjRol($v) { $this->objRol = $v; }
 
     //Construct
     public function __construct() {
         $this->objPdo = new bdCarritoCompras();
     }
 
-    // Cargar desde BD
-    private function cargarDesdeArray($row) {
-        $this->setIdmenu($row['idmenu']);
-        $this->setIdrol($row['idrol']);
-    }
-
-    // Insertar relación
+    // Insertar
     public function insertar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
+            $idmenu = $this->getObjMenu()->getIdmenu() ?? NULL;
+            $idrol = $this->getObjRol()->getIdrol() ?? NULL;
             $sql = "INSERT INTO menurol (idmenu, idrol)
-                    VALUES ({$this->getIdmenu()}, {$this->getIdrol()})";
+                    VALUES ({$idmenu}, {$idrol})";
             $rta = $this->objPdo->Ejecutar($sql);
         }
         return $rta;
     }
 
-    // Eliminar relación
-    public function eliminar() {
-        $rta = false;
-        if ($this->objPdo->Iniciar()) {
-            $sql = "DELETE FROM menurol 
-                    WHERE idmenu = {$this->getIdmenu()} 
-                    AND idrol = {$this->getIdrol()}";
-            $rta = $this->objPdo->Ejecutar($sql);
-        }
-        return $rta;
-    }
-
-    // Listar relaciones (devuelve array de objetos)
+    // Listar
     public function listar($condicion = "") {
         $arreglo = [];
+
         if ($this->objPdo->Iniciar()) {
             $sql = "SELECT * FROM menurol";
-            if ($condicion != "") {
+            if ($condicion !== "") {
                 $sql .= " WHERE " . $condicion;
             }
-            $result = $this->objPdo->Ejecutar($sql);
+            $this->objPdo->Ejecutar($sql);
 
-            foreach ($result as $row) {
-                $obj = new MenuRol();
-                $obj->cargarDesdeArray($row);
-                $arreglo[] = $obj;
+            $filas = $this->objPdo->getFilas();
+            if (!empty($filas)) {
+
+                foreach ($filas as $fila) {
+                    $obj = new MenuRol();
+                    $res = $obj->buscar($fila['idmenurol']);
+
+                    if ($res) $arreglo[] = $obj;
+                }
             }
         }
         return $arreglo;
+    }
+
+    public function cargar($objMenu, $objRol){
+        $this->setObjMenu($objMenu);
+        $this->setObjRol($objRol);
+    }
+
+    public function buscar($id) {
+        $resultado = false;
+        if ($this->objPdo->Iniciar()) {
+            $this->objPdo->Ejecutar("SELECT * FROM menurol WHERE idmenu = {$id} OR idrol = {$id}");
+            $filas = $this->objPdo->getFilas();
+            if (!empty($filas)) {
+                $fila = $filas[0];
+                $this->cargar(
+                    $fila['idmenu'],
+                    $fila['idrol'],
+                );
+                $resultado = true;
+            }
+        }
+        return $resultado;
     }
 
 }
