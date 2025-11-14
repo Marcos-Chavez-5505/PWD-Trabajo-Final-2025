@@ -3,7 +3,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $session = new Session();
-$usuario = $session->activa() ? $session->getUsuario() : null;
+
+//con esta seccion obtenemos la informacion del usuario desde la session
+$usuarioActivo = $session->activa();
+$nombreUsuario = $usuarioActivo ? $session->getUsuario() : null;//si hay un usuario logueado, se guardara el nombre
+$rolUsuario = $usuarioActivo ? $session->getRol() : null; // si hay seecion activa, se obtiene el rol (admin / cliente)
 
 $bd = new bdCarritoCompras();
 $productos = [];
@@ -32,12 +36,17 @@ if ($bd->Iniciar()) {
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
     <div class="ms-auto">
-        <?php if ($usuario): ?>
+        <?php if ($usuarioActivo): ?>
             <div class="dropdown">
                 <a class="btn btn-outline-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($usuario); ?>
+                    <i class="bi bi-person-circle"></i> <?= htmlspecialchars($nombreUsuario); ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
+                    <?php if ($rolUsuario === "admin"): ?>
+                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/panelAdmin.php">Panel Admin</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                    <?php endif; ?>
+
                     <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/perfil.php">Editar cuenta</a></li>
                     <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/private/logout.php">Cerrar sesión</a></li>
                 </ul>
@@ -57,18 +66,32 @@ if ($bd->Iniciar()) {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm product-card">
                     <?php if (!empty($p['proimagen'])): ?>
-                        <img src="../image/<?php echo htmlspecialchars($p['proimagen']); ?>" class="card-img-top" alt="Imagen del producto">
+                        <img src="../image/<?= htmlspecialchars($p['proimagen']); ?>" 
+                             class="card-img-top" alt="Imagen del producto">
                     <?php else: ?>
-                        <img src="https://via.placeholder.com/300x200.png?text=Sin+Imagen" class="card-img-top" alt="Sin imagen">
+                        <img src="https://via.placeholder.com/300x200.png?text=Sin+Imagen" 
+                             class="card-img-top" alt="Sin imagen">
                     <?php endif; ?>
                     <div class="card-body d-flex flex-column">
-                        <h5  class="card-title product-title"><?php echo htmlspecialchars($p['pronombre']); ?></h5>
-                        <p class="card-text text-muted flex-grow-1 product-description"><?php echo htmlspecialchars($p['prodetalle']); ?></p>
-                        <p class="product-price"><strong>Precio:</strong> $<?php echo number_format($p['proprecio'], 2); ?></p>
-                        <p class="product-stock"><strong>Stock:</strong> <?php echo (int)$p['procantstock']; ?></p>
-                        <a href="#" class="btn btn-compra mt-auto w-100">
-                            <i class="bi bi-cart-fill"></i> Agregar al carrito
-                        </a>
+                        <h5 class="card-title product-title"><?= htmlspecialchars($p['pronombre']); ?></h5>
+
+                        <p class="card-text text-muted flex-grow-1 product-description">
+                            <?= htmlspecialchars($p['prodetalle']); ?>
+                        </p>
+
+                        <p class="product-price"><strong>Precio:</strong> $<?= number_format($p['proprecio'], 2); ?></p>
+                        <p class="product-stock"><strong>Stock:</strong> <?= (int)$p['procantstock']; ?></p>
+
+                        <?php if ($usuarioActivo): ?>
+                            <a href="/PWD-TP-FINAL/Vista/acciones/agregarCarrito.php?id=<?= $p['idproducto']; ?>"
+                               class="btn btn-compra mt-auto w-100">
+                                <i class="bi bi-cart-fill"></i> Agregar al carrito
+                            </a>
+                        <?php else: ?>
+                            <a class="btn btn-secondary mt-auto w-100 disabled">
+                                Inicia sesión para comprar
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
