@@ -177,6 +177,71 @@ h1, h2, h3 {
 }
 
 
+
+/* =========================================
+   TARJETAS DE PRODUCTOS
+========================================= */
+
+.product-card {
+  border: 2px solid #EF360A22; /* leve borde con el color primario */
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background-color: #fff;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border-color: #EF360A55;
+}
+
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;       
+  padding: 10px;             
+}
+
+.product-card .product-title {
+  color: #111;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.product-card .product-description {
+  color: #555;
+  font-size: 0.95rem;
+  min-height: 60px;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #EF360A;
+}
+
+.product-stock {
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-compra {
+  background-color: #EF360A;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background-color 0.25s ease;
+  border: none;
+}
+
+.btn-compra:hover {
+  background-color: #cc3b00;
+  color: #fff;
+}
+
+
+
 /* =========================================
    PIE DE PÁGINA
 ========================================= */

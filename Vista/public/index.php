@@ -26,7 +26,7 @@ if ($bd->Iniciar()) {
     <title>Productos Disponibles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
+    <link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tpFinal.css">
 </head>
 <body>
 
@@ -55,18 +55,18 @@ if ($bd->Iniciar()) {
     <div class="row">
         <?php foreach ($productos as $p): ?>
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
+                <div class="card h-100 shadow-sm product-card">
                     <?php if (!empty($p['proimagen'])): ?>
                         <img src="../image/<?php echo htmlspecialchars($p['proimagen']); ?>" class="card-img-top" alt="Imagen del producto">
                     <?php else: ?>
                         <img src="https://via.placeholder.com/300x200.png?text=Sin+Imagen" class="card-img-top" alt="Sin imagen">
                     <?php endif; ?>
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title"><?php echo htmlspecialchars($p['pronombre']); ?></h5>
-                        <p class="card-text text-muted flex-grow-1"><?php echo htmlspecialchars($p['prodetalle']); ?></p>
-                        <p><strong>Precio:</strong> $<?php echo number_format($p['proprecio'], 2); ?></p>
-                        <p><strong>Stock:</strong> <?php echo (int)$p['procantstock']; ?></p>
-                        <a href="#" class="btn btn-compra mt-auto w-100" style="background-color: #ee370a;">
+                        <h5  class="card-title product-title"><?php echo htmlspecialchars($p['pronombre']); ?></h5>
+                        <p class="card-text text-muted flex-grow-1 product-description"><?php echo htmlspecialchars($p['prodetalle']); ?></p>
+                        <p class="product-price"><strong>Precio:</strong> $<?php echo number_format($p['proprecio'], 2); ?></p>
+                        <p class="product-stock"><strong>Stock:</strong> <?php echo (int)$p['procantstock']; ?></p>
+                        <a href="#" class="btn btn-compra mt-auto w-100">
                             <i class="bi bi-cart-fill"></i> Agregar al carrito
                         </a>
                     </div>

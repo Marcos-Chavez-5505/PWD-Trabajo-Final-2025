@@ -1,25 +1,33 @@
 <?php
-session_start();
+include_once "../modelo/usuario.php";
+include_once "../modelo/session.php";
 
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+$session = new Session();
 
-if (!isset($_POST['nombreUsuario'], $_POST['password'])) {
-    header("Location: /PWD-TP-FINAL/Vista/login.php?error=Faltan datos");
-    exit();
+$usuarioIngresado = $_POST['nombreUsuario'] ?? "";
+$passIngresada = $_POST['password'] ?? "";
+
+$user = new Usuario();
+$lista = $user->listar("usnombre = '$usuarioIngresado'");
+
+if (count($lista) == 0) {
+    header("Location: login.php?error=Usuario incorrecto");
+    exit;
 }
 
-$nombreUsuario = trim($_POST['nombreUsuario']);
-$password = trim($_POST['password']);
+$user = $lista[0];
 
-$controlUsuario = new ControlUsuario();
-$usuario = $controlUsuario->autenticar($nombreUsuario, $password);
-
-if ($usuario) {
-    $_SESSION['usuario'] = $usuario->getNombreUsuario();
-    header("Location: /PWD-TP-FINAL/Vista/paginaSegura.php");
-    exit();
-} else {
-    header("Location: /PWD-TP-FINAL/Vista/login.php?error=Usuario o contraseña incorrectos");
-    exit();
+if ($user->getUsdeshabilitado() !== null) {
+    header("Location: login.php?error=Su cuenta está deshabilitada");
+    exit;
 }
-?>
+
+if ($user->getUspass() !== $passIngresada) {
+    header("Location: login.php?error=Contraseña incorrecta");
+    exit;
+}
+
+$session->iniciarSesion($user);
+
+header("Location: /PWD-TP-FINAL/Vista/home.php");
+exit;

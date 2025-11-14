@@ -11,12 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombreUsuario = $_POST['nombreUsuario'];
     $password = $_POST['password'];
     $usuario = $control->autenticar($nombreUsuario, $password);
+
     if ($usuario) {
-        $session->iniciar(
-            $usuario->getIdusuario(),
-            $usuario->getUsnombre(),
-            $usuario->getUspass()
-        );
+        $session->iniciarSesion($usuario);
         header('Location: /PWD-TP-FINAL/Vista/public/index.php');
         exit();
     } else {
@@ -24,13 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-if ($session->activa() && $session->validar()) {
-    $usuarioNombre = $session->getUsuario();
-    $lista = $control->listarUsuarios("usnombre = '$usuarioNombre'");
-    $usuario = count($lista) > 0 ? $lista[0] : null;
+$idUsuario = $session->getIdUsuario();
+$usuario = null;
+
+if ($idUsuario) {
+    $lista = $control->listarUsuarios("idusuario = $idUsuario");
+    if (count($lista) > 0) {
+        $usuario = $lista[0];
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -111,7 +111,7 @@ if ($session->activa() && $session->validar()) {
               <i class="bi bi-bag-check me-2"></i> Mis compras
             </div>
             <div class="card-body">
-              <p class="text-muted text-center mb-0">La visualización de compras estará disponible próximamente. (elpepe)</p>
+              <p class="text-muted text-center mb-0">La visualización de compras estará disponible próximamente.</p>
             </div>
           </div>
 

@@ -1,5 +1,5 @@
 <?php
-class session {
+class Session {
 
     public function __construct() {
         if (session_status() === PHP_SESSION_NONE) {
@@ -7,91 +7,90 @@ class session {
         }
     }
 
-    public function iniciar($idusuario, $usnombre, $uspass) {
-        $_SESSION['idusuario'] = $idusuario;
-        $_SESSION['usnombre'] = $usnombre;
-        $_SESSION['uspass'] = $uspass;
+    public function iniciarSesion($usuario) {
+        $_SESSION['idusuario'] = $usuario->getIdusuario();
+        $_SESSION['usnombre'] = $usuario->getUsnombre();
         $_SESSION['activa'] = true;
+        return true;
     }
 
     public function validar() {
-        $valido = false;
+        $resultado = false;
 
-        if (isset($_SESSION['usnombre']) && isset($_SESSION['uspass'])) {
+        if (isset($_SESSION['idusuario'])) {
+
             include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
-            $usuario = new Usuario();
-            $lista = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
+            $user = new Usuario();
 
-            if (count($lista) > 0) {
-                $objUsuario = $lista[0];
-                if ($objUsuario->getUspass() === $_SESSION['uspass']) {
-                    $valido = true;
+            if ($user->buscar($_SESSION['idusuario'])) {
+                if ($user->getUsdeshabilitado() === null) {
+                    $resultado = true;
                 }
             }
         }
 
-        return $valido;
+        return $resultado;
     }
 
     public function activa() {
-        $activa = false;
+        $resultado = false;
+
         if (isset($_SESSION['activa']) && $_SESSION['activa'] === true) {
-            $activa = true;
+            if ($this->validar()) {
+                $resultado = true;
+            }
         }
-        return $activa;
+
+        return $resultado;
     }
 
     public function getUsuario() {
         $usuario = null;
+
         if (isset($_SESSION['usnombre'])) {
             $usuario = $_SESSION['usnombre'];
         }
+
         return $usuario;
     }
 
-    public function getRol() {
-        $rol = null;
-
-        if ($this->validar()) {
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
-
-            $usuario = new Usuario();
-            $listaUsuarios = $usuario->listar("usnombre = '{$_SESSION['usnombre']}'");
-
-            if (count($listaUsuarios) > 0) {
-                $objUsuario = $listaUsuarios[0];
-                $idUsuario = $objUsuario->getIdusuario();
-
-                $usuarioRol = new UsuarioRol();
-                $listaRoles = $usuarioRol->listar("idUsuario = {$idUsuario}");
-
-                if (count($listaRoles) > 0) {
-                    $objUsuarioRol = $listaRoles[0];
-                    $objRol = $objUsuarioRol->getObjRol();
-                    $rol = $objRol->getDescripcionRol();
-                }
-            }
-        }
-
-        return $rol;
-    }
-
-
-
     public function getIdUsuario() {
         $id = null;
+
         if (isset($_SESSION['idusuario'])) {
             $id = $_SESSION['idusuario'];
         }
+
         return $id;
+    }
+
+    public function getRol() {
+        $resultado = null;
+
+        if ($this->validar()) {
+
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
+            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
+
+            $idUsuario = $_SESSION['idusuario'];
+            $usuarioRol = new UsuarioRol();
+            $listaRoles = $usuarioRol->listar("idusuario = {$idUsuario}");
+
+            if (count($listaRoles) > 0) {
+                $objUsuarioRol = $listaRoles[0];
+                $rol = $objUsuarioRol->getObjRol();
+                $resultado = $rol->getDescripcionRol();  // "admin" | "cliente"
+            }
+        }
+
+        return $resultado;
     }
 
     public function cerrar() {
         session_unset();
         session_destroy();
         $_SESSION = [];
+        return true;
     }
 }
 ?>
