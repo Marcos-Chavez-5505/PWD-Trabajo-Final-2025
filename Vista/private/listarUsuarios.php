@@ -52,14 +52,14 @@ $listaUsuarios = $controlUsuario->listarUsuarios();
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <form action="/PWD/vista/TP/5/action/actualizarLogin.php" method="get" class="d-inline">
+                                    <form action="/PWD/vista/admin/action/actualizarLogin.php" method="get" class="d-inline">
                                         <input type="hidden" name="idUsuario" value="<?= $usuario->getIdUsuario(); ?>">
                                         <button type="submit" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square"></i> Actualizar
                                         </button>
                                     </form>
 
-                                    <form action="/PWD/vista/TP/5/action/eliminarLogin.php" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
+                                    <form action="/PWD/vista/admin/action/eliminarLogin.php" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
                                         <input type="hidden" name="idUsuario" value="<?= $usuario->getIdUsuario(); ?>">
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="fa-solid fa-trash"></i> Eliminar

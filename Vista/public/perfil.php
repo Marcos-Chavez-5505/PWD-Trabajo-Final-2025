@@ -1,6 +1,8 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
 
 $session = new Session();
 $control = new ControlUsuario();
@@ -14,7 +16,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($usuario) {
         $session->iniciarSesion($usuario);
-        header('Location: /PWD-TP-FINAL/Vista/public/index.php');
+
+        $usuarioRol = new UsuarioRol();
+        $listaRoles = $usuarioRol->listar("idusuario = {$usuario->getIdusuario()}");
+        $rol = "cliente"; 
+
+        if (count($listaRoles) > 0) {
+            $rol = $listaRoles[0]->getObjRol()->getDescripcionRol(); // admin o cliente
+        }
+
+        if ($rol === "admin") {
+            header('Location: /PWD-TP-FINAL/vista/admin/listarUsuarios.php');
+        } else {
+            header('Location: /PWD-TP-FINAL/vista/public/index.php');
+        }
         exit();
     } else {
         $mensaje = 'Usuario o contraseña incorrectos';
@@ -43,7 +58,6 @@ if ($idUsuario) {
 </head>
 
 <body class="bg-light">
-
 <main class="d-flex align-items-center justify-content-center min-vh-100">
   <?php if (!$usuario): ?>
     <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
