@@ -39,19 +39,33 @@ class controlCarrito {
 
     public function agregarAlCarrito($idUsuario, $idProducto, $cantidad = 1) {
         $idCompra = $this->obtenerCompraIniciada($idUsuario);
+        $exito = true;
 
         $sql = "SELECT * FROM compraitem WHERE idcompra = $idCompra AND idproducto = $idProducto";
         $this->db->Ejecutar($sql);
         $item = $this->db->Registro();
 
+        $sqlStock = "SELECT procantstock FROM producto WHERE idproducto = $idProducto";
+        $this->db->Ejecutar($sqlStock);
+        $stockData = $this->db->Registro();
+        $stockDisponible = $stockData['procantstock'];
+
         if ($item) {
             $nuevaCantidad = $item['cicantidad'] + $cantidad;
-            $this->db->Ejecutar("UPDATE compraitem SET cicantidad = $nuevaCantidad WHERE idcompraitem = {$item['idcompraitem']}");
+            if ($nuevaCantidad > $stockDisponible){
+                $exito = false;
+            } else {
+                $this->db->Ejecutar("UPDATE compraitem SET cicantidad = $nuevaCantidad WHERE idcompraitem = {$item['idcompraitem']}");
+            }
         } else {
-            $this->db->Ejecutar("INSERT INTO compraitem (idcompra, idproducto, cicantidad) VALUES ($idCompra, $idProducto, $cantidad)");
+            if ($cantidad > $stockDisponible) {
+                $exito = false;
+            } else {
+                $this->db->Ejecutar("INSERT INTO compraitem (idcompra, idproducto, cicantidad) VALUES ($idCompra, $idProducto, $cantidad)");
+            }
         }
 
-        return true;
+        return $exito;
     }
 }
 ?>
