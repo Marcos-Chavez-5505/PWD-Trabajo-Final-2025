@@ -5,7 +5,7 @@ $control = new ControlUsuario();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['idUsuario'])) {
-        header("Location: /PWD-TP-FINAL/vista/TP/5/2/listarUsuario.php");
+        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php");
         exit();
     }
 
@@ -13,26 +13,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $usuario = $control->buscarUsuario($idUsuario);
 
     if (!$usuario) {
-        header("Location: /PWD-TP-FINAL/vista/TP/5/2/listarUsuario.php?error=Usuario no encontrado");
+        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php?error=Usuario no encontrado");
         exit();
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idUsuario = intval($_POST['idUsuario']);
     $datos = [
-        'idUsuario' => $idUsuario,
-        'nombreUsuario' => trim($_POST['nombreUsuario']),
-        'password' => trim($_POST['password']),
-        'nombre' => trim($_POST['nombre']),
-        'apellido' => trim($_POST['apellido']),
-        'email' => trim($_POST['email']),
-        'idRol' => isset($_POST['idRol']) ? intval($_POST['idRol']) : 1, // 👈 agregado invisible por seguridad
-        'activo' => isset($_POST['activo']) ? 1 : 0
+        'idusuario' => $idUsuario,
+        'usnombre' => trim($_POST['usnombre']),
+        'uspass' => trim($_POST['uspass']),
+        'usmail' => trim($_POST['usmail']),
+        'usdeshabilitado' => isset($_POST['usdeshabilitado']) ? 1 : 0
     ];
 
     if ($control->modificarUsuario($datos)) {
-        header("Location: /PWD-TP-FINAL/vista/TP/5/1/listarUsuarios.php?exito=Usuario actualizado correctamente");
+        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php?exito=Usuario actualizado correctamente");
     } else {
-        header("Location: /PWD-TP-FINAL/vista/TP/5/1/listarUsuarios.php?error=No se pudo actualizar el usuario");
+        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php?error=No se pudo actualizar el usuario");
     }
     exit();
 }
@@ -45,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <meta charset="UTF-8">
     <title>Actualizar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tp5.css">
+    <link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tpFinal.css">
 </head>
 <body>
 <main class="container py-5 my-5 form-actualizar-usuario">
@@ -53,43 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         <h2 class="text-center mb-4">Actualizar Usuario</h2>
 
         <form method="post" action="">
-            <input type="hidden" name="idUsuario" value="<?= $usuario->getIdUsuario(); ?>">
-            <input type="hidden" name="idRol" value="<?= $usuario->getIdRol(); ?>"> <!-- 👈 invisible pero enviado -->
+            <input type="hidden" name="idUsuario" value="<?= $usuario->getIdusuario(); ?>">
 
             <div class="mb-3">
-                <label for="nombreUsuario" class="form-label">Usuario:</label>
-                <input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario"
-                    value="<?= htmlspecialchars($usuario->getNombreUsuario()); ?>" required>
+                <label for="usnombre" class="form-label">Usuario:</label>
+                <input type="text" class="form-control" id="usnombre" name="usnombre"
+                    value="<?= htmlspecialchars($usuario->getUsnombre()); ?>" required>
             </div>
             
             <div class="mb-3">
-                <label for="password" class="form-label">Contraseña:</label>
-                <input type="text" class="form-control" id="password" name="password"
-                    value="<?= htmlspecialchars($usuario->getPassword()); ?>" required>
+                <label for="uspass" class="form-label">Contraseña:</label>
+                <input type="text" class="form-control" id="uspass" name="uspass"
+                    value="<?= htmlspecialchars($usuario->getUspass()); ?>" required>
             </div>
 
             <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre"
-                    value="<?= htmlspecialchars($usuario->getNombre()); ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="apellido" class="form-label">Apellido:</label>
-                <input type="text" class="form-control" id="apellido" name="apellido"
-                    value="<?= htmlspecialchars($usuario->getApellido()); ?>" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" class="form-control" id="email" name="email"
-                    value="<?= htmlspecialchars($usuario->getEmail()); ?>" required>
+                <label for="usmail" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="usmail" name="usmail"
+                    value="<?= htmlspecialchars($usuario->getUsmail()); ?>" required>
             </div>
 
             <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="activo" name="activo"
-                    <?= $usuario->getActivo() == 1 ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="activo">Activo</label>
+                <input class="form-check-input" type="checkbox" id="usdeshabilitado" name="usdeshabilitado"
+                    <?= $usuario->getUsdeshabilitado() == 0 ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="usdeshabilitado">Activo</label>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Actualizar</button>

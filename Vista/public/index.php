@@ -87,10 +87,9 @@ if ($bd->Iniciar()) {
                         <p class="product-stock"><strong>Stock:</strong> <?= (int)$p['procantstock']; ?></p>
 
                         <?php if ($usuarioActivo): ?>
-                            <a href="/PWD-TP-FINAL/Vista/acciones/agregarCarrito.php?id=<?= $p['idproducto']; ?>"
-                               class="btn btn-compra mt-auto w-100">
+                            <button class="btn btn-compra mt-auto w-100 agregar-carrito" data-id="<?= $p['idproducto']; ?>">
                                 <i class="bi bi-cart-fill"></i> Agregar al carrito
-                            </a>
+                            </button>
                         <?php else: ?>
                             <a class="btn btn-secondary mt-auto w-100 disabled">
                                 Inicia sesión para comprar
@@ -106,5 +105,12 @@ if ($bd->Iniciar()) {
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const BASE_URL = "<?= BASE_URL ?>";
+</script>
+<script src="/PWD-TP-FINAL/vista/js/agregarProducto.js"></script>
+
+
+
 </body>
 </html>

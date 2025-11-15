@@ -21,4 +21,10 @@
   define('LOGIN_PAGE', BASE_URL . 'vista/login/login.php'); // podemos usarlo para TP5
   
   include_once(ROOT . 'util/funciones.php');
+  include_once(ROOT . 'modelo/conector/bdCarritoCompras.php');
+  include_once(ROOT . 'control/Session.php');
+  include_once(ROOT . 'control/ControlUsuario.php');
+
+
+ 
 ?>

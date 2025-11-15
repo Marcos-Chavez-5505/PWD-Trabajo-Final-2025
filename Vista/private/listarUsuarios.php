@@ -12,8 +12,7 @@ $listaUsuarios = $controlUsuario->listarUsuarios();
     <meta charset="UTF-8">
     <title>Listado de Usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/PWD/vista/css/header-footer.css">
-    <link rel="stylesheet" href="/PWD/home/fonts/css/all.min.css">
+    <link rel="stylesheet" href="/PWD-TP-FINAL/home/fonts/css/all.min.css">
 </head>
 <body>
 <main class="container py-5 my-5">
@@ -27,10 +26,7 @@ $listaUsuarios = $controlUsuario->listarUsuarios();
                         <tr>
                             <th>ID</th>
                             <th>Usuario</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
                             <th>Email</th>
-                            <th>Rol</th>
                             <th>Activo</th>
                             <th>Acciones</th>
                         </tr>
@@ -38,29 +34,26 @@ $listaUsuarios = $controlUsuario->listarUsuarios();
                     <tbody>
                         <?php foreach ($listaUsuarios as $usuario): ?>
                             <tr>
-                                <td><?= $usuario->getIdUsuario(); ?></td>
-                                <td><?= htmlspecialchars($usuario->getNombreUsuario()); ?></td>
-                                <td><?= htmlspecialchars($usuario->getNombre()); ?></td>
-                                <td><?= htmlspecialchars($usuario->getApellido()); ?></td>
-                                <td><?= htmlspecialchars($usuario->getEmail()); ?></td>
-                                <td><?= htmlspecialchars($usuario->getIdRol()); ?></td>
+                                <td><?= $usuario->getIdusuario(); ?></td>
+                                <td><?= htmlspecialchars($usuario->getUsnombre()); ?></td>
+                                <td><?= htmlspecialchars($usuario->getUsmail()); ?></td>
                                 <td>
-                                    <?php if ($usuario->getActivo() == 1): ?>
+                                    <?php if ($usuario->getUsdeshabilitado() == 0): ?>
                                         <span class="badge bg-success">Activo</span>
                                     <?php else: ?>
                                         <span class="badge bg-danger">Inactivo</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <form action="/PWD/vista/admin/action/actualizarLogin.php" method="get" class="d-inline">
-                                        <input type="hidden" name="idUsuario" value="<?= $usuario->getIdUsuario(); ?>">
+                                    <form action="/PWD-TP-FINAL/vista/private/action/actualizarLogin.php" method="get" class="d-inline">
+                                        <input type="hidden" name="idUsuario" value="<?= $usuario->getIdusuario(); ?>">
                                         <button type="submit" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square"></i> Actualizar
                                         </button>
                                     </form>
 
-                                    <form action="/PWD/vista/admin/action/eliminarLogin.php" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
-                                        <input type="hidden" name="idUsuario" value="<?= $usuario->getIdUsuario(); ?>">
+                                    <form action="/PWD-TP-FINAL/vista/private/action/eliminarLogin.php" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
+                                        <input type="hidden" name="idUsuario" value="<?= $usuario->getIdusuario(); ?>">
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="fa-solid fa-trash"></i> Eliminar
                                         </button>

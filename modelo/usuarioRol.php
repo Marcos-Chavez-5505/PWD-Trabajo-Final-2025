@@ -14,7 +14,7 @@ class UsuarioRol {
         $this->idusuario = null;
         $this->idrol = null;
         $this->objUsuario = null;
-        $this->objRol = null;
+        $this->objRol = null;  
         $this->objBaseDatos = $objBaseDatos ?? new BDautenticacion();
     }
 

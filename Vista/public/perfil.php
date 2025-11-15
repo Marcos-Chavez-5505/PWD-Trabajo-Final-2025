@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rol = $listaRoles[0]->getObjRol()->getDescripcionRol(); // admin o cliente
         }
 
-        if ($rol === "admin") {
-            header('Location: /PWD-TP-FINAL/Vista/admin/listarUsuarios.php');
+        if ($rol === "Administrador") {
+            header('Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php');
         } else {
-            header('Location: /PWD-TP-FINAL/Vista/public/index.php');
+            header('Location: /PWD-TP-FINAL/vista/public/index.php');
         }
         exit();
     } else {
