@@ -132,7 +132,7 @@ class UsuarioRol {
      * Obtiene el rol asignado a un usuario.
      * Devuelve ID Rol
      */
-    public function listarRolesPorUsuario($idusuario) {
+    public function rolDeUsuario($idusuario) {
         $rol = -1;
 
         $usuario = new Usuario();

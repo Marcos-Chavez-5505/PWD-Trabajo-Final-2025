@@ -1,36 +1,39 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
-$opciones = "";
-$mostrarDropdown = false;//menu desplegable
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
 
-if (isset($_SESSION['rol'])) {
+// if (session_status() === PHP_SESSION_NONE) {
+//     session_start();
+// }
 
-  //se habilitara el menu despleglable si el usuario tiene un rol
-  $mostrarDropdown = true;
+// $opciones = "";
+// $mostrarDropdown = false;//menu desplegable
 
-  if($_SESSION['rol'] === "cliente") {
-    $opciones .= '
-      <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/cliente/miCuenta.php">Mi Cuenta</a></li>
-      <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/publica/productos.php">Ver Productos</a></li>
-    ';
-  }
+// if (isset($_SESSION['rol'])) {
 
-  if($_SESSION['rol'] === "admin") {
-    $opciones .= '
-      <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/usuario.php">Gestionar Usuarios</a></li>
-      <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/menu.php">Gestionar Menú</a></li>
-      <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/rol.php">Gestionar Roles</a></li>
-      <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/privado/logout.php">Cerrar Sesión</a></li>
-    ';
-  }
-}
+//   //se habilitara el menu despleglable si el usuario tiene un rol
+//   $mostrarDropdown = true;
+
+//   if($_SESSION['rol'] === "cliente") {
+//     $opciones .= '
+//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/cliente/miCuenta.php">Mi Cuenta</a></li>
+//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/publica/productos.php">Ver Productos</a></li>
+//     ';
+//   }
+
+//   if($_SESSION['rol'] === "admin") {
+//     $opciones .= '
+//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/usuario.php">Gestionar Usuarios</a></li>
+//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/menu.php">Gestionar Menú</a></li>
+//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/rol.php">Gestionar Roles</a></li>
+//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/privado/logout.php">Cerrar Sesión</a></li>
+//     ';
+//   }
+// }
 
 ?>
 <!DOCTYPE html>
