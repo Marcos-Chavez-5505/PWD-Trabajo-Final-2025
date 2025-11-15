@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const id = boton.dataset.id;
 
       try {
-        const respuesta = await fetch(BASE_URL + 'vista/public/action/agregarProducto.php', {
+        const respuesta = await fetch(BASE_URL + 'Vista/public/action/agregarProducto.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'idproducto=' + encodeURIComponent(id)
