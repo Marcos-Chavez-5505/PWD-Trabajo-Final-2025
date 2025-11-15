@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register(function ($clase) {
-    echo "🎯 PHP está buscando la clase: '" . $clase . "'\n";
+    // echo "🎯 PHP está buscando la clase: '" . $clase . "'\n";
 
     $rutas = [
         //*MODELO CASE SENSITIVE
@@ -23,23 +23,23 @@ spl_autoload_register(function ($clase) {
     
     foreach ($rutas as $ruta) {
         if (!$encontrado) {
-            echo "  🔍 Probando ruta: " . $ruta . "\n";
+            // echo "  🔍 Probando ruta: " . $ruta . "\n";
             
             if (file_exists($ruta)) {
-                echo "  ✅ ENCONTRADO! Cargando: " . $ruta . "\n";
+                // echo "  ✅ ENCONTRADO! Cargando: " . $ruta . "\n";
                 require_once $ruta;
                 $encontrado = true;
             } else {
-                echo "  ❌ No existe\n";
+                // echo "  ❌ No existe\n";
             }
         }
     }
     
     if (!$encontrado) {
-        echo "🚨 ERROR: No se encontró la clase '" . $clase . "'\n";
+        // echo "🚨 ERROR: No se encontró la clase '" . $clase . "'\n";
     }
     
-    echo "----------------------------------------\n";
+    // echo "----------------------------------------\n";
 });
 
 function verEstructura($e){
@@ -47,4 +47,19 @@ function verEstructura($e){
   print_r($e);
   echo "</pre>";
 }
+function data_submitted() {
+    
+    $_AAux= array();
+    if (!empty($_REQUEST))
+        $_AAux =$_REQUEST;
+     if (count($_AAux)){
+            foreach ($_AAux as $indice => $valor) {
+                if ($valor=="")
+                    $_AAux[$indice] = 'null' ;
+            }
+        }
+     return $_AAux;
+        
+}
+
 ?>
