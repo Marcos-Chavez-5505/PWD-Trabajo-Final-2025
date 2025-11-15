@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
 class Menu {
     private $idmenu;
     private $menombre ;

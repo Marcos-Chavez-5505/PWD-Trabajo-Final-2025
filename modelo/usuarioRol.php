@@ -1,21 +1,19 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/conector/BDautenticacion.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
 
 class UsuarioRol {
     private $idusuario;
     private $idrol;
     private $objUsuario;
     private $objRol;
-    private $objBaseDatos;
+    private $objPdo;
 
-    public function __construct($objBaseDatos = null) {
+    public function __construct($objPdo = null) {
         $this->idusuario = null;
         $this->idrol = null;
         $this->objUsuario = null;
         $this->objRol = null;  
-        $this->objBaseDatos = $objBaseDatos ?? new BDautenticacion();
+        $this->objPdo = $objPdo ?? new BDautenticacion();
     }
 
   // --- Getters ---
@@ -31,62 +29,134 @@ class UsuarioRol {
     public function setObjRol($objRol) { $this->objRol = $objRol; }
 
     // --- CRUD ---
+    // Insertar
     public function insertar() {
-        $baseDatos = new BDautenticacion();
-        $resultado = false;
-
-        if ($baseDatos->Iniciar()) {
+        $rta = false;
+        if ($this->objPdo->Iniciar()) {
+            $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
+            $idrol = $this->getObjRol()->getIdrol() ?? NULL;
             $sql = "INSERT INTO usuariorol (idusuario, idrol)
-                    VALUES (" . intval($this->idusuario) . ", " . intval($this->idrol) . ")";
-            if ($baseDatos->Ejecutar($sql) >= 0) {
-                $resultado = true;
-            }
+                    VALUES ('{$idusuario}', '{$idrol}')";
+            $rta = $this->objPdo->Ejecutar($sql);
         }
-        return $resultado;
+        return $rta;
+    }
+    // Modificar
+    public function modificar() {
+        $rta = false;
+        if ($this->objPdo->Iniciar()) {
+            $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
+            $idrol = $this->getObjRol()->getIdrol() ?? NULL;
+            $sql = "UPDATE usuariorol SET 
+                        idusuario = '{$idusuario}',
+                        idrol = '{$idrol}',
+                    WHERE idusuario = {$idusuario}";
+            $rta = $this->objPdo->Ejecutar($sql);
+        }
+        return $rta;
     }
 
     public function eliminar() {
-        $baseDatos = new BDautenticacion();
-        $resultado = false;
+        $rta = false;
 
-        if ($baseDatos->Iniciar()) {
-            $sql = "DELETE FROM usuariorol WHERE idusuario = " . intval($this->idusuario) . " AND idrol = " . intval($this->idrol);
-            if ($baseDatos->Ejecutar($sql) >= 0) {
-                $resultado = true;
+        if ($this->objPdo->Iniciar()) {
+            $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
+            $idrol = $this->getObjRol()->getIdrol() ?? NULL;
+            $sql = "DELETE FROM usuariorol WHERE idusuario = " . intval($idusuario) . " AND idrol = " . intval($idrol);
+            if ($this->objPdo->Ejecutar($sql) >= 0) {
+                $rta = true;
             }
         }
-        return $resultado;
+        return $rta;
     }
 
+    // Listar
     public function listar($condicion = "") {
-        $lista = [];
-        $baseDatos = new BDautenticacion();
-        $sql = "SELECT * FROM usuariorol";
+        $arreglo = [];
 
-        if ($condicion != "") {
-            $sql .= " WHERE " . $condicion;
-        }
-        $sql .= " ORDER BY idusuario";
+        if ($this->objPdo->Iniciar()) {
+            $sql = "SELECT * FROM usuariorol";
+            if ($condicion !== "") {
+                $sql .= " WHERE " . $condicion;
+            }
+            $this->objPdo->Ejecutar($sql);
 
-        if ($baseDatos->Iniciar() && $baseDatos->Ejecutar($sql) > 0) {
-            while ($fila = $baseDatos->Registro()) {
-                $obj = new UsuarioRol();
-                $obj->setIdUsuario($fila['idusuario']);
-                $obj->setIdRol($fila['idrol']);
+            $filas = $this->objPdo->getFilas();
+            if (!empty($filas)) {
 
-                // Cargar objetos relacionados
-                $objUsuario = new Usuario();
-                $objUsuario->buscar($fila['idusuario']);
-                $obj->setObjUsuario($objUsuario);
+                foreach ($filas as $fila) {
+                    $objUR = new UsuarioRol();
 
-                $objRol = new Rol();
-                $objRol->buscar($fila['idrol']);
-                $obj->setObjRol($objRol);
+                    $objUsuario = new Usuario();
+                    $res = $objUsuario->buscar($fila['idusuario']);
+                    $objUR->setObjUsuario($objUsuario);
 
-                $lista[] = $obj;
+                    $objRol = new Rol();
+                    $res = $objRol->buscar($fila['idrol']);
+                    $objUR->setObjRol($objRol);
+
+                    if ($res) $arreglo[] = $objUR;
+                }
             }
         }
-        return $lista;
+        return $arreglo;
     }
+
+    public function cargar($objUsuario, $objRol){
+        $this->setObjUsuario($objUsuario);
+        $this->setObjRol($objRol);
+    }
+
+    // Si hace falta esta funcion, habria que corregirla
+    // public function buscar($id) {
+    //     $resultado = false;
+    //     if ($this->objPdo->Iniciar()) {
+    //         $this->objPdo->Ejecutar("SELECT * FROM compra WHERE idcompra = {$id}");
+    //         $filas = $this->objPdo->getFilas();
+    //         if (!empty($filas)) {
+    //             $fila = $filas[0];
+    //             $objUsuario = new Usuario();
+    //             $objUsuario->buscar($fila['idusuario']);
+    //             $this->cargar(
+    //                 $fila['idcompra'],
+    //                 $fila['cofecha'],
+    //                 $objUsuario
+    //             );
+    //             $resultado = true;
+    //         }
+    //     }
+    //     return $resultado;
+    // }
+
+    /**
+     * Obtiene el rol asignado a un usuario.
+     * Devuelve ID Rol
+     */
+    public function listarRolesPorUsuario($idusuario) {
+        $rol = -1;
+
+        $usuario = new Usuario();
+
+        if ($usuario->buscar($idusuario)) {
+            
+            $sql = "SELECT r.*
+                    FROM rol r
+                    INNER JOIN usuariorol ur ON r.idrol = ur.idrol
+                    INNER JOIN usuario u ON u.idusuario = ur.idusuario
+                    WHERE u.idusuario = $idusuario";
+    
+            if ($this->objPdo->Iniciar()) {
+                $res = $this->objPdo->Ejecutar($sql);
+                if ($res) {
+                    $filas = $this->objPdo->getFilas();
+                    $objRol = new Rol();
+                    $objRol->buscar($filas[0]['idrol']);
+                    $rol = $objRol->getIdRol();
+                }
+            }
+        }
+        return $rol;
+    }
+
 }
 ?>

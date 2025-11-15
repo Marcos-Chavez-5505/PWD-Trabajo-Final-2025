@@ -200,4 +200,7 @@ class BDautenticacion extends PDO {
    private function getResultado(){
         return $this->resultado;
    }
+    public function getFilas() {
+        return $this->getResultado() ?? [];
+   }
 } 

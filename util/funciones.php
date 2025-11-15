@@ -47,6 +47,14 @@ function verEstructura($e){
   print_r($e);
   echo "</pre>";
 }
+
+function verSession(){
+    echo "<pre>";
+    var_dump($_SESSION);
+    echo "</pre>";
+}
+// verSession();
+
 function data_submitted() {
     
     $_AAux= array();

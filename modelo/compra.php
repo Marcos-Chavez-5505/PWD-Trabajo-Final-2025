@@ -19,7 +19,7 @@ class Compra{
         $this->objPdo = new bdCarritoCompras();
     }
 
-    // Insertar Usuario
+    // Insertar
     public function insertar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
@@ -31,7 +31,7 @@ class Compra{
         return $rta;
     }
 
-    // Modificar Usuario
+    // Modificar
     public function modificar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {

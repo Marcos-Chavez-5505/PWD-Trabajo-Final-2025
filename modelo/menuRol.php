@@ -79,5 +79,33 @@ class menuRol{
         return $resultado;
     }
 
+    /**
+     * Lista todos los ítems de menú disponibles para un rol.
+     * Devuelve ARRAY de objetos Menu.
+     */
+    public function listarMenuPorRol($idRol) {
+        $arreglo = [];
+        $sql = "SELECT m.*
+                FROM menu m
+                INNER JOIN menurol mr ON m.idmenu = mr.idmenu
+                WHERE mr.idrol = $idRol
+                ORDER BY m.idpadre, m.idmenu";
+    
+        if ($this->objPdo->Iniciar()) {
+            $res = $this->objPdo->Ejecutar($sql);
+            if ($res > 0) {
+                while ($row = $this->objPdo->Registro()) {
+                    $menu = new Menu();
+                    $menu->setIdmenu($row['idmenu']);
+                    $menu->cargar(); // carga padre e info completa
+                    $arreglo[] = $menu;
+                }
+            }
+        }
+        return $arreglo;
+    }
+
+
+
 }
 ?>
