@@ -22,7 +22,7 @@
   
   include_once(ROOT . 'util/funciones.php');
   include_once(ROOT . 'modelo/conector/bdCarritoCompras.php');
-  include_once(ROOT . 'control/Session.php');
+  include_once(ROOT . 'control/session.php');
   include_once(ROOT . 'control/ControlUsuario.php');
 
 

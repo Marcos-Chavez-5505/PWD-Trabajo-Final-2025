@@ -63,7 +63,7 @@ if (isset($_SESSION['rol'])) {
             <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/perfil.php">Perfil</a></li>
         <?php endif; ?>
         
-        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/vista/public/carritoCliente.php">Carrito</a></li>
+        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/carritoCliente.php">Carrito</a></li>
       </ul>
     </div>
 
