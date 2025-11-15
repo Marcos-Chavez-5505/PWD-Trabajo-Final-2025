@@ -21,6 +21,7 @@ class controlCarrito {
         $this->db->Ejecutar($sql);
         $compra = $this->db->Registro();
 
+        //! esta parte deberia pertenecer a otra funcion
         if (!$compra) {
             $idCompra = $this->db->Ejecutar("INSERT INTO compra (idusuario) VALUES ($idUsuario)");
             $this->db->Ejecutar("
@@ -66,6 +67,36 @@ class controlCarrito {
         }
 
         return $exito;
+    }
+
+    function eliminarDelCarrito($idUsuario, $idProducto){
+        $respuesta = false;
+
+        $sqlCarrito = "
+            SELECT c.idcompra 
+            FROM compra c
+            INNER JOIN compraestado ce ON c.idcompra = ce.idcompra
+            WHERE c.idusuario = $idUsuario 
+            AND ce.idcompraestadotipo = 1
+            AND ce.cefechafin IS NULL
+            LIMIT 1
+        ";
+        $this->db->Ejecutar($sqlCarrito);
+        $compraActiva = $this->db->Registro();
+        
+        if ($compraActiva) {
+            $idCompra = $compraActiva['idcompra'];
+        
+            $sqlEliminar = "
+                DELETE FROM compraitem 
+                WHERE idcompra = $idCompra 
+                AND idproducto = $idProducto
+            ";
+            
+            $respuesta =  $this->db->Ejecutar($sqlEliminar);
+        }
+        
+        return $respuesta;
     }
 }
 ?>
