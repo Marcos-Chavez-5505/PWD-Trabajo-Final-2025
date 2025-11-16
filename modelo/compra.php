@@ -1,107 +1,102 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-class MenuRol {
-    private $idmenu;
-    private $idrol;
+class Compra{
+    private $idcompra;
+    private $cofecha;
+    private $objUsuario;
     private $objPdo;
 
-    //getters
-    public function getIdmenu(){ 
-        return $this->idmenu; 
-    }
+    // === Getters & Setters ===
+    public function getIdcompra() { return $this->idcompra; }
+    public function setIdcompra($v) { $this->idcompra = $v; }
+    public function getCofecha() { return $this->cofecha; }
+    public function setCofecha($v) { $this->cofecha = $v; }
+    public function getObjUsuario() { return $this->objUsuario; }
+    public function setObjUsuario($v) { $this->objUsuario = $v; }
 
-    public function getIdrol(){ 
-        return $this->idrol; 
-    }
-
-    //setters
-    public function setIdmenu($v){
-        $this->idmenu = $v; 
-    }
-
-    public function setIdrol($v){ 
-        $this->idrol = $v; 
-    }
-
-    //construct
     public function __construct() {
         $this->objPdo = new bdCarritoCompras();
     }
 
-    //cargar
-    public function cargar($idmenu, $idrol){
-        $this->setIdmenu($idmenu);
-        $this->setIdrol($idrol);
-    }
-
-    //insertar
-    public function insertar(){
+    // Insertar
+    public function insertar() {
         $rta = false;
-
-        if($this->objPdo->Iniciar()){
-            $sql = "INSERT INTO menurol (idmenu, idrol)
-                    VALUES ('{$this->getIdmenu()}', '{$this->getIdrol()}')";
+        if ($this->objPdo->Iniciar()) {
+            $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
+            $sql = "INSERT INTO compra (idcompra, cofecha, idusuario)
+                    VALUES ('{$this->getIdcompra()}', '{$this->getCofecha()}', '{$idusuario}')";
             $rta = $this->objPdo->Ejecutar($sql);
         }
-    return $rta;
+        return $rta;
     }
 
-    //eliminar
-    public function eliminar(){
+    // Modificar
+    public function modificar() {
         $rta = false;
-
-        if ($this->objPdo->Iniciar()){
-            $sql = "DELETE FROM menurol 
-                    WHERE idmenu = '{$this->getIdmenu()}'
-                      AND idrol = '{$this->getIdrol()}'";
+        if ($this->objPdo->Iniciar()) {
+            $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
+            $sql = "UPDATE usuario SET 
+                        idcompra = '{$this->getIdcompra()}',
+                        cofecha = '{$this->getCofecha()}',
+                        idusuario = '{$idusuario}',
+                    WHERE idcompra = {$this->getIdcompra()}";
             $rta = $this->objPdo->Ejecutar($sql);
         }
-    return $rta;
+        return $rta;
     }
 
-    // buscar
-    public function buscar($idmenu, $idrol){
-        $rta = false;
-
-        if($this->objPdo->Iniciar()){
-            $sql = "SELECT * FROM menurol 
-                    WHERE idmenu = {$idmenu} AND idrol = {$idrol}";
-            $this->objPdo->Ejecutar($sql);
-            $filas = $this->objPdo->getFilas();
-
-            if(!empty($filas)){
-                $fila = $filas[0];
-                $this->cargar($fila['idmenu'], $fila['idrol']);
-                $rta = true;
-            }
-        }
-    return $rta;
-    }
-
-    //listar
-    public function listar($condicion = ""){
+    // Listar
+    public function listar($condicion = "") {
         $arreglo = [];
 
-        if($this->objPdo->Iniciar()){
-
-            $sql = "SELECT * FROM menurol";
-            if($condicion !== ""){
+        if ($this->objPdo->Iniciar()) {
+            $sql = "SELECT * FROM compra";
+            if ($condicion !== "") {
                 $sql .= " WHERE " . $condicion;
             }
-
             $this->objPdo->Ejecutar($sql);
-            $filas = $this->objPdo->getFilas();
 
-            if(!empty($filas)){
-                foreach($filas as $fila){
-                    $obj = new MenuRol();
-                    $obj->cargar($fila['idmenu'], $fila['idrol']);
-                    $arreglo[] = $obj;
+            $filas = $this->objPdo->getFilas();
+            if (!empty($filas)) {
+
+                foreach ($filas as $fila) {
+                    $obj = new Compra();
+                    $res = $obj->buscar($fila['idcompra']);
+
+                    if ($res) $arreglo[] = $obj;
                 }
             }
         }
-    return $arreglo;
+        return $arreglo;
     }
+
+    public function cargar($idcompra, $cofecha, $objUsuario){
+        $this->setIdcompra($idcompra);
+        $this->setCofecha($cofecha);
+        $this->setObjUsuario($objUsuario);
+    }
+
+    public function buscar($id) {
+        $resultado = false;
+        if ($this->objPdo->Iniciar()) {
+            $this->objPdo->Ejecutar("SELECT * FROM compra WHERE idcompra = {$id}");
+            $filas = $this->objPdo->getFilas();
+            if (!empty($filas)) {
+                $fila = $filas[0];
+                $objUsuario = new Usuario();
+                $objUsuario->buscar($fila['idusuario']);
+                $this->cargar(
+                    $fila['idcompra'],
+                    $fila['cofecha'],
+                    $objUsuario
+                );
+                $resultado = true;
+            }
+        }
+        return $resultado;
+    }
+
 }
 ?>
+
