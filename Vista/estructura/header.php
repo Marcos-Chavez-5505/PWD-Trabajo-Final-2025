@@ -1,40 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 
-
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
-
-// $opciones = "";
-// $mostrarDropdown = false;//menu desplegable
-
-// if (isset($_SESSION['rol'])) {
-
-//   //se habilitara el menu despleglable si el usuario tiene un rol
-//   $mostrarDropdown = true;
-
-//   if($_SESSION['rol'] === "cliente") {
-//     $opciones .= '
-//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/cliente/miCuenta.php">Mi Cuenta</a></li>
-//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/publica/productos.php">Ver Productos</a></li>
-//     ';
-//   }
-
-//   if($_SESSION['rol'] === "admin") {
-//     $opciones .= '
-//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/usuario.php">Gestionar Usuarios</a></li>
-//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/menu.php">Gestionar Menú</a></li>
-//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/rol.php">Gestionar Roles</a></li>
-//       <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/privado/logout.php">Cerrar Sesión</a></li>
-//     ';
-//   }
-// }
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -58,33 +24,20 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/index.php">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/contacto.php">Contacto</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="/PWD-TP-FINAL/Vista/public/index.php">Inicio</a>
+        </li>
 
-        <!--si no esta logueado el usuario aparecera esta opcion-->
-        <?php if (!$mostrarDropdown): ?>
-            <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/perfil.php">Perfil</a></li>
-        <?php endif; ?>
-        
-        <li class="nav-item"><a class="nav-link" href="/PWD-TP-FINAL/Vista/public/carritoCliente.php">Carrito</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="/PWD-TP-FINAL/Vista/public/contacto.php">Contacto</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/PWD-TP-FINAL/Vista/public/perfil.php">Perfil</a>
+        </li>
+
       </ul>
     </div>
-
-    <!--el menu desplegable aparecera solo si esta logueado-->
-    <?php if ($mostrarDropdown): ?>
-    <div class="dropdown ms-3">
-        <button class="btn btn-secondary dropdown-toggle" 
-                type="button" 
-                data-bs-toggle="dropdown">
-            <?= $_SESSION['rol'] === "admin" ? "Admin" : "Mi Cuenta" ?>
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-end">
-            <?= $opciones ?>
-        </ul>
-    </div>
-    <?php endif; ?>
-
   </div>
 </nav>
 
