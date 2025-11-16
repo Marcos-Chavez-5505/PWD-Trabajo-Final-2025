@@ -31,8 +31,8 @@ class CompraEstado{
         if ($this->objPdo->Iniciar()) {
             $idcompra = $this->getObjCompra()->getIdcompra() ?? NULL;
             $idcompraestadotipo = $this->getObjCompraEstadoTipo()->getIdcompraestadotipo() ?? NULL;
-            $sql = "INSERT INTO compraestadotipo (idcompraestado, idcompra, idcompraestadotipo, cefechaini, cefechafin)
-                    VALUES ('{$this->getIdcompraestado()}', '{$idcompra}', '{$idcompraestadotipo}', '{$this->getCefechaini()}', '{$this->getCefechafin()}')";
+            $sql = "INSERT INTO compraestado (idcompraestado, idcompra, idcompraestadotipo)
+                    VALUES ('{$this->getIdcompraestado()}', '{$idcompra}', '{$idcompraestadotipo}')";
             $rta = $this->objPdo->Ejecutar($sql);
         }
         return $rta;
@@ -42,10 +42,11 @@ class CompraEstado{
     public function modificar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
+            $idcompraestadotipo = $this->getObjCompraEstadoTipo()->getIdcompraestadotipo() ?? NULL;
             $sql = "UPDATE compraestado SET 
                         idcompraestado = '{$this->getIdcompraestado()}',
                         idcompra = '{$this->getObjCompra()}',
-                        idcompraestadotipo = '{$this->getObjCompraEstadoTipo()}',
+                        idcompraestadotipo = '{$idcompraestadotipo}',
                         cefechaini = '{$this->getCefechaini()}',
                         cefechafin = '{$this->getCefechafin()}',
                     WHERE idcompraestado = {$this->getIdcompraestado()}";
@@ -102,8 +103,32 @@ class CompraEstado{
                     $fila['idcompraestado'],
                     $objCompra,
                     $objCompraEstadoTipo,
-                    $fila['cofechaini'],
-                    $fila['cofechafin']
+                    $fila['cefechaini'],
+                    $fila['cefechafin']
+                );
+                $resultado = true;
+            }
+        }
+        return $resultado;
+    }
+
+    public function buscarCompraAsociada($idCompra) {
+        $resultado = false;
+        if ($this->objPdo->Iniciar()) {
+            $this->objPdo->Ejecutar("SELECT * FROM compraestado WHERE idcompra = {$idCompra}");
+            $filas = $this->objPdo->getFilas();
+            if (!empty($filas)) {
+                $fila = $filas[0];
+                $objCompra = new Compra();
+                $objCompra->buscar($fila['idcompra']);
+                $objCompraEstadoTipo = new CompraEstadoTipo();
+                $objCompraEstadoTipo->buscar($fila['idcompraestadotipo']);
+                $this->cargar(
+                    $fila['idcompraestado'],
+                    $objCompra,
+                    $objCompraEstadoTipo,
+                    $fila['cefechaini'],
+                    $fila['cefechafin']
                 );
                 $resultado = true;
             }

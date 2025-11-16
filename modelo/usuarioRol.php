@@ -17,38 +17,22 @@ class UsuarioRol{
     }
 
     //Getters
-    public function getIdusuario(){
-        return $this->idusuario;
-    }
+    public function getIdusuario(){ return $this->idusuario; }
 
-    public function getIdrol(){
-        return $this->idrol;
-    }
+    public function getIdrol(){ return $this->idrol; }
 
-    public function getObjUsuario(){
-        return $this->objUsuario;
-    }
+    public function getObjUsuario(){ return $this->objUsuario; }
 
-    public function getObjRol(){
-        return $this->objRol;
-    }
+    public function getObjRol(){ return $this->objRol; }
 
     //setters
-    public function setIdusuario($idusuario){
-        $this->idusuario = $idusuario;
-    }
+    public function setIdusuario($idusuario){ $this->idusuario = $idusuario; }
 
-    public function setIdrol($idrol){
-        $this->idrol = $idrol;
-    }
+    public function setIdrol($idrol){ $this->idrol = $idrol; }
 
-    public function setObjUsuario($objUsuario){
-        $this->objUsuario = $objUsuario;
-    }
+    public function setObjUsuario($objUsuario){ $this->objUsuario = $objUsuario; }
 
-    public function setObjRol($objRol){
-        $this->objRol = $objRol;
-    }
+    public function setObjRol($objRol){ $this->objRol = $objRol; }
 
     //insertar
     public function insertar(){

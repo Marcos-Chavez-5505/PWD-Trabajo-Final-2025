@@ -6,6 +6,7 @@ class Compra{
     private $cofecha;
     private $objUsuario;
     private $objPdo;
+    private $colItems; // 1:N
 
     // === Getters & Setters ===
     public function getIdcompra() { return $this->idcompra; }
@@ -14,6 +15,8 @@ class Compra{
     public function setCofecha($v) { $this->cofecha = $v; }
     public function getObjUsuario() { return $this->objUsuario; }
     public function setObjUsuario($v) { $this->objUsuario = $v; }
+    public function getColItems() { return $this->colItems; }
+    public function setColItems($v) { $this->colItems = $v; }
 
     public function __construct() {
         $this->objPdo = new bdCarritoCompras();
@@ -24,8 +27,9 @@ class Compra{
         $rta = false;
         if ($this->objPdo->Iniciar()) {
             $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
-            $sql = "INSERT INTO compra (idcompra, cofecha, idusuario)
-                    VALUES ('{$this->getIdcompra()}', '{$this->getCofecha()}', '{$idusuario}')";
+            // por diseño de BD solo hace falta idusuario
+            $sql = "INSERT INTO compra (idusuario)
+                    VALUES ('{$idusuario}')";
             $rta = $this->objPdo->Ejecutar($sql);
         }
         return $rta;
@@ -68,6 +72,7 @@ class Compra{
                 }
             }
         }
+        $this->setColItems($arreglo);
         return $arreglo;
     }
 

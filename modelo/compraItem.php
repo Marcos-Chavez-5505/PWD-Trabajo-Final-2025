@@ -7,6 +7,7 @@ class CompraItem{
     private $objCompra;
     private $cicantidad;
     private $objPdo;
+    private $colProductos; // 1:N
 
     // === Getters & Setters ===
     public function getIdcompraitem() { return $this->idcompraitem; }
@@ -17,6 +18,8 @@ class CompraItem{
     public function setObjCompra($v) { $this->objCompra = $v; }
     public function getCicantidad() { return $this->cicantidad; }
     public function setCicantidad($v) { $this->cicantidad = $v; }
+    public function getColProductos() { return $this->colProductos; }
+    public function setColProductos($v) { $this->colProductos = $v; }
 
     public function __construct() {
         $this->objPdo = new bdCarritoCompras();
@@ -73,8 +76,12 @@ class CompraItem{
                 }
             }
         }
+        $this->setColProductos($arreglo);
         return $arreglo;
     }
+
+
+
 
     public function cargar($idcompraitem, $objProducto, $objCompra, $cicantidad){
         $this->setIdcompraitem($idcompraitem);
