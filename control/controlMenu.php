@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 class ControlMenu{
 
     function construirMenuJerarquico($menus) {
@@ -41,7 +41,7 @@ class ControlMenu{
             $idRol = $objRol->rolDeUsuario($idusuario);
     
             if ($idRol > 0){
-                $menus = $objMenu->listarMenuPorRol($idRol);
+                $menus = $objMenu->listar($idRol);
         
                 $estructura = $this->construirMenuJerarquico($menus);
             }
