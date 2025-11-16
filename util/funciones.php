@@ -3,20 +3,17 @@ spl_autoload_register(function ($clase) {
     // echo "🎯 PHP está buscando la clase: '" . $clase . "'\n";
 
     $rutas = [
-        //*MODELO CASE SENSITIVE
-        ROOT . 'modelo/' . $clase . '.php',
+        //* CONTROL - CASE SENSITIVE (exacto)
+        ROOT . 'control/' . $clase . '.php',      // Session.php
+        ROOT . 'modelo/' . $clase . '.php',       // Session.php en modelo
         ROOT . 'modelo/conector/' . $clase . '.php',
-        //*MODELO CASE INSENSITIVE
+        
+        //* CONTROL - CASE INSENSITIVE  
+        ROOT . 'control/' . strtolower($clase) . '.php', // session.php
         ROOT . 'modelo/conector/' . strtolower($clase) . '.php',
         ROOT . 'modelo/' . strtolower($clase) . '.php',
 
-        //*CONTROL CASE SENSITIVE
-        ROOT . 'control/' . $clase . '.php',
-        //*CONTROL CASE INSENSITIVE
-        ROOT . 'control/' . strtolower($clase) . '.php',
-
         ROOT . 'util/' . strtolower($clase) . '.php',
-        
     ];
     
     $encontrado = false;

@@ -12,7 +12,7 @@ class Producto{
 
     // === Getters & Setters ===
     public function getIdproducto() { return $this->idproducto; }
-    public function setIdproducto($v) { $this->idproducto = $v; }
+    public function setIdproducto($idproducto) {$this->idproducto = ($idproducto === '' || $idproducto === null) ? null : (int)$idproducto;}
     public function getPronombre() { return $this->pronombre; }
     public function setPronombre($v) { $this->pronombre = $v; }
     public function getProdetalle() { return $this->prodetalle; }
@@ -30,13 +30,13 @@ class Producto{
 
     // Insertar Compra
     public function insertar() {
-        $rta = false;
+        $exito = false;
         if ($this->objPdo->Iniciar()) {
-            $sql = "INSERT INTO producto (idproducto, pronombre, prodetalle, procantstock, proprecio, proimagen)
-                    VALUES ('{$this->getIdproducto()}', '{$this->getPronombre()}', '{$this->getProdetalle()}', '{$this->getProcantstock()}', '{$this->getProprecio()}', '{$this->getProimagen()}')";
-            $rta = $this->objPdo->Ejecutar($sql);
+            $sql = "INSERT INTO producto (pronombre, prodetalle, procantstock, proprecio, proimagen)
+                    VALUES ('{$this->getPronombre()}', '{$this->getProdetalle()}', '{$this->getProcantstock()}', '{$this->getProprecio()}', '{$this->getProimagen()}')";
+            $idGenerado = $this->objPdo->Ejecutar($sql);
         }
-        return $rta;
+        return $idGenerado;
     }
 
     // Modificar Compra
@@ -49,7 +49,7 @@ class Producto{
                         prodetalle = '{$this->getProdetalle()}',
                         procantstock = '{$this->getProcantstock()}',
                         proprecio = '{$this->getProprecio()}',
-                        proimagen = '{$this->getProimagen()}',
+                        proimagen = '{$this->getProimagen()}'
                     WHERE idproducto = {$this->getIdproducto()}";
             $rta = $this->objPdo->Ejecutar($sql);
         }
@@ -80,8 +80,7 @@ class Producto{
         return $arreglo;
     }
 
-    public function cargar($idproducto, $pronombre, $prodetalle, $procantstock, $proprecio, $proimagen){
-        $this->setIdproducto($idproducto);
+    public function cargar($pronombre, $prodetalle, $procantstock, $proprecio, $proimagen){
         $this->setPronombre($pronombre);
         $this->setProdetalle($prodetalle);
         $this->setProcantstock($procantstock);
@@ -97,19 +96,28 @@ class Producto{
             if (!empty($filas)) {
                 $fila = $filas[0];
                 $this->cargar(
-                    $fila['idproducto'],
                     $fila['pronombre'],
                     $fila['prodetalle'],
                     $fila['procantstock'],
                     $fila['proprecio'],
                     $fila['proimagen'],
                 );
+                $this->setIdproducto($fila['idproducto']);
                 $resultado = true;
             }
         }
         return $resultado;
     }
 
+    // Modificar Compra
+    public function eliminar() {
+        $rta = false;
+        if ($this->objPdo->Iniciar()) {
+            $sql = "DELETE FROM producto WHERE idproducto = {$this->getIdproducto()}";
+            $rta = $this->objPdo->Ejecutar($sql);
+        }
+        return $rta;
+    }
 }
 ?>
 
