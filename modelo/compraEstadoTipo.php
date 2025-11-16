@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/configuracion.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 class CompraEstadoTipo{
     private $idcompraestadotipo;
     private $cetdescripcion;
