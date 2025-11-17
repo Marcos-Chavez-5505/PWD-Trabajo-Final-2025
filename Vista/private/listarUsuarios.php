@@ -1,4 +1,11 @@
 <?php
+// Mostrar todos los errores
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// O más específico
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $controlUsuario = new ControlUsuario();
@@ -45,14 +52,14 @@ $listaUsuarios = $controlUsuario->listarUsuarios();
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <form action="/PWD-TP-FINAL/vista/private/action/actualizarLogin.php" method="get" class="d-inline">
+                                    <form action="/PWD-TP-FINAL/Vista/private/action/actualizarLogin.php" method="get" class="d-inline">
                                         <input type="hidden" name="idUsuario" value="<?= $usuario->getIdusuario(); ?>">
                                         <button type="submit" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square"></i> Actualizar
                                         </button>
                                     </form>
 
-                                    <form action="/PWD-TP-FINAL/vista/private/action/eliminarLogin.php" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
+                                    <form action="/PWD-TP-FINAL/Vista/private/action/eliminarLogin.php" method="post" class="d-inline" onsubmit="return confirmarEliminacion()">
                                         <input type="hidden" name="idUsuario" value="<?= $usuario->getIdusuario(); ?>">
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="fa-solid fa-trash"></i> Eliminar

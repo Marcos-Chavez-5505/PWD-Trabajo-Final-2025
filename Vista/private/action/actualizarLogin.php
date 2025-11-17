@@ -1,11 +1,20 @@
 <?php
+// Mostrar todos los errores
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// O más específico
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+
+date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 $control = new ControlUsuario();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['idUsuario'])) {
-        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php");
+        header("Location: /PWD-TP-FINAL/Vista/private/listarUsuarios.php");
         exit();
     }
 
@@ -13,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $usuario = $control->buscarUsuario($idUsuario);
 
     if (!$usuario) {
-        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php?error=Usuario no encontrado");
+        header("Location: /PWD-TP-FINAL/Vista/private/listarUsuarios.php?error=Usuario no encontrado");
         exit();
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,13 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'usnombre' => trim($_POST['usnombre']),
         'uspass' => trim($_POST['uspass']),
         'usmail' => trim($_POST['usmail']),
-        'usdeshabilitado' => isset($_POST['usdeshabilitado']) ? 1 : 0
+        'usdeshabilitado' => isset($_POST['usdeshabilitado']) ? null : date('Y-m-d H:i:s')
     ];
 
     if ($control->modificarUsuario($datos)) {
-        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php?exito=Usuario actualizado correctamente");
+        header("Location: /PWD-TP-FINAL/Vista/private/listarUsuarios.php?exito=Usuario actualizado correctamente");
     } else {
-        header("Location: /PWD-TP-FINAL/vista/private/listarUsuarios.php?error=No se pudo actualizar el usuario");
+        header("Location: /PWD-TP-FINAL/Vista/private/listarUsuarios.php?error=No se pudo actualizar el usuario");
     }
     exit();
 }
@@ -42,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <meta charset="UTF-8">
     <title>Actualizar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/PWD-TP-FINAL/vista/css/tpFinal.css">
+    <link rel="stylesheet" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 </head>
 <body>
 <main class="container py-5 my-5 form-actualizar-usuario">
