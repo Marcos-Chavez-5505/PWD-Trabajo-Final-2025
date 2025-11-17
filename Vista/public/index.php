@@ -51,12 +51,12 @@ if ($bd->Iniciar()) {
                         <li><hr class="dropdown-divider"></li>
                     <?php endif; ?>
 
-                    <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/perfil.php">Editar cuenta</a></li>
+                    <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Editar cuenta</a></li>
                     <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/private/logout.php">Cerrar sesión</a></li>
                 </ul>
             </div>
         <?php else: ?>
-            <a href="/PWD-TP-FINAL/Vista/public/perfil.php" class="btn btn-outline-primary">
+            <a href="/PWD-TP-FINAL/Vista/public/cuenta.php" class="btn btn-outline-primary">
                 <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
             </a>
         <?php endif; ?>

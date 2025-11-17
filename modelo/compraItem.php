@@ -1,7 +1,7 @@
 <?php
-
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-class CompraItem{
+
+class CompraItem {
     private $idcompraitem;
     private $objProducto;
     private $objCompra;
@@ -9,15 +9,18 @@ class CompraItem{
     private $objPdo;
     private $colProductos; // 1:N
 
-    // === Getters & Setters ===
     public function getIdcompraitem() { return $this->idcompraitem; }
     public function setIdcompraitem($v) { $this->idcompraitem = $v; }
+
     public function getObjProducto() { return $this->objProducto; }
     public function setObjProducto($v) { $this->objProducto = $v; }
+
     public function getObjCompra() { return $this->objCompra; }
     public function setObjCompra($v) { $this->objCompra = $v; }
+
     public function getCicantidad() { return $this->cicantidad; }
     public function setCicantidad($v) { $this->cicantidad = $v; }
+
     public function getColProductos() { return $this->colProductos; }
     public function setColProductos($v) { $this->colProductos = $v; }
 
@@ -25,36 +28,40 @@ class CompraItem{
         $this->objPdo = new bdCarritoCompras();
     }
 
-    // Insertar Compra
+    /** Inserta un nuevo item en la tabla compraitem */
     public function insertar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
             $idproducto = $this->getObjProducto()->getIdproducto() ?? NULL;
             $idcompra = $this->getObjCompra()->getIdcompra() ?? NULL;
-            $sql = "INSERT INTO compraitem (idcompraitem, idproducto, idcompra, cicantidad)
-                    VALUES ('{$this->getIdcompraitem()}', '{$idproducto}', '{$idcompra}', '{$this->getCicantidad()}')";
+
+            $sql = "INSERT INTO compraitem (idproducto, idcompra, cicantidad)
+                    VALUES ('{$idproducto}', '{$idcompra}', '{$this->getCicantidad()}')";
+
             $rta = $this->objPdo->Ejecutar($sql);
         }
         return $rta;
     }
 
-    // Modificar Compra
+    /** Modifica un item existente (solo cantidad o referencias) */
     public function modificar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
             $idproducto = $this->getObjProducto()->getIdproducto() ?? NULL;
             $idcompra = $this->getObjCompra()->getIdcompra() ?? NULL;
+
             $sql = "UPDATE compraitem SET 
-                        idcompraitem = '{$this->getIdcompraitem()}',
                         idproducto = '{$idproducto}',
                         idcompra = '{$idcompra}',
-                        cicantidad = '{$this->getCicantidad()}',
+                        cicantidad = '{$this->getCicantidad()}'
                     WHERE idcompraitem = {$this->getIdcompraitem()}";
+
             $rta = $this->objPdo->Ejecutar($sql);
         }
         return $rta;
     }
 
+    /** Lista todos los items que cumplan una condición */
     public function listar($condicion = "") {
         $arreglo = [];
 
@@ -63,86 +70,81 @@ class CompraItem{
             if ($condicion !== "") {
                 $sql .= " WHERE " . $condicion;
             }
+
             $this->objPdo->Ejecutar($sql);
-
             $filas = $this->objPdo->getFilas();
-            if (!empty($filas)) {
 
+            if (!empty($filas)) {
                 foreach ($filas as $fila) {
                     $obj = new CompraItem();
                     $res = $obj->buscar($fila['idcompraitem']);
-
                     if ($res) $arreglo[] = $obj;
                 }
             }
         }
+
         $this->setColProductos($arreglo);
         return $arreglo;
     }
 
-
-
-
-    public function cargar($idcompraitem, $objProducto, $objCompra, $cicantidad){
+    /** Carga datos en el objeto actual */
+    public function cargar($idcompraitem, $objProducto, $objCompra, $cicantidad) {
         $this->setIdcompraitem($idcompraitem);
         $this->setObjProducto($objProducto);
         $this->setObjCompra($objCompra);
         $this->setCicantidad($cicantidad);
     }
 
+    /** Busca un item por su ID */
     public function buscar($id) {
         $resultado = false;
         if ($this->objPdo->Iniciar()) {
             $this->objPdo->Ejecutar("SELECT * FROM compraitem WHERE idcompraitem = {$id}");
             $filas = $this->objPdo->getFilas();
+
             if (!empty($filas)) {
                 $fila = $filas[0];
+
                 $objCompra = new Compra();
                 $objCompra->buscar($fila['idcompra']);
+
                 $objProducto = new Producto();
                 $objProducto->buscar($fila['idproducto']);
+
                 $this->cargar(
                     $fila['idcompraitem'],
                     $objProducto,
                     $objCompra,
-                    $fila['cicantidad'],
+                    $fila['cicantidad']
                 );
+
                 $resultado = true;
             }
         }
         return $resultado;
     }
 
-
+    /** Elimina un item por combinación de compra y producto */
     public function eliminarPorCompraYProducto($idCompra, $idProducto) {
         $resultado = false;
-
         if ($this->objPdo->Iniciar()) {
             $sql = "DELETE FROM compraitem
                     WHERE idcompra = {$idCompra}
                     AND idproducto = {$idProducto}";
-
             $resultado = $this->objPdo->Ejecutar($sql);
         }
-
         return $resultado;
     }
 
+    /** Busca un item por combinación de compra y producto */
     public function buscarPorCompraYProducto($idCompra, $idProducto) {
         $resultado = null;
-
         $cond = "idcompra = {$idCompra} AND idproducto = {$idProducto}";
         $items = $this->listar($cond);
-
         if (!empty($items)) {
             $resultado = $items[0];
         }
-
         return $resultado;
     }
-
-
-
 }
 ?>
-

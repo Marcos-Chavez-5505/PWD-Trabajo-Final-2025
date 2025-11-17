@@ -34,7 +34,8 @@ class controlCarrito {
                 }
             }
         }
-        // si no encontro carrito
+
+        // si no encontró carrito existente
         if ($resultado === null) {
             $usuario = new Usuario();
             $usuario->buscar($idUsuario);
@@ -47,11 +48,21 @@ class controlCarrito {
                 $ultimas = $compra->listar("idusuario = {$idUsuario} ORDER BY idcompra DESC LIMIT 1");
                 if (!empty($ultimas)) {
                     $resultado = $ultimas[0]->getIdcompra();
+                    
+                    $estadoTipo = new CompraEstadoTipo();
+                    $estadoTipo->buscarDescripcion("Iniciada");
+
+                    $nuevoEstado = new CompraEstado();
+                    $nuevoEstado->setObjCompra($ultimas[0]);
+                    $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
+                    $nuevoEstado->insertar();
                 }
             }
         }
+
         return $resultado;
     }
+
 
     
     /**

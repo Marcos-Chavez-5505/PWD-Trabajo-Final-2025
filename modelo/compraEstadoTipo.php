@@ -93,6 +93,24 @@ class CompraEstadoTipo{
         return $resultado;
     }
 
+    public function buscarDescripcion($descripcion) {
+        $base = new bdCarritoCompras();
+        $resp = false;
+        $sql = "SELECT * FROM compraestadotipo WHERE cetdescripcion = '$descripcion' LIMIT 1";
+        if ($base->Iniciar()) {
+            $res = $base->Ejecutar($sql);
+            if ($res > 0) {
+                $row = $base->Registro();
+                $this->setIdcompraestadotipo($row['idcompraestadotipo']);
+                $this->setCetdescripcion($row['cetdescripcion']);
+                $this->setCetdetalle($row['cetdetalle']);
+                $resp = true;
+            }
+        }
+        return $resp;
+    }
+
+
 }
 ?>
 

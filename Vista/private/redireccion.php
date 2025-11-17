@@ -5,7 +5,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 $session = new Session();
 
 if (!$session->activa() || !$session->validar()) {
-    header('Location: /PWD-TP-FINAL/Vista/public/perfil.php');
+    header('Location: /PWD-TP-FINAL/Vista/public/cuenta.php');
     exit();
 }
 

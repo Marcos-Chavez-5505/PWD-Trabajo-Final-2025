@@ -13,6 +13,7 @@ CREATE TABLE menu (
   idmenu BIGINT(20) NOT NULL AUTO_INCREMENT,
   menombre VARCHAR(50) NOT NULL COMMENT 'Nombre del item del menu',
   medescripcion VARCHAR(124) NOT NULL COMMENT 'Descripcion detallada',
+  meurl VARCHAR(255) DEFAULT NULL COMMENT 'Ruta o enlace del menú',
   idpadre BIGINT(20) DEFAULT NULL COMMENT 'Referencia al id del menu padre',
   medeshabilitado TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de deshabilitación',
   PRIMARY KEY (idmenu),
@@ -29,17 +30,15 @@ CREATE TABLE menurol (
   CONSTRAINT fkmenurol_2 FOREIGN KEY (idrol) REFERENCES rol (idrol) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- TABLA: USUARIO
 CREATE TABLE usuario (
   idusuario BIGINT(20) NOT NULL AUTO_INCREMENT,
   usnombre VARCHAR(50) NOT NULL,
-  uspass VARCHAR(100) NOT NULL, -- corregido, antes era int
+  uspass VARCHAR(100) NOT NULL,
   usmail VARCHAR(50) NOT NULL,
   usdeshabilitado TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (idusuario)
 ) ENGINE=InnoDB;
-
 
 -- TABLA: USUARIOROL
 CREATE TABLE usuariorol (
@@ -50,18 +49,16 @@ CREATE TABLE usuariorol (
   CONSTRAINT fkusuariorol_2 FOREIGN KEY (idrol) REFERENCES rol (idrol) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- TABLA: PRODUCTO
 CREATE TABLE producto (
   idproducto BIGINT(20) NOT NULL AUTO_INCREMENT,
-  pronombre VARCHAR(50) NOT NULL, -- corregido, antes era int
+  pronombre VARCHAR(50) NOT NULL,
   prodetalle VARCHAR(512) NOT NULL,
   procantstock INT(11) NOT NULL,
-  proprecio DECIMAL(10,2) DEFAULT 0, -- agregado
-  proimagen VARCHAR(255) DEFAULT NULL, -- agregado
+  proprecio DECIMAL(10,2) DEFAULT 0,
+  proimagen VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (idproducto)
 ) ENGINE=InnoDB;
-
 
 -- TABLA: COMPRA
 CREATE TABLE compra (
@@ -72,7 +69,6 @@ CREATE TABLE compra (
   CONSTRAINT fkcompra_1 FOREIGN KEY (idusuario) REFERENCES usuario (idusuario) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- TABLA: COMPRAESTADOTIPO
 CREATE TABLE compraestadotipo (
   idcompraestadotipo INT(11) NOT NULL AUTO_INCREMENT,
@@ -80,7 +76,6 @@ CREATE TABLE compraestadotipo (
   cetdetalle VARCHAR(256) NOT NULL,
   PRIMARY KEY (idcompraestadotipo)
 ) ENGINE=InnoDB;
-
 
 -- TABLA: COMPRAESTADO
 CREATE TABLE compraestado (
@@ -96,7 +91,6 @@ CREATE TABLE compraestado (
   CONSTRAINT fkcompraestado_2 FOREIGN KEY (idcompraestadotipo) REFERENCES compraestadotipo (idcompraestadotipo) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- TABLA: COMPRAITEM
 CREATE TABLE compraitem (
   idcompraitem BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -108,37 +102,35 @@ CREATE TABLE compraitem (
   CONSTRAINT fkcompraitem_2 FOREIGN KEY (idproducto) REFERENCES producto (idproducto) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-
 -- DATOS INICIALES
 
--- Roles
 INSERT INTO rol (rodescripcion) VALUES
 ('Administrador'),
 ('Cliente');
 
--- Menú
-INSERT INTO menu (menombre, medescripcion, idpadre) VALUES
-('Inicio', 'Página principal', NULL),
-('Productos', 'Listado de productos disponibles', NULL),
-('Usuarios', 'Gestión de usuarios', NULL),
-('Compras', 'Gestión de compras', NULL);
+INSERT INTO menu (menombre, medescripcion, meurl, idpadre) VALUES
+('Inicio', 'Página principal y listado de productos', 'index.php', NULL),
+('Carrito', 'Visualiza y gestiona los productos seleccionados', 'carrito.php', NULL),
+('Mi Cuenta', 'Gestión de datos del usuario cliente', 'cuenta.php', NULL),
+('Mis Compras', 'Historial y seguimiento de compras realizadas', 'compras.php', NULL),
+('Administración', 'Panel de gestión del sistema', 'admin/index.php', NULL),
+('Usuarios', 'Administración de usuarios del sistema', 'admin/usuarios.php', 5),
+('Roles', 'Gestión de roles y permisos', 'admin/roles.php', 5),
+('Menús', 'Gestión del menú dinámico', 'admin/menus.php', 5),
+('Productos', 'ABM de productos del catálogo', 'admin/productos.php', 5);
 
--- Asociación menú-rol
 INSERT INTO menurol (idmenu, idrol) VALUES
-(1,1),(2,1),(3,1),(4,1),  -- Admin
-(1,2),(2,2);              -- Cliente
+(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),
+(1,2),(2,2),(3,2),(4,2);
 
--- Usuarios
 INSERT INTO usuario (usnombre, uspass, usmail) VALUES
 ('admin', '1234', 'admin@tienda.com'),
 ('cliente1', '1234', 'cliente1@correo.com');
 
--- Usuario-Rol
 INSERT INTO usuariorol (idusuario, idrol) VALUES
 (1,1),
 (2,2);
 
--- Productos
 INSERT INTO producto (pronombre, prodetalle, procantstock, proprecio, proimagen) VALUES
 ('Auriculares Bluetooth', 'Auriculares inalámbricos con cancelación de ruido', 25, 15999.99, 'auriculares.jpg'),
 ('Mouse Gamer', 'Mouse óptico RGB con 6 botones', 40, 7999.50, 'mouse.jpg'),
@@ -146,7 +138,6 @@ INSERT INTO producto (pronombre, prodetalle, procantstock, proprecio, proimagen)
 ('Monitor 24"', 'Monitor LED Full HD de 24 pulgadas', 10, 54999.90, 'monitor.jpg'),
 ('Parlantes Bluetooth', 'Parlantes portátiles con sonido envolvente', 30, 12999.00, 'parlantes.jpg');
 
--- Estados de compra
 INSERT INTO compraestadotipo (cetdescripcion, cetdetalle) VALUES
 ('Iniciada', 'Compra creada por el cliente.'),
 ('Aceptada', 'Compra aceptada por el sistema.'),

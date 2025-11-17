@@ -14,13 +14,14 @@ function imprimirMenu($items) {
 
         if ($tieneHijos) {
             echo "<a class='nav-link dropdown-toggle' href='#' data-bs-toggle='dropdown'>" 
-                    . $menu->getMenombre() . "</a>";
+                    . htmlspecialchars($menu->getMenombre()) . "</a>";
             echo "<ul class='dropdown-menu'>";
             imprimirMenu($item['hijos']);
             echo "</ul>";
         } else {
-            echo "<a class='nav-link' href='" . $menu->getMedescripcion() . "'>"
-                    . $menu->getMenombre() . "</a>";
+            $url = $menu->getMeurl() ?: '#';
+            echo "<a class='nav-link' href='" . htmlspecialchars($url) . "'>"
+                    . htmlspecialchars($menu->getMenombre()) . "</a>";
         }
 
         echo "</li>";
