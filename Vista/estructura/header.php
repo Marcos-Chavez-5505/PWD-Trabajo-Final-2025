@@ -35,7 +35,6 @@ ini_set('display_errors', 1);
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul id="menu-dinamico" class="navbar-nav ms-auto">
-          <!-- Menú generado dinamicamente -->
       </ul>
     </div>
 

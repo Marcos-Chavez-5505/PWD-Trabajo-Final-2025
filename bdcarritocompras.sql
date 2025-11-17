@@ -112,16 +112,14 @@ INSERT INTO menu (menombre, medescripcion, meurl, idpadre) VALUES
 ('Inicio', 'Página principal y listado de productos', 'index.php', NULL),
 ('Carrito', 'Visualiza y gestiona los productos seleccionados', 'carrito.php', NULL),
 ('Mi Cuenta', 'Gestión de datos del usuario cliente', 'cuenta.php', NULL),
-('Mis Compras', 'Historial y seguimiento de compras realizadas', 'compras.php', NULL),
-('Administración', 'Panel de gestión del sistema', 'admin/index.php', NULL),
-('Usuarios', 'Administración de usuarios del sistema', 'admin/usuarios.php', 5),
-('Roles', 'Gestión de roles y permisos', 'admin/roles.php', 5),
-('Menús', 'Gestión del menú dinámico', 'admin/menus.php', 5),
-('Productos', 'ABM de productos del catálogo', 'admin/productos.php', 5);
+('Usuarios', 'Administración de usuarios del sistema', 'admin/usuarios.php', NULL),
+('Roles', 'Gestión de roles y permisos', 'admin/roles.php', NULL),
+('Menús', 'Gestión del menú dinámico', 'admin/menus.php', NULL),
+('Productos', 'ABM de productos del catálogo', 'admin/productos.php', NULL);
 
 INSERT INTO menurol (idmenu, idrol) VALUES
-(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),
-(1,2),(2,2),(3,2),(4,2);
+(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),
+(1,2),(2,2),(3,2);
 
 INSERT INTO usuario (usnombre, uspass, usmail) VALUES
 ('admin', '1234', 'admin@tienda.com'),
