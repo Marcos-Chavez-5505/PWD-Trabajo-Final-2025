@@ -5,14 +5,20 @@ class MenuRol {
     private $idmenu;
     private $idrol;
     private $objPdo;
+    private $objMenu;
+    private $objRol;
 
     //getters
     public function getIdmenu() { return $this->idmenu; }
     public function getIdrol()  { return $this->idrol; }
+    public function getObjMenu()  { return $this->objMenu; }
+    public function getObjRol()  { return $this->objRol; }
 
     //setters
     public function setIdmenu($v) { $this->idmenu = $v; }
     public function setIdrol($v)  { $this->idrol = $v; }
+    public function setObjMenu($v)  { $this->objMenu = $v; }
+    public function setObjRol($v)  { $this->objRol = $v; }
 
     //construc
     public function __construct(){
@@ -20,9 +26,11 @@ class MenuRol {
     }
 
     //cargar
-    public function cargar($idmenu, $idrol){
+    public function cargar($idmenu, $idrol, $objMenu, $objRol){
         $this->setIdmenu($idmenu);
         $this->setIdrol($idrol);
+        $this->setObjMenu($objMenu);
+        $this->setObjRol($objRol);
     }
 
     //insertar
@@ -62,11 +70,22 @@ class MenuRol {
 
             if (!empty($filas)) {
                 $fila = $filas[0];
-                $this->cargar($fila['idmenu'], $fila['idrol']);
+
+                $objMenu = new Menu();
+                $objMenu->setIdmenu($fila['idmenu']);
+                $objMenu->cargar();
+                $objRol = new Rol();
+                $objRol->buscar($fila['idrol']);
+                $this->cargar(
+                    $fila['idmenu'],
+                    $fila['idrol'],
+                    $objMenu,
+                    $objRol
+                );
                 $rta = true;
             }
         }
-    return $rta;
+        return $rta;
     }
 
     //listar
@@ -86,7 +105,7 @@ class MenuRol {
             if(!empty($filas)){
                 foreach ($filas as $fila){
                     $obj = new MenuRol();
-                    $obj->cargar($fila['idmenu'], $fila['idrol']);
+                    $obj->buscar($fila['idmenu'], $fila['idrol']);
                     $arreglo[] = $obj;
                 }
             }
