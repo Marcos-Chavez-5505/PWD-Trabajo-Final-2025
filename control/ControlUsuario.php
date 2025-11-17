@@ -66,5 +66,18 @@ class ControlUsuario {
         return $resultado;
     }
 
+    public function cambiarContraseña($nombreUsuario, $passwordActual, $nuevaPassword) {
+        $usuarioAutenticado = $this->autenticar($nombreUsuario, $passwordActual);
+        $retorno = false;
+
+        if ($usuarioAutenticado) {
+            // $usuarioAutenticado ya es un objeto Usuario con todos los datos cargados
+            $usuarioAutenticado->setUspass($nuevaPassword);
+            $retorno = $usuarioAutenticado->modificar();
+        }
+        
+        return $retorno;
+    }
+
 }
 ?>
