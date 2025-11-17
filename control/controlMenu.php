@@ -48,12 +48,12 @@ class ControlMenu {
             $idUsuario = $_SESSION['idusuario'];
 
             // Obtener id de rol del usuario (asumo que rolDeUsuario devuelve int)
-            $usuarioRolOrm = new UsuarioRol();
+            $usuarioRolOrm = new usuarioRol();
             $idRol = $usuarioRolOrm->rolDeUsuario($idUsuario);
 
             if ($idRol && $idRol > 0) {
                 // Obtener relaciones menu-rol
-                $menuRolOrm = new MenuRol();
+                $menuRolOrm = new menuRol();
                 $menuRolList = $menuRolOrm->listar("idrol = {$idRol}");
 
                 // Convertir MenuRol[] -> Menu[] (obtener los objetos Menu reales)
