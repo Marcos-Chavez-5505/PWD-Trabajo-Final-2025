@@ -113,6 +113,36 @@ class CompraItem{
         return $resultado;
     }
 
+
+    public function eliminarPorCompraYProducto($idCompra, $idProducto) {
+        $resultado = false;
+
+        if ($this->objPdo->Iniciar()) {
+            $sql = "DELETE FROM compraitem
+                    WHERE idcompra = {$idCompra}
+                    AND idproducto = {$idProducto}";
+
+            $resultado = $this->objPdo->Ejecutar($sql);
+        }
+
+        return $resultado;
+    }
+
+    public function buscarPorCompraYProducto($idCompra, $idProducto) {
+        $resultado = null;
+
+        $cond = "idcompra = {$idCompra} AND idproducto = {$idProducto}";
+        $items = $this->listar($cond);
+
+        if (!empty($items)) {
+            $resultado = $items[0];
+        }
+
+        return $resultado;
+    }
+
+
+
 }
 ?>
 
