@@ -10,19 +10,23 @@ if (!$session->activa()) {
 }
 
 if ($_POST){
-    $usuario = $_POST['username'];
+    $usuarioSolicitado = $_POST['username'];
+    $usuarioLogueado = $session->getUsuario(); 
+    $idUsuarioLogueado = $session->getIdUsuario(); 
+    
+    if ($usuarioSolicitado !== $usuarioLogueado) {
+        echo json_encode(['ok' => false, 'msg' => 'No tienes permisos para modificar esta cuenta.']);
+        exit;
+    }
+
     $contraseñaActual = $_POST['currentPassword'];
     $nuevaContraseña = $_POST['newPassword'];
 
     $controlUsuario = new ControlUsuario;
-    if($controlUsuario->cambiarContraseña($usuario, $contraseñaActual, $nuevaContraseña)){
+    if($controlUsuario->cambiarContraseña($usuarioSolicitado, $contraseñaActual, $nuevaContraseña)){
         echo json_encode(['ok' => true, 'msg' => 'Los cambios se aplicaron exitosamente.']);
     }else{
         echo json_encode(['ok' => false, 'msg' => 'Hubo un error en el proceso.']);
     }
 }
-
-
-
-
 ?>
