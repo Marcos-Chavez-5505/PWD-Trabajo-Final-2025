@@ -36,7 +36,7 @@ $itemsCarrito = $controlCarrito->obtenerItemsDelCarrito($idUsuario);
 </head>
 
 <body>
-<main class="container py-5">
+<main class="container py-5 min-vh-100 d-flex flex-column">
   <h2 class="text-center mb-4">🛒 Mi Carrito</h2>
 
   <?php if (empty($itemsCarrito)): ?>
