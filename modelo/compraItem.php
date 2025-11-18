@@ -28,20 +28,25 @@ class CompraItem {
         $this->objPdo = new bdCarritoCompras();
     }
 
-    /** Inserta un nuevo item en la tabla compraitem */
     public function insertar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
             $idproducto = $this->getObjProducto()->getIdproducto() ?? NULL;
             $idcompra = $this->getObjCompra()->getIdcompra() ?? NULL;
+            $cantidad = $this->getCicantidad();
 
             $sql = "INSERT INTO compraitem (idproducto, idcompra, cicantidad)
-                    VALUES ('{$idproducto}', '{$idcompra}', '{$this->getCicantidad()}')";
+                    VALUES ('{$idproducto}', '{$idcompra}', '{$cantidad}')";
 
-            $rta = $this->objPdo->Ejecutar($sql);
+            $resultado = $this->objPdo->Ejecutar($sql);
+
+            if ($resultado > 0 || $resultado === -1) {
+                $rta = true;
+            }
         }
         return $rta;
     }
+
 
     /** Modifica un item existente (solo cantidad o referencias) */
     public function modificar() {
