@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function actualizarCantidad(accion, idProducto) {
     try {
-      // ✅ RUTA CORRECTA (respetando mayúsculas)
-      const url = `${BASE_URL}Vista/public/action/${accion}.php`;
+      const url = '/PWD-TP-FINAL/Vista/public/action/' + accion + '.php';
 
       const respuesta = await fetch(url, {
         method: 'POST',
@@ -36,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
           fila.remove();
         }
 
-        // ✅ Recalcular total
         let total = 0;
         document.querySelectorAll('.subtotal').forEach(td => {
           total += parseMoneda(td.textContent);

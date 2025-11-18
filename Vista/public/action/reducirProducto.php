@@ -11,15 +11,14 @@ if (!$idProducto || !$idUsuario) {
     exit;
 }
 
-// ✅ Buscar la compra con estado "Iniciada" (carrito activo)
+// Se usa LEFT JOIN porque la compra puede no tener estados
 $sqlCompra = "
     SELECT c.idcompra 
     FROM compra c
-    INNER JOIN compraestado ce ON c.idcompra = ce.idcompra
-    INNER JOIN compraestadotipo cet ON ce.idcompraestadotipo = cet.idcompraestadotipo
-    WHERE c.idusuario = $idUsuario
-    AND cet.cetdescripcion = 'Iniciada'
-    AND ce.cefechafin IS NULL
+    LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
+    LEFT JOIN compraestadotipo cet ON ce.idcompraestadotipo = cet.idcompraestadotipo
+    WHERE c.idusuario = {$idUsuario}
+    AND (ce.cefechafin IS NULL OR ce.idcompraestado IS NULL)
     ORDER BY c.idcompra DESC
     LIMIT 1
 ";
@@ -32,7 +31,6 @@ if (!$idCompra) {
     exit; 
 }
 
-// ✅ Buscar el item del producto dentro de esa compra
 $sqlItem = "
     SELECT cicantidad, proprecio 
     FROM compraitem ci

@@ -28,8 +28,7 @@ $itemsCarrito = $controlCarrito->obtenerItemsDelCarrito($idUsuario);
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
   <script>
-    // ✅ BASE_URL correcta (respetando mayúsculas)
-    const BASE_URL = "http://localhost/PWD-TP-FINAL/";
+    const BASE_URL = "/PWD-TP-FINAL/";
   </script>
 
   <script src="<?= BASE_URL ?>Vista/js/carrito.js"></script>
@@ -91,7 +90,6 @@ $itemsCarrito = $controlCarrito->obtenerItemsDelCarrito($idUsuario);
     </div>
   <?php endif; ?>
 </main>
-
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/footer.php"; ?>
 </body>
 </html>
