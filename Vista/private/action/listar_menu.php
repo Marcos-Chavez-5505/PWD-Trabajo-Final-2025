@@ -9,6 +9,7 @@ foreach ($list as $elem ){
     $nuevoElem['idmenu'] = $elem->getIdMenu();
     $nuevoElem["menombre"]=$elem->getMenombre();
     $nuevoElem["medescripcion"]=$elem->getMedescripcion();
+    $nuevoElem["meurl"]=$elem->getMeurl();
     $nuevoElem["idpadre"]=$elem->getObjMenu();
     if($elem->getObjMenu()!=null){
         $nuevoElem["idpadre"]=$elem->getObjMenu()->getMeNombre();

@@ -1,6 +1,7 @@
 
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 $objControl = new AbmMenu();
 $List_Menu = $objControl->buscar(null);
 $combo = '<select class="easyui-combobox"  id="idpadre"  name="idpadre" label="Submenu de?:" labelPosition="top" style="width:90%;">
@@ -22,6 +23,9 @@ $combo .='</select>';
 <link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.6.6/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.6.6/themes/color.css">
 <link rel="stylesheet" type="text/css" href="../js/jquery-easyui-1.6.6/demo/demo.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/PWD/vista/css/header-footer.css">
+    <link rel="stylesheet" href="/PWD/home/fonts/css/all.min.css">
 <script type="text/javascript" src="../js/jquery-easyui-1.6.6/jquery.min.js"></script>
 <script type="text/javascript" src="../js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
 </head>
@@ -36,8 +40,9 @@ $combo .='</select>';
             <th field="idmenu" width="50">ID</th>
             <th field="menombre" width="50">Nombre</th>
             <th field="medescripcion" width="50">Descripci&oacute;n</th>
+            <th field="meurl" width="50">URL:</th>
             <th field="idpadre" width="50">Submenu De:</th>
-             <th field="medeshabilitado" width="50">Deshabilitado</th>
+            <th field="medeshabilitado" width="50">Deshabilitado</th>
             </tr>
             </thead>
             </table>
@@ -49,24 +54,25 @@ $combo .='</select>';
             
             <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
             <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-            <h3>Menu Informacion</h3>
-            <div style="margin-bottom:10px">
-            
-                      
-            <input name="menombre" id="menombre"  class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-            <input  name="medescripcion" id="medescripcion"  class="easyui-textbox" required="true" label="Descripcion:" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-            <?php 
-                echo $combo;
-            ?>
-             
-            </div>
-              <div style="margin-bottom:10px">
-            <input class="easyui-checkbox" name="medeshabilitado" value="medeshabilitado" label="Des-Habilitar:">
-        </div>
+                <h3>Menu Informacion</h3>
+                <div style="margin-bottom:10px">
+                    <input name="menombre" id="menombre"  class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
+                </div>
+                <div style="margin-bottom:10px">
+                    <input  name="medescripcion" id="medescripcion"  class="easyui-textbox" required="true" label="Descripcion:" style="width:100%">
+                </div>
+                <div style="margin-bottom:10px">
+                </div>
+                <div style="margin-bottom:10px">
+                    <input name="meurl" id="meurl" class="easyui-textbox" label="URL:" style="width:100%">
+                </div>
+                <?php 
+                    echo $combo;
+                ?>
+                
+                <div style="margin-bottom:10px">
+                    <input class="easyui-checkbox" name="medeshabilitado" value="medeshabilitado" label="Des-Habilitar:">
+                </div>
             </form>
             </div>
             <div id="dlg-buttons">
@@ -135,5 +141,6 @@ $combo .='</select>';
                 }
             }
             </script>
+<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
             </body>
             </html>
