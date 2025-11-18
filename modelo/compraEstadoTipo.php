@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-class CompraEstadoTipo{
+class compraEstadoTipo{
     private $idcompraestadotipo;
     private $cetdescripcion;
     private $cetdetalle;

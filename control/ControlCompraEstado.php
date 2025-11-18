@@ -11,7 +11,7 @@ class ControlCompraEstado {
     public function obtenerEstadoActual($idCompra) {
         $estadoActual = null;
 
-        $objEstado = new CompraEstado();
+        $objEstado = new compraEstado();
         $lista = $objEstado->listar("idcompra = {$idCompra} AND cefechafin IS NULL");
 
         if (!empty($lista)) {
@@ -24,7 +24,7 @@ class ControlCompraEstado {
     public function tieneEstado($idCompra) {
         $tiene = false;
 
-        $objEstado = new CompraEstado();
+        $objEstado = new compraEstado();
         $lista = $objEstado->listar("idcompra = {$idCompra}");
 
         if (!empty($lista)) {
@@ -37,16 +37,16 @@ class ControlCompraEstado {
     public function crearEstadoInicial($idCompra) {
         $exito = false;
 
-        $objCompra = new Compra();
+        $objCompra = new compra();
         if ($objCompra->buscar($idCompra)) {
 
-            $objTipo = new CompraEstadoTipo();
+            $objTipo = new compraEstadoTipo();
             $objTipo->buscar(1);
 
-            $objEstado = new CompraEstado();
+            $objEstado = new compraEstado();
             $objEstado->setObjCompra($objCompra);
             $objEstado->setObjCompraEstadoTipo($objTipo);
-            $objEstado->setCefechaini(null);
+            $objEstado->setCefechaini(date("Y-m-d H:i:s"));  
             $objEstado->setCefechafin(null);
 
             $exito = $objEstado->insertar();
@@ -74,13 +74,13 @@ class ControlCompraEstado {
         $cerrado = $this->cerrarEstadoActual($idCompra);
 
         if ($cerrado) {
-            $objCompra = new Compra();
+            $objCompra = new compra();
             $objCompra->buscar($idCompra);
 
-            $objTipo = new CompraEstadoTipo();
+            $objTipo = new compraEstadoTipo();
             $objTipo->buscar($nuevoEstadoTipo);
 
-            $objEstado = new CompraEstado();
+            $objEstado = new compraEstado();
             $objEstado->setObjCompra($objCompra);
             $objEstado->setObjCompraEstadoTipo($objTipo);
             $objEstado->setCefechaini(null);
@@ -95,7 +95,7 @@ class ControlCompraEstado {
     public function listarEstadosDeCompra($idCompra) {
         $listaEstados = [];
 
-        $objEstado = new CompraEstado();
+        $objEstado = new compraEstado();
         $lista = $objEstado->listar("idcompra = {$idCompra} ORDER BY cefechaini ASC");
 
         if (!empty($lista)) {
@@ -111,7 +111,7 @@ class ControlCompraEstado {
         $actual = $this->obtenerEstadoActual($idCompra);
 
         if ($actual !== null) {
-            if ($actual->getObjCompraEstadoTipo()->getIdcompraestadotipo() == $tipoEsperado) {
+            if ($actual->getObjcompraEstadoTipo()->getIdcompraEstadoTipo() == $tipoEsperado) {
                 $coincide = true;
             }
         }
@@ -119,9 +119,20 @@ class ControlCompraEstado {
         return $coincide;
     }
 
+    public function obtenerIdCompraEstadoTipo($idCompra){
+        $actual = $this->obtenerEstadoActual($idCompra);
+        return ($actual !== null && $actual->getObjcompraEstadoTipo() !== null) ? $actual->getObjcompraEstadoTipo()->getIdcompraestadotipo() : null;
+    }
 
     public function cancelarCompra($idCompra) {
-        return $this->cambiarEstado($idCompra, 4);
+        $estadoActual = $this->obtenerIdCompraEstadoTipo($idCompra);
+        $resultado = false;
+        
+        if ($estadoActual != 4) {
+            $resultado = $this->cambiarEstado($idCompra, 4);
+        }
+        
+        return $resultado;
     }
 
     public function aceptarCompra($idCompra) {

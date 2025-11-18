@@ -18,6 +18,8 @@ class Compra{
     public function getColItems() { return $this->colItems; }
     public function setColItems($v) { $this->colItems = $v; }
 
+    public function getObjPdo(){ return $this->objPdo;}
+
     public function __construct() {
         $this->objPdo = new bdCarritoCompras();
     }

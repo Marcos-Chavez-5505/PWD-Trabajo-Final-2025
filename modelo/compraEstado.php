@@ -1,6 +1,8 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/modelo/compra.php"; 
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/modelo/compraEstadoTipo.php";
 class CompraEstado{
     private $idcompraestado;
     private $objCompra;
@@ -20,6 +22,8 @@ class CompraEstado{
     public function setCefechaini($v) { $this->cefechaini = $v; }
     public function getCefechafin() { return $this->cefechafin; }
     public function setCefechafin($v) { $this->cefechafin = $v; }
+
+    public function getObjPdo() { return $this->objPdo; }
     
     public function __construct() {
         $this->objPdo = new bdCarritoCompras();
@@ -29,11 +33,22 @@ class CompraEstado{
     public function insertar() {
         $rta = false;
         if ($this->objPdo->Iniciar()) {
-            $idcompra = $this->getObjCompra()->getIdcompra() ?? NULL;
             $idcompraestadotipo = $this->getObjCompraEstadoTipo()->getIdcompraestadotipo() ?? NULL;
-            $sql = "INSERT INTO compraestado (idcompraestado, idcompra, idcompraestadotipo)
-                    VALUES ('{$this->getIdcompraestado()}', '{$idcompra}', '{$idcompraestadotipo}')";
+            
+            date_default_timezone_set('America/Argentina/Buenos_Aires');
+            $fecha_actual = date('Y-m-d H:i:s');
+            
+            $sql = "INSERT INTO compraestado (idcompra, idcompraestadotipo, cefechaini, cefechafin) 
+                    VALUES ('{$this->getObjCompra()->getIdCompra()}',
+                            '{$idcompraestadotipo}',
+                            '{$fecha_actual}',
+                            NULL)";
+
             $rta = $this->objPdo->Ejecutar($sql);
+            
+            if ($rta) {
+                $this->setIdcompraestado($this->getObjPdo()->lastInsertId());
+            }
         }
         return $rta;
     }
@@ -45,10 +60,10 @@ class CompraEstado{
             $idcompraestadotipo = $this->getObjCompraEstadoTipo()->getIdcompraestadotipo() ?? NULL;
             $sql = "UPDATE compraestado SET 
                         idcompraestado = '{$this->getIdcompraestado()}',
-                        idcompra = '{$this->getObjCompra()}',
+                        idcompra = '{$this->getObjCompra()->getIdCompra()}',
                         idcompraestadotipo = '{$idcompraestadotipo}',
                         cefechaini = '{$this->getCefechaini()}',
-                        cefechafin = '{$this->getCefechafin()}',
+                        cefechafin = '{$this->getCefechafin()}'
                     WHERE idcompraestado = {$this->getIdcompraestado()}";
             $rta = $this->objPdo->Ejecutar($sql);
         }
@@ -97,7 +112,7 @@ class CompraEstado{
                 $fila = $filas[0];
                 $objCompra = new Compra();
                 $objCompra->buscar($fila['idcompra']);
-                $objCompraEstadoTipo = new CompraEstadoTipo();
+                $objCompraEstadoTipo = new compraEstadoTipo();
                 $objCompraEstadoTipo->buscar($fila['idcompraestadotipo']);
                 $this->cargar(
                     $fila['idcompraestado'],
@@ -121,7 +136,7 @@ class CompraEstado{
                 $fila = $filas[0];
                 $objCompra = new Compra();
                 $objCompra->buscar($fila['idcompra']);
-                $objCompraEstadoTipo = new CompraEstadoTipo();
+                $objCompraEstadoTipo = new compraEstadoTipo();
                 $objCompraEstadoTipo->buscar($fila['idcompraestadotipo']);
                 $this->cargar(
                     $fila['idcompraestado'],

@@ -1,4 +1,5 @@
 <?php
+//* Si bien esto se llama controlAdmin se refiere mas que nada al ABM de productos
 class controlAdmin{
     private $db;
 

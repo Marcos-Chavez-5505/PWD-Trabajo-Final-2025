@@ -2,7 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/conector/bdCarritoCompras.php';
 
-class controlCarrito {
+class ControlCarrito {
     private $db;
 
     public function __construct() {
@@ -18,14 +18,14 @@ class controlCarrito {
     public function buscarCarritoAbierto($idUsuario) {
         $resultado = null;
 
-        $compra = new Compra();
+        $compra = new compra();
         $compras = $compra->listar("idusuario = {$idUsuario} ORDER BY idcompra DESC");
 
         if (!empty($compras)) {
             foreach ($compras as $c) {
                 $idCompra = $c->getIdcompra();
 
-                $compraEstado = new CompraEstado();
+                $compraEstado = new compraEstado();
                 $tieneEstado = $compraEstado->buscarCompraAsociada($idCompra);
 
                 if (!$tieneEstado) {
@@ -37,10 +37,10 @@ class controlCarrito {
 
         // si no encontró carrito existente
         if ($resultado === null) {
-            $usuario = new Usuario();
+            $usuario = new usuario();
             $usuario->buscar($idUsuario);
 
-            $nuevaCompra = new Compra();
+            $nuevaCompra = new compra();
             $nuevaCompra->setObjUsuario($usuario);
 
             $insertOk = $nuevaCompra->insertar();
@@ -49,10 +49,10 @@ class controlCarrito {
                 if (!empty($ultimas)) {
                     $resultado = $ultimas[0]->getIdcompra();
                     
-                    $estadoTipo = new CompraEstadoTipo();
+                    $estadoTipo = new compraEstadoTipo();
                     $estadoTipo->buscarDescripcion("Iniciada");
 
-                    $nuevoEstado = new CompraEstado();
+                    $nuevoEstado = new compraEstado();
                     $nuevoEstado->setObjCompra($ultimas[0]);
                     $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
                     $nuevoEstado->insertar();
@@ -74,57 +74,77 @@ class controlCarrito {
      * @return bool|int|string
      */
     public function agregarAlCarrito($idUsuario, $idProducto, $cantidad = 1) {
-        $resultado = false;
+    $resultado = false;
+    error_log("🎯 agregarAlCarrito INICIADO - Usuario: $idUsuario, Producto: $idProducto, Cantidad: $cantidad");
 
-        $idCompra = $this->buscarCarritoAbierto($idUsuario);
+    $idCompra = $this->buscarCarritoAbierto($idUsuario);
+    error_log("ID Compra obtenido: " . ($idCompra ?? 'NULL'));
 
-        if ($idCompra !== null) {
-            $producto = new Producto();
-            $prodOk = $producto->buscar($idProducto);
+    if ($idCompra !== null) {
+        error_log("✅ Compra existe, buscando producto $idProducto...");
+        $producto = new producto();
+        $prodOk = $producto->buscar($idProducto);
+        error_log("Producto encontrado: " . ($prodOk ? 'SÍ' : 'NO'));
 
-            if ($prodOk) {
-                $stock = (int)$producto->getProcantstock();
+        if ($prodOk) {
+            $stock = (int)$producto->getProcantstock();
+            error_log("Stock disponible: $stock, Cantidad solicitada: $cantidad");
 
-                if ($cantidad <= 0 || $cantidad > $stock) {
-                    $resultado = false;
-                } else {
-                    $compraItem = new CompraItem();
-                    $itemExistente = $compraItem->buscarPorCompraYProducto($idCompra, $idProducto);
+            if ($cantidad <= 0 || $cantidad > $stock) {
+                error_log("❌ Problema de stock - Cantidad fuera de rango");
+                $resultado = false;
+            } else {
+                $compraItem = new compraItem();
+                $itemExistente = $compraItem->buscarPorCompraYProducto($idCompra, $idProducto);
+                error_log("Item existente en carrito: " . ($itemExistente ? 'SÍ' : 'NO'));
 
-                    if ($itemExistente) {
-                        $cantActual = (int)$itemExistente->getCicantidad();
-                        $nuevaCant = $cantActual + $cantidad;
+                if ($itemExistente) {
+                    error_log("📦 Item existe, actualizando cantidad...");
+                    $cantActual = (int)$itemExistente->getCicantidad();
+                    $nuevaCant = $cantActual + $cantidad;
+                    error_log("Cantidad actual: $cantActual, Nueva cantidad: $nuevaCant");
 
-                        if ($nuevaCant <= $stock) {
-                            $itemExistente->setCicantidad($nuevaCant);
-                            $resultado = $itemExistente->modificar();
-                        } else {
-                            $resultado = false;
-                        }
+                    if ($nuevaCant <= $stock) {
+                        $itemExistente->setCicantidad($nuevaCant);
+                        $resultado = $itemExistente->modificar();
+                        error_log("Modificar item: " . ($resultado ? 'ÉXITO' : 'FALLÓ'));
                     } else {
-                        $compraObj = new Compra();
-                        $compraObj->buscar($idCompra);
+                        error_log("❌ Stock insuficiente para actualizar");
+                        $resultado = false;
+                    }
+                } else {
+                    error_log("🆕 Creando nuevo item en carrito...");
+                    $compraObj = new compra();
+                    $compraEncontrada = $compraObj->buscar($idCompra);
+                    error_log("Compra buscada: " . ($compraEncontrada ? 'SÍ' : 'NO'));
 
-                        $productoObj = new Producto();
-                        $productoObj->buscar($idProducto);
+                    $productoObj = new producto();
+                    $productoEncontrado = $productoObj->buscar($idProducto);
+                    error_log("Producto buscado: " . ($productoEncontrado ? 'SÍ' : 'NO'));
 
-                        $nuevoItem = new CompraItem();
-                        $nuevoItem->setObjCompra($compraObj);
-                        $nuevoItem->setObjProducto($productoObj);
-                        $nuevoItem->setCicantidad($cantidad);
+                    $nuevoItem = new compraItem();
+                    $nuevoItem->setObjCompra($compraObj);
+                    $nuevoItem->setObjProducto($productoObj);
+                    $nuevoItem->setCicantidad($cantidad);
 
-                        $resultado = $nuevoItem->insertar();
+                    $resultado = $nuevoItem->insertar();
+                    error_log("Insertar nuevo item: " . ($resultado ? 'ÉXITO' : 'FALLÓ'));
+                    
+                    if (!$resultado) {
+                        error_log("❌ FALLÓ la inserción del item");
                     }
                 }
-            } else {
-                $resultado = false;
             }
         } else {
-            $resultado = false;
+            error_log("❌ Producto no encontrado");
         }
-
-        return $resultado;
+    } else {
+        error_log("❌ No se pudo obtener/comprar ID de compra");
     }
+    
+    error_log("🔚 agregarAlCarrito RESULTADO FINAL: " . ($resultado ? 'TRUE' : 'FALSE'));
+    return $resultado;
+}
 
     
     /**
@@ -139,7 +159,7 @@ class controlCarrito {
         $idCompra = $this->buscarCarritoAbierto($idUsuario);
 
         if ($idCompra !== null) {
-            $compraItem = new CompraItem();
+            $compraItem = new compraItem();
             $resultado = $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
         } else {
             $resultado = false;
@@ -161,7 +181,7 @@ class controlCarrito {
         $idCompra = $this->buscarCarritoAbierto($idUsuario);
 
         if ($idCompra !== null) {
-            $compraItem = new CompraItem();
+            $compraItem = new compraItem();
             // Uso de listar para obtener los objetos CompraItem asociados a la compra
             $items = $compraItem->listar("idcompra = {$idCompra}");
 
@@ -188,7 +208,7 @@ class controlCarrito {
         $idCompra = $this->buscarCarritoAbierto($idUsuario);
 
         if ($idCompra !== null) {
-            $compraItem = new CompraItem();
+            $compraItem = new compraItem();
             $items = $compraItem->listar("idcompra = {$idCompra}");
 
             if (!empty($items)) {
@@ -222,7 +242,7 @@ class controlCarrito {
         $idCompra = $this->buscarCarritoAbierto($idUsuario);
 
         if ($idCompra !== null) {
-            $compraItem = new CompraItem();
+            $compraItem = new compraItem();
             $items = $compraItem->listar("idcompra = {$idCompra}");
 
             if (!empty($items)) {

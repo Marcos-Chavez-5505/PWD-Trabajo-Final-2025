@@ -11,28 +11,39 @@ if (!$idProducto || !$idUsuario) {
     exit;
 }
 
-// Compra activa
 $sqlCompra = "
     SELECT c.idcompra 
     FROM compra c
-    LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
-    LEFT JOIN compraestadotipo cet ON ce.idcompraestadotipo = cet.idcompraestadotipo
     WHERE c.idusuario = $idUsuario
-    ORDER BY ce.cefechaini DESC
+    AND c.idcompra NOT IN (
+        SELECT DISTINCT idcompra FROM compraestado WHERE cefechafin IS NULL
+    )
+    ORDER BY c.idcompra DESC
     LIMIT 1
 ";
 $base->Ejecutar($sqlCompra);
 $compra = $base->Registro();
 $idCompra = $compra['idcompra'] ?? null;
-if (!$idCompra) { echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']); exit; }
 
-// Aumentar cantidad
+if (!$idCompra) { 
+    echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']); 
+    exit; 
+}
+
 $sqlItem = "SELECT cicantidad, proprecio FROM compraitem ci
             INNER JOIN producto p ON ci.idproducto = p.idproducto
             WHERE ci.idcompra = $idCompra AND ci.idproducto = $idProducto";
 $base->Ejecutar($sqlItem);
 $item = $base->Registro();
-if (!$item) { echo json_encode(['ok'=>false,'msg'=>'Producto no encontrado']); exit; }
+
+if (!$item) { 
+    $sqlTodosItems = "SELECT * FROM compraitem WHERE idcompra = $idCompra";
+    $base->Ejecutar($sqlTodosItems);
+    $todosItems = $base->getFilas();
+    
+    echo json_encode(['ok'=>false,'msg'=>'Producto no encontrado']); 
+    exit; 
+}
 
 $nuevaCantidad = $item['cicantidad'] + 1;
 $sqlUpdate = "UPDATE compraitem SET cicantidad = $nuevaCantidad WHERE idcompra = $idCompra AND idproducto = $idProducto";

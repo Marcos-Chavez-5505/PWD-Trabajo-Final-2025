@@ -14,7 +14,6 @@ $controlAdmin = new controlAdmin();
 $productos = $controlAdmin->obtenerProductos();
 
 if ($productos !== false) {
-    // ✅ Formato que espera EasyUI Datagrid
     echo json_encode([
         'total' => count($productos),
         'rows' => $productos

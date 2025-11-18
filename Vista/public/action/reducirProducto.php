@@ -11,14 +11,14 @@ if (!$idProducto || !$idUsuario) {
     exit;
 }
 
-// Compra activa
 $sqlCompra = "
     SELECT c.idcompra 
     FROM compra c
-    LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
-    LEFT JOIN compraestadotipo cet ON ce.idcompraestadotipo = cet.idcompraestadotipo
     WHERE c.idusuario = $idUsuario
-    ORDER BY ce.cefechaini DESC
+    AND c.idcompra NOT IN (
+        SELECT DISTINCT idcompra FROM compraestado WHERE cefechafin IS NULL
+    )
+    ORDER BY c.idcompra DESC
     LIMIT 1
 ";
 $base->Ejecutar($sqlCompra);
@@ -26,7 +26,6 @@ $compra = $base->Registro();
 $idCompra = $compra['idcompra'] ?? null;
 if (!$idCompra) { echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']); exit; }
 
-// Reducir cantidad
 $sqlItem = "SELECT cicantidad, proprecio FROM compraitem ci
             INNER JOIN producto p ON ci.idproducto = p.idproducto
             WHERE ci.idcompra = $idCompra AND ci.idproducto = $idProducto";
