@@ -5,11 +5,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.
 $objControl = new AbmMenu();
 $List_Menu = $objControl->buscar(null);
 
-$combo = '<select class="easyui-combobox" id="idpadre" name="idpadre" label="Submenu de?:" labelPosition="top" style="width:90%;">
+$combo = '<select class="easyui-combobox" id="idpadre" name="idpadre" label="Submenú de?:" labelPosition="top" style="width:90%;">
 <option></option>';
 
 foreach ($List_Menu as $objMenu) {
-    $combo .= '<option value="' . $objMenu->getIdmenu() . '">' . $objMenu->getMenombre() . ':' . $objMenu->getMedescripcion() . '</option>';
+    $combo .= '<option value="' . $objMenu->getIdmenu() . '">' . $objMenu->getMenombre() . ': ' . $objMenu->getMedescripcion() . '</option>';
 }
 
 $combo .= '</select>';
@@ -29,60 +29,66 @@ $combo .= '</select>';
 
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">  
+<!-- Tu CSS global -->
+<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/css/tpFinal.css">
 </head>
 
 <body>
-<h2>ABM - Menú</h2>
-<p>Seleccione la acción que desea realizar.</p>
+<div class="menu-admin-container">
+  <div class="menu-admin-box">
+    <h2>ABM - Menú</h2>
+    <p>Seleccione la acción que desea realizar.</p>
 
-<table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid" style="width:700px;height:250px"
-    url="/PWD-TP-FINAL/vista/admin/action/listar_menu.php"
-    toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+    <table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid"
+        url="/PWD-TP-FINAL/vista/private/action/listar_menu.php"
+        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
 
-    <thead>
-        <tr>
-            <th field="idmenu" width="50">ID</th>
-            <th field="menombre" width="50">Nombre</th>
-            <th field="medescripcion" width="50">Descripción</th>
-            <th field="meurl" width="50">URL</th>
-            <th field="idpadre" width="50">Submenú de</th>
-            <th field="medeshabilitado" width="50">Deshabilitado</th>
-        </tr>
-    </thead>
-</table>
+        <thead>
+            <tr>
+                <th field="idmenu" width="50">ID</th>
+                <th field="menombre" width="80">Nombre</th>
+                <th field="medescripcion" width="120">Descripción</th>
+                <th field="meurl" width="120">URL</th>
+                <th field="idpadre" width="100">Submenú de</th>
+                <th field="medeshabilitado" width="80">Deshabilitado</th>
+            </tr>
+        </thead>
+    </table>
 
-<div id="toolbar">
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newMenu()">Nuevo Menú</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editMenu()">Editar Menú</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyMenu()">Baja Menú</a>
-</div>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newMenu()">Nuevo Menú</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editMenu()">Editar Menú</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyMenu()">Baja Menú</a>
+    </div>
 
-<div id="dlg" class="easyui-dialog" style="width:600px"
-     data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <div id="dlg" class="easyui-dialog" style="width:600px"
+        data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
 
-    <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
-        <h3>Información del Menú</h3>
-        <div style="margin-bottom:10px">
-            <input name="menombre" id="menombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
-        </div>
-        <div style="margin-bottom:10px">
-            <input name="medescripcion" id="medescripcion" class="easyui-textbox" required="true" label="Descripción:" style="width:100%">
-        </div>
-        <div style="margin-bottom:10px">
-            <input name="meurl" id="meurl" class="easyui-textbox" label="URL:" style="width:100%">
-        </div>
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <h3>Información del Menú</h3>
+            <div style="margin-bottom:10px">
+                <input name="menombre" id="menombre" class="easyui-textbox" required="true" label="Nombre:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="medescripcion" id="medescripcion" class="easyui-textbox" required="true" label="Descripción:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="meurl" id="meurl" class="easyui-textbox" label="URL:" style="width:100%">
+            </div>
 
-        <?php echo $combo; ?>
+            <?php echo $combo; ?>
 
-        <div style="margin-bottom:10px">
-            <input class="easyui-checkbox" name="medeshabilitado" value="medeshabilitado" label="Deshabilitar:">
-        </div>
-    </form>
-</div>
+            <div style="margin-bottom:10px">
+                <input class="easyui-checkbox" name="medeshabilitado" value="medeshabilitado" label="Deshabilitar:">
+            </div>
+        </form>
+    </div>
 
-<div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveMenu()" style="width:90px">Aceptar</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveMenu()" style="width:90px">Aceptar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">

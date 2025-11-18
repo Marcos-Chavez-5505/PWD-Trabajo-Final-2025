@@ -293,6 +293,129 @@ h1, h2, h3 {
 
 
 /* =========================================
+   AJUSTES PARA ABM MENÚ
+========================================= */
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #f8f9fa;
+  height: 100%;
+}
+
+.menu-admin-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 85vh;
+  padding-top: 40px;
+}
+
+/* Caja visual del ABM */
+.menu-admin-box {
+  background-color: #fff;
+  border-radius: 16px;
+  border: 2px solid #EF360A33;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1100px; /* ancho máximo visible */
+  padding: 30px 40px;
+}
+
+/* Encabezado del ABM */
+.menu-admin-box h2 {
+  text-align: center;
+  color: #EF360A;
+  margin-bottom: 10px;
+}
+
+.menu-admin-box p {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.easyui-datagrid {
+  width: 100% !important;
+  height: 400px !important;
+  border-radius: 8px;
+}
+
+
+#toolbar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#toolbar a {
+  margin: 0 5px;
+  border-radius: 6px;
+}
+
+
+.easyui-dialog {
+  border-radius: 10px !important;
+}
+
+
+/* =========================================
+   AJUSTES PARA ADMIN - PRODUCTOS
+========================================= */
+
+.menu-admin-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 90vh;
+  padding-top: 40px;
+}
+
+.menu-admin-box {
+  background-color: #fff;
+  border-radius: 16px;
+  border: 2px solid #EF360A33;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1100px;
+  padding: 40px 50px;
+}
+
+.menu-admin-box h2 {
+  text-align: center;
+  color: #EF360A;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.menu-admin-box p {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.easyui-datagrid {
+  width: 100% !important;
+  height: 400px !important;
+  border-radius: 8px;
+}
+
+#toolbar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#toolbar a {
+  margin: 0 5px;
+  border-radius: 6px;
+}
+
+.easyui-dialog {
+  border-radius: 10px !important;
+}
+
+
+
+/* =========================================
    PIE DE PÁGINA
 ========================================= */
 
