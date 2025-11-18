@@ -1,0 +1,1 @@
+Esta carpeta es utilizada por ControlPDF.php para guardar los archivos PDF generados

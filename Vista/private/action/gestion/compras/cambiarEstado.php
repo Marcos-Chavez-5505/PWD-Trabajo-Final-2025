@@ -24,6 +24,10 @@ if (isset($_POST['idcompra']) && isset($_POST['accion'])){
                     if($controlCompraEstado->cambiarEstado($idCompra,$proximoEstado)){
                         $response['success'] = true;
                         $response['message'] = "Estado cambiado a: " . $proximoEstado;
+
+                        $mail = new MailerService();
+                        $mail->generarMail($idCompra, $proximoEstado);
+
                     }else{
                         $response['success'] = false;
                         $response['error'] = "No se pudo cambiar al estado: " . $proximoEstado;
@@ -46,6 +50,10 @@ if (isset($_POST['idcompra']) && isset($_POST['accion'])){
                 if ($estadoActual == 4) {
                     $response['success'] = false;
                     $response['error'] = "La compra ya está cancelada";
+                    
+                    $mail = new MailerService();
+                    $mail->generarMail($idCompra, $estadoActual);
+                    
                 } else {
                     $response['success'] = false;
                     $response['error'] = "No se pudo cancelar la compra";
