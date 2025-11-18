@@ -15,7 +15,7 @@ $usuarioRol = trim(strtolower((string)$usuarioRolRaw));
 
 $currentScript = basename($_SERVER['SCRIPT_NAME']);
 
-if ($usuarioRol === 'cliente' && $currentScript !== 'cliente.php') {
+if ($usuarioRol === 'Cliente' && $currentScript !== 'cliente.php') {
     header('Location: /PWD-TP-FINAL/Vista/public/index.php');
     exit();
 }
@@ -24,7 +24,7 @@ if ($usuarioRol === 'cliente' && $currentScript !== 'cliente.php') {
 <div class="container mt-5">
     <h1 class="text-center mb-4">Bienvenido, <?php echo htmlspecialchars($usuarioNombre); ?> 👋</h1>
 
-    <?php if ($usuarioRol === 'administrador'): ?>
+    <?php if ($usuarioRol === 'Administrador'): ?>
         <div class="alert alert-primary text-center">
             <strong>Rol:</strong> Administrador
         </div>
