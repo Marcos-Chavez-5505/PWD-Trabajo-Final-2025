@@ -23,14 +23,12 @@ class ControlCarrito {
                 $estado = $compraEstado->buscarCompraAsociada($idCompra);
 
                 if ($estado) {
-                    // buscarCompraAsociada() devuelve true si hay estado; el objeto queda cargado
                     $estadoTipo = $compraEstado->getObjCompraEstadoTipo()->getCETdescripcion();
                     if ($estadoTipo === 'Iniciada') {
                         $resultado = $idCompra;
                         break;
                     }
                 } else {
-                    // No tiene estado => está abierta
                     $resultado = $idCompra;
                     break;
                 }
@@ -103,19 +101,57 @@ class ControlCarrito {
         return $resultado;
     }
 
-    /** Devuelve todos los items del carrito actual del usuario */
-    public function obtenerItemsDelCarrito($idUsuario) {
+    /** Devuelve todos los items de la compra sin estado o “Iniciada” */
+    public function obtenerItemsSinEstado($idUsuario) {
         $resultado = [];
-        $idCompra = $this->buscarCarritoAbierto($idUsuario);
-        if ($idCompra !== null) {
-            $compraItem = new compraItem();
-            $items = $compraItem->listar("idcompra = {$idCompra}");
-            if (!empty($items)) {
-                foreach ($items as $item) {
-                    $resultado[] = $item;
+        $compra = new compra();
+        
+        // Buscar compras sin estado o con estado "Iniciada"
+        $comprasSinEstado = $compra->listarComprasSinEstado("idusuario = {$idUsuario}");
+        
+        // Solo crear una nueva compra si el usuario no tiene NINGUNA compra previa
+        if (empty($comprasSinEstado)) {
+            $controlCompra = new ControlCompra();
+            $comprasPrevias = $controlCompra->obtenerComprasPorUsuario($idUsuario);
+
+            // Si el usuario nunca compró nada, se crea una nueva compra
+            if (empty($comprasPrevias)) {
+                $usuario = new usuario();
+                if ($usuario->buscar($idUsuario)) {
+                    $nuevaCompra = new compra();
+                    $nuevaCompra->setObjUsuario($usuario);
+                    if ($nuevaCompra->insertar()) {
+                        $comprasSinEstado = [$nuevaCompra];
+                    }
                 }
             }
         }
+
+
+        // Si aún no hay compras activas, crear una nueva
+        if (empty($comprasSinEstado)) {
+            $usuario = new usuario();
+            if ($usuario->buscar($idUsuario)) {
+                $nuevaCompra = new compra();
+                $nuevaCompra->setObjUsuario($usuario);
+                if ($nuevaCompra->insertar()) {
+                    $comprasSinEstado = [$nuevaCompra];
+                }
+            }
+        }
+
+        // Obtener items de esas compras
+        if (!empty($comprasSinEstado)) {
+            $compraItem = new compraItem();
+            foreach ($comprasSinEstado as $compraObj) {
+                $idCompra = $compraObj->getIdcompra();
+                if (!empty($idCompra)) {
+                    $items = $compraItem->listar("idcompra = {$idCompra}");
+                    $resultado = array_merge($resultado, $items);
+                }
+            }
+        }
+
         return $resultado;
     }
 
@@ -162,6 +198,7 @@ class ControlCarrito {
         return $total;
     }
 
+    /** Procesa la compra actual del usuario */
     public function comprarCarrito($idUsuario) {
         $controlCompraEstado = new ControlCompraEstado();
         $controlCompra = new ControlCompra();
@@ -170,57 +207,22 @@ class ControlCarrito {
         $mail = new MailerService();
         $exito = false;
 
-        $comprasSinEstado = $controlCompra->obtenerComprasPorUsuario($idUsuario);
-        
-        foreach ($comprasSinEstado as $compra) {
+        $compras = $controlCompra->obtenerComprasPorUsuario($idUsuario);
+
+        foreach ($compras as $compra) {
             $idCompra = $compra->getIdcompra();
-            if (!$exito && $controlCompraEstado->añadirEstadoCarrito($idCompra)) {
-                $colProd = $compraItem->obtenerIdsYCantidadPorCompra($idCompra);
-                foreach ($colProd as $prod){
+
+            if ($controlCompraEstado->añadirEstadoCarrito($idCompra)) {
+                $items = $compraItem->obtenerIdsYCantidadPorCompra($idCompra);
+                foreach ($items as $prod) {
                     $producto->reducirStock($prod['idproducto'], $prod['cicantidad']);
                 }
                 $mail->generarMail($idCompra, 1);
                 $exito = true;
             }
         }
+
         return $exito;
     }
-
-    public function obtenerItemsSinEstado($idUsuario) {
-    $resultado = array();
-    $compra = new compra();
-    $comprasSinEstado = $compra->listarComprasSinEstado("idusuario = {$idUsuario}");
-    $exito = false;
-    
-    if (empty($comprasSinEstado)) {
-        $nuevaCompra = new compra();
-        $usuario = new usuario();
-        $usuario->setIdusuario($idUsuario);
-        $nuevaCompra->setObjUsuario($usuario);
-        $exito = $nuevaCompra->insertar();
-        
-        if ($exito) {
-            $idCompraNueva = $nuevaCompra->getIdcompra();
-            if (!empty($idCompraNueva)) {
-                $comprasSinEstado = array($nuevaCompra);
-            }
-        }
-    }
-    
-    if (!empty($comprasSinEstado)) {
-        $compraItem = new compraItem();
-        
-        foreach ($comprasSinEstado as $compraObj) {
-            $idCompra = $compraObj->getIdcompra();
-            if (!empty($idCompra)) {
-                $items = $compraItem->listar("idcompra = {$idCompra}");
-                $resultado = array_merge($resultado, $items);
-            }
-        }
-    }
-    
-    return $resultado;
 }
-}
-
 ?>

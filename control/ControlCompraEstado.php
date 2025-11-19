@@ -152,22 +152,18 @@ class ControlCompraEstado {
         return $exito;
     }
 
-    /**
-    * Esta funcion revisa si la compra tiene un estado asociado    
-    */
-    public function añadirEstadoCarrito($idCompra){
-    $objCompraEstado = new compraEstado();
-    $comprasSinEstado = $objCompraEstado->obtenerComprasSinEstado($idCompra);
-    $exito = false;
-    
-    if ($comprasSinEstado === true) {
-        if ($this->crearEstadoInicial($idCompra)){
-            $exito = true;
+   public function añadirEstadoCarrito($idCompra){
+        $objCompraEstado = new compraEstado();
+        $lista = $objCompraEstado->listar("idcompra = {$idCompra}");
+
+        // Si no hay estado, crear estado inicial
+        if (empty($lista)) {
+            return $this->crearEstadoInicial($idCompra);
         }
+
+        return false;
     }
-    
-    return $exito;
-}
+
 
 }
 ?>
