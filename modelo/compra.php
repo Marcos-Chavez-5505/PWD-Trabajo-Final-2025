@@ -137,6 +137,40 @@ class Compra{
         }
         return $arreglo;
     }
+
+
+    public function listarIDComprasSinEstadoNiFecha($idUsuario, $condicion = "") {
+        $idCompra = null;
+
+        $sql = "
+            SELECT c.idcompra 
+            FROM compra c
+            LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
+            LEFT JOIN compraestadotipo cet ON ce.idcompraestadotipo = cet.idcompraestadotipo
+            WHERE c.idusuario = {$idUsuario}
+            AND (ce.cefechafin IS NULL OR ce.idcompraestado IS NULL)
+            ORDER BY c.idcompra DESC
+            LIMIT 1  
+        ";
+
+        if ($condicion !== "") {
+            $sql = rtrim($sql, ";");
+            $sql .= " AND " . $condicion;
+        }
+
+        if ($this->objPdo->Iniciar()) {
+            $this->objPdo->Ejecutar($sql);
+            $filas = $this->objPdo->getFilas();
+
+            if (!empty($filas)) {
+                $idCompra = (int)$filas[0]['idcompra'];
+            }
+        }
+
+        return $idCompra;
+    }
+
+
 }
 ?>
 

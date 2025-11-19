@@ -175,6 +175,37 @@ class CompraItem {
     
         return $resultado;
     }
+
+
+    public function obtenerDatosItem($idCompra, $idProducto) {
+        $resultado = null;
+
+        $sql = "
+            SELECT idcompraitem, cicantidad, proprecio, procantstock
+            FROM compraitem ci
+            INNER JOIN producto p ON ci.idproducto = p.idproducto
+            WHERE ci.idcompra = {$idCompra} 
+            AND ci.idproducto = {$idProducto}
+            LIMIT 1
+        ";
+        
+        if ($this->objPdo->Iniciar()) {
+            $this->objPdo->Ejecutar($sql);
+            $filas = $this->objPdo->getFilas();
+
+            if (!empty($filas)) {
+                $resultado = [
+                    'idcompraitem'   => (int)$filas[0]['idcompraitem'],
+                    'cicantidad'   => (int)$filas[0]['cicantidad'],
+                    'proprecio'    => (float)$filas[0]['proprecio'],
+                    'procantstock' => (int)$filas[0]['procantstock']
+                ];
+                $this->buscar($filas[0]['idcompraitem']);
+            }
+        }
+        return $resultado;
+    }
+
 }
 
 ?>

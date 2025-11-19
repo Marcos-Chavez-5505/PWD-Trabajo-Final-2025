@@ -75,5 +75,121 @@ class ControlCompra{
         $compra = new compra();
         return $compra->listar("idusuario = " . strval($idUsuario));
     }
+
+    /**
+     * Aumenta la cantidad de un producto en el carrito.
+     * Códigos:
+     *  1 = falta de datos
+     *  2 = carrito no encontrado
+     *  3 = producto no encontrado
+     *  4 = sin stock disponible
+     *  5 = error al modificar
+     *  6 = ok
+     */
+    public function aumentarCantidadProducto($idUsuario, $idProducto) {
+
+        $response = ['code' => 0];
+
+        if (!$idUsuario || !$idProducto){
+            $response = ['code' => 1];
+        }
+        else {
+            $compra = new Compra();
+            $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario);
+
+            if (!$idCompra) {
+                $response = ['code' => 2];
+            }
+            else {
+                $compraItem = new CompraItem();
+                $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
+
+                if (!$item){
+                    $response = ['code' => 3];
+                }
+                else {
+                    $nuevaCantidad = $item['cicantidad'] + 1;
+
+                    if ($nuevaCantidad > $item['procantstock']){
+                        $response = ['code' => 4];
+
+                    }
+                    else {
+
+                        $compraItem->setCicantidad($nuevaCantidad);
+                        $ok = $compraItem->modificar();
+
+                        if (!$ok){
+                            $response = ['code' => 5];
+                        } else {
+                            $response = [
+                                'code' => 6,
+                                'cantidad' => $nuevaCantidad,
+                                'precio' => $item['proprecio']
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        return $response;
+    }
+
+
+    /**
+     * Disminuye la cantidad de un producto en el carrito.
+     * Códigos de retorno:
+     *  1 = falta de datos
+     *  2 = carrito no encontrado
+     *  3 = producto no encontrado en la compra
+     *  4 = error al modificar item
+     *  5 = ok, cantidad modificada o eliminado
+     */
+    public function disminuirCantidadProducto($idUsuario, $idProducto) {
+
+        $response = ['code' => 0];
+
+        if (!$idUsuario || !$idProducto){
+            $response = ['code' => 1];
+        }
+        else {
+            $compra = new Compra();
+            $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario);
+
+            if (!$idCompra){
+                $response = ['code' => 2];
+            }
+            else {
+                $compraItem = new CompraItem();
+                $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
+                if (!$item){
+                    $response = ['code' => 3];
+                }
+                else {
+                    $nuevaCantidad = $item['cicantidad'] - 1;
+                    $ok = false;
+                    if ($nuevaCantidad > 0){
+                        $compraItem->setCicantidad($nuevaCantidad);
+                        $ok = $compraItem->modificar();
+                    }
+                    else {
+                        $ok = $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
+                    }
+                    if (!$ok){
+                        $response = ['code' => 4];
+                    }
+                    else {
+                        $response = [
+                            'code' => 5,
+                            'cantidad' => max(0, $nuevaCantidad),
+                            'precio' => $item['proprecio']
+                        ];
+                    }
+                }
+            }
+        }
+        return $response;
+    }
+
 }
 ?>

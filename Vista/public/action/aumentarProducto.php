@@ -1,57 +1,81 @@
 <?php
 include_once '../../../configuracion.php';
-$base = new bdCarritoCompras();
 
 $idProducto = $_POST['idproducto'] ?? null;
 $session = new Session();
 $idUsuario = $session->getIdUsuario();
 
-if (!$idProducto || !$idUsuario) {
-    echo json_encode(['ok' => false, 'msg' => 'Datos incompletos']);
-    exit;
+$control = new ControlCompra();
+$result = $control->aumentarCantidadProducto($idUsuario, $idProducto);
+
+switch ($result['code']) {
+    case 1:
+        echo json_encode(['ok' => false, 'msg' => 'Datos incompletos']);
+        break;
+    case 2:
+        echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']);
+        break;
+    case 3:
+        echo json_encode(['ok' => false, 'msg' => 'Producto no encontrado']);
+        break;
+    case 4:
+        echo json_encode(['ok' => false, 'msg' => 'Stock insuficiente']);
+        break;
+    case 5:
+        echo json_encode(['ok' => false, 'msg' => 'Error al modificar la cantidad']);
+        break;
+    case 6:
+        echo json_encode(['ok' => true, 'cantidad' => $result['cantidad'], 'precio' => $result['precio']]);
+        break;
+    default:
+        echo json_encode(['ok' => false, 'msg' => 'Error inesperado']);
 }
 
-// Se usa LEFT JOIN porque la compra puede no tener estados
-$sqlCompra = "
-    SELECT c.idcompra 
-    FROM compra c
-    LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
-    LEFT JOIN compraestadotipo cet ON ce.idcompraestadotipo = cet.idcompraestadotipo
-    WHERE c.idusuario = {$idUsuario}
-    AND (ce.cefechafin IS NULL OR ce.idcompraestado IS NULL)
-    ORDER BY c.idcompra DESC
-    LIMIT 1
-";
-$base->Ejecutar($sqlCompra);
-$compra = $base->Registro();
 
-$idCompra = $compra['idcompra'] ?? null;
-if (!$idCompra) { 
-    echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']); 
-    exit; 
-}
 
-$sqlItem = "
-    SELECT cicantidad, proprecio, procantstock
-    FROM compraitem ci
-    INNER JOIN producto p ON ci.idproducto = p.idproducto
-    WHERE ci.idcompra = $idCompra AND ci.idproducto = $idProducto
-";
-$base->Ejecutar($sqlItem);
-$item = $base->Registro();
 
-if (!$item) { 
-    echo json_encode(['ok'=>false,'msg'=>'Producto no encontrado']); 
-    exit; 
-}
 
-$nuevaCantidad = $item['cicantidad'] + 1;
-if ($nuevaCantidad < $item['procantstock']){
-    $sqlUpdate = "UPDATE compraitem 
-              SET cicantidad = $nuevaCantidad 
-              WHERE idcompra = $idCompra AND idproducto = $idProducto";
-    $base->Ejecutar($sqlUpdate);
-}
 
-echo json_encode(['ok'=>true,'cantidad'=>$nuevaCantidad,'precio'=>$item['proprecio']]);
+
+
+
+
+
+
+// include_once '../../../configuracion.php';
+// $base = new bdCarritoCompras();
+
+// $idProducto = $_POST['idproducto'] ?? null;
+// $session = new Session();
+// $idUsuario = $session->getIdUsuario();
+
+// if (!$idProducto || !$idUsuario) {
+//     echo json_encode(['ok' => false, 'msg' => 'Datos incompletos']);
+//     exit;
+// }
+
+// $compra = new Compra();
+// $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario) ?? null;
+
+// if (!$idCompra) { 
+//     echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']); 
+//     exit; 
+// }
+
+// $compraItem = new CompraItem();
+// $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
+
+
+// if (!$item) { 
+//     echo json_encode(['ok'=>false,'msg'=>'Producto no encontrado']); 
+//     exit; 
+// }
+
+// $nuevaCantidad = $item['cicantidad'] + 1;
+// if ($nuevaCantidad < $item['procantstock']){
+//     $compraItem->setCicantidad($nuevaCantidad);
+//     $compraItem->modificar();
+// }
+
+// echo json_encode(['ok'=>true,'cantidad'=>$nuevaCantidad,'precio'=>$item['proprecio']]);
 ?>
