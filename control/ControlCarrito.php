@@ -161,5 +161,22 @@ class ControlCarrito {
         }
         return $total;
     }
+
+    public function comprarCarrito($idUsuario){
+        $controlCompraEstado = new ControlCompraEstado();
+        $controlCompra = new ControlCompra();
+        $exito = false;
+
+        $comprasDeUsuario = $controlCompra->obtenerComprasPorUsuario($idUsuario);
+
+        foreach ($comprasDeUsuario as $objCompra){
+            $idCompra = $objCompra->getIdcompra();
+            if ($controlCompraEstado->iniciarCompra($idCompra)){
+                $exito = true;
+            }
+        }
+
+        return $exito;
+    }
 }
 ?>

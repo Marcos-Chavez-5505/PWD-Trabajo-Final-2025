@@ -139,5 +139,18 @@ class ControlCompraEstado {
         return $this->cambiarEstado($idCompra, 2);
     }
 
+    public function iniciarCompra($idCompra) {
+        $exito = true;
+        $controlCompra = new ControlCompra();
+        $objCompra = $controlCompra->buscarCompra($idCompra);
+         
+        if ($this->estadoActualEs($objCompra->getIdcompra(),1)){
+            $exito = false;
+        }else{
+            $this->cambiarEstado($idCompra,1);
+        }
+        return $exito;
+    }
+
 }
 ?>

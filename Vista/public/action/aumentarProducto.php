@@ -32,7 +32,7 @@ if (!$idCompra) {
 }
 
 $sqlItem = "
-    SELECT cicantidad, proprecio 
+    SELECT cicantidad, proprecio, procantstock
     FROM compraitem ci
     INNER JOIN producto p ON ci.idproducto = p.idproducto
     WHERE ci.idcompra = $idCompra AND ci.idproducto = $idProducto
@@ -46,10 +46,12 @@ if (!$item) {
 }
 
 $nuevaCantidad = $item['cicantidad'] + 1;
-$sqlUpdate = "UPDATE compraitem 
+if ($nuevaCantidad < $item['procantstock']){
+    $sqlUpdate = "UPDATE compraitem 
               SET cicantidad = $nuevaCantidad 
               WHERE idcompra = $idCompra AND idproducto = $idProducto";
-$base->Ejecutar($sqlUpdate);
+    $base->Ejecutar($sqlUpdate);
+}
 
 echo json_encode(['ok'=>true,'cantidad'=>$nuevaCantidad,'precio'=>$item['proprecio']]);
 ?>

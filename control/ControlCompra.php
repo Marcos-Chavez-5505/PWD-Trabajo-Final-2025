@@ -70,5 +70,10 @@ class ControlCompra{
         
         return $arreglo;
     }
+
+    public function obtenerComprasPorUsuario($idUsuario){
+        $compra = new compra();
+        return $compra->listar("idusuario = " . strval($idUsuario));
+    }
 }
 ?>

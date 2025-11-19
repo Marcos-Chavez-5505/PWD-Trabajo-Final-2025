@@ -66,10 +66,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+
   const botonFinalizar = document.getElementById('finalizar-compra');
   if (botonFinalizar) {
     botonFinalizar.addEventListener('click', () => {
-      alert("Funcionalidad de finalizar compra aún no implementada.");
+      const idUsuario = botonFinalizar.getAttribute('data-usuario-id');
+      realizarCompra(idUsuario);
     });
+  }
+
+async function realizarCompra(idUsuario){
+    if (idUsuario){
+        const response = await fetch('/PWD-TP-FINAL/Vista/public/action/realizarCompra.php',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({idUsuario: parseInt(idUsuario) })
+        });
+
+        const texto = await response.text();
+        let data;
+        try{
+            data = JSON.parse(texto);
+        } catch (e) {
+            console.error("Error JSON:", texto);
+            alert("⚠ Error inesperado del servidor.");
+            return;
+        }
+
+        if (data.ok){
+            alert('la compra se realizó exitosamente');
+        } else {
+            alert(data.error);
+        }
+    } else {
+        alert('no llegó el id de usuario');
+    }
   }
 });

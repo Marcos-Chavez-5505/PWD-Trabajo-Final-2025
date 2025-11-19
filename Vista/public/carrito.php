@@ -80,7 +80,9 @@ $itemsCarrito = $controlCarrito->obtenerItemsDelCarrito($idUsuario);
             <td colspan="4" class="text-end">Total:</td>
             <td id="total-carrito">$<?= number_format($total, 2, ',', '.'); ?></td>
             <td>
-              <button id="finalizar-compra" class="btn btn-success btn-sm">
+              <button id="finalizar-compra" 
+                      class="btn btn-success btn-sm" 
+                      data-usuario-id="<?php echo $idUsuario; ?>">
                 <i class="bi bi-bag-check"></i> Finalizar Compra
               </button>
             </td>
