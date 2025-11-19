@@ -15,48 +15,56 @@ class ControlPDF {
      * @return string //PDF
      */
 public function generarPdf($idCompra, $estado){
-    $pdf = new FPDF();
-    $pdf->AddPage();
+    try{
+        $file = ROOT . 'email/factura_' . $idCompra . '.pdf';
+        $pdf = new FPDF();
+        $pdf->AddPage();
 
-    // === TÍTULO PRINCIPAL ===
-    $pdf->SetFont('Arial', 'B', 28);
-    $pdf->SetTextColor(255, 128, 0); // Naranja
-    $pdf->SetXY(10, 10); // Parte superior izquierda
-    $pdf->Cell(0, 15, 'El Guapo Gamer', 0, 1, 'L');
+        $pdf->AddPage();
 
-    // === SUBTÍTULO ===
-    $pdf->SetFont('Arial', 'B', 18);
-    $pdf->SetTextColor(0, 0, 0); // Negro
-    $pdf->Ln(5);
-    $pdf->Cell(0, 10, 'Estado de compra', 0, 1, 'L');
+        // === TÍTULO PRINCIPAL ===
+        $pdf->SetFont('Arial', 'B', 28);
+        $pdf->SetTextColor(255, 128, 0); // Naranja
+        $pdf->SetXY(10, 10); // Parte superior izquierda
+        $pdf->Cell(0, 15, 'El Guapo Gamer', 0, 1, 'L');
 
-    $pdf->SetLineWidth(0.5);
-    $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
-    $pdf->Ln(8);
+        // === SUBTÍTULO ===
+        $pdf->SetFont('Arial', 'B', 18);
+        $pdf->SetTextColor(0, 0, 0); // Negro
+        $pdf->Ln(5);
+        $pdf->Cell(0, 10, 'Estado de compra', 0, 1, 'L');
 
-    // === CUERPO DEL PDF ===
-    $pdf->SetFont('Arial', '', 12);
+        $pdf->SetLineWidth(0.5);
+        $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
+        $pdf->Ln(8);
 
-    $pdf->Cell(0, 8, 'ID Compra: ' . (int)$idCompra, 0, 1);
-    $pdf->Cell(0, 8, 'Estado actual: ' . (string)$estado, 0, 1);
+        // === CUERPO DEL PDF ===
+        $pdf->SetFont('Arial', '', 12);
 
-    $pdf->Ln(5);
-    $pdf->SetLineWidth(0.5);
-    $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
-    $pdf->Ln(10);
+        $pdf->Cell(0, 8, 'ID Compra: ' . (int)$idCompra, 0, 1);
+        $pdf->Cell(0, 8, 'Estado actual: ' . (string)$estado, 0, 1);
 
-    // === SALUDO FINAL EN ITÁLICA + FECHA ===
-    $pdf->SetFont('Arial', 'I', 12);
+        $pdf->Ln(5);
+        $pdf->SetLineWidth(0.5);
+        $pdf->Line(10, $pdf->GetY(), 200, $pdf->GetY());
+        $pdf->Ln(10);
 
-    $saludo = "Saludos del equipo de El Guapo Gamer,";
-    $fecha = date('d/m/Y');
+        // === SALUDO FINAL EN ITÁLICA + FECHA ===
+        $pdf->SetFont('Arial', 'I', 12);
 
-    $pdf->Cell(0, 8, $saludo . '  ' . $fecha, 0, 1);
+        $saludo = "Saludos del equipo de El Guapo Gamer,";
+        $fecha = date('d/m/Y');
 
-    // === GUARDAR ARCHIVO ===
-    $file = ROOT . 'email/factura_' . $idCompra . '.pdf';
-    $pdf->Output('F', $file);
+        $pdf->Cell(0, 8, $saludo . '  ' . $fecha, 0, 1);
 
-    return $file;
+        // === GUARDAR ARCHIVO ===
+        $file = ROOT . 'email/factura_' . $idCompra . '.pdf';
+        $pdf->Output('F', $file);
+        
+        return $file;
+
+    } catch (Exception $e) {
+        throw $e;
+    }
 }
 }

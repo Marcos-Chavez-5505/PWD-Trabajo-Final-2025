@@ -62,9 +62,8 @@ class MailerService{
 
             // crear PDF
             $pdf = new ControlPDF();
-            $pdf->generarPdf($idCompra, $estado);
-            $rutaPDF = ROOT . 'facturas/' . $idCompra . '.pdf';
-            $this->mail->addAttachment($rutaPDF);
+            $rutaPDF = $pdf->generarPdf($idCompra, $estado); 
+            $this->mail->addAttachment($rutaPDF, 'factura_' . $idCompra . '.pdf');
 
 
             return $this->mail->send();
