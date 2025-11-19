@@ -1,22 +1,24 @@
 <?php
+    include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
+    require $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/util/vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
+    use Dotenv\Dotenv;
 
 class MailerService{
     private PHPMailer $mail;
 
     public function __construct(){
-        $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT']);
-        $dotenv->load();
+        $dotenv = Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/');
+        $dotenv->safeLoad();
 
-        $this->mail = new PHPMailer(true);
+        $this->mail = new PHPMailer();
         $this->mail->isSMTP();
         $this->mail->Host = $_ENV['SMTP_HOST'];
         $this->mail->SMTPAuth = true;
+        $this->mail->Port = $_ENV['SMTP_PORT'];
         $this->mail->Username = $_ENV['SMTP_USER'];
         $this->mail->Password = $_ENV['SMTP_PASS'];
-        $this->mail->Port = $_ENV['SMTP_PORT'];
     }
 
     /**

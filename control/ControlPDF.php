@@ -1,6 +1,8 @@
 <?php
-use FPDF;
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
+require $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/util/vendor/autoload.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/util/vendor/setasign/fpdf/fpdf.php';
+// use FPDF;
 
 class ControlPDF {
 
@@ -52,7 +54,7 @@ public function generarPdf($idCompra, $estado){
     $pdf->Cell(0, 8, $saludo . '  ' . $fecha, 0, 1);
 
     // === GUARDAR ARCHIVO ===
-    $file = ROOT . 'facturas/factura_' . $idCompra . '.pdf';
+    $file = ROOT . 'email/factura_' . $idCompra . '.pdf';
     $pdf->Output('F', $file);
 
     return $file;

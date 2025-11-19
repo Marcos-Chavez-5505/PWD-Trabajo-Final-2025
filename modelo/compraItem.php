@@ -151,5 +151,30 @@ class CompraItem {
         }
         return $resultado;
     }
+
+    
+    public function obtenerIdsYCantidadPorCompra($idCompra) {
+        $resultado = [];
+    
+        if ($this->objPdo->Iniciar()) {
+            $sql = "SELECT idproducto, cicantidad 
+                    FROM compraitem 
+                    WHERE idcompra = {$idCompra}";
+            $this->objPdo->Ejecutar($sql);
+            $filas = $this->objPdo->getFilas();
+    
+            if (!empty($filas)) {
+                foreach ($filas as $fila) {
+                    $resultado[] = [
+                        'idproducto' => (int)$fila['idproducto'],
+                        'cicantidad' => (int)$fila['cicantidad']
+                    ];
+                }
+            }
+        }
+    
+        return $resultado;
+    }
 }
+
 ?>

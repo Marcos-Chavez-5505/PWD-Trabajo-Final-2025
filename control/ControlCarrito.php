@@ -165,6 +165,9 @@ class ControlCarrito {
     public function comprarCarrito($idUsuario) {
         $controlCompraEstado = new ControlCompraEstado();
         $controlCompra = new ControlCompra();
+        $compraItem = new CompraItem();
+        $producto = new Producto();
+        $mail = new MailerService();
         $exito = false;
 
         $comprasSinEstado = $controlCompra->obtenerComprasPorUsuario($idUsuario);
@@ -172,10 +175,14 @@ class ControlCarrito {
         foreach ($comprasSinEstado as $compra) {
             $idCompra = $compra->getIdcompra();
             if (!$exito && $controlCompraEstado->añadirEstadoCarrito($idCompra)) {
+                $colProd = $compraItem->obtenerIdsYCantidadPorCompra($idCompra);
+                foreach ($colProd as $prod){
+                    $producto->reducirStock($prod['idproducto'], $prod['cicantidad']);
+                }
+                $mail->generarMail($idCompra, 1);
                 $exito = true;
             }
         }
-        
         return $exito;
     }
 

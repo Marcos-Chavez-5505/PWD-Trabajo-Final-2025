@@ -118,6 +118,28 @@ class Producto{
         }
         return $rta;
     }
+
+    
+    public function reducirStock($idproducto, $cantidad = 1) {
+        $rta = false;
+    
+        if ((int)$cantidad > 0){
+            $producto = new Producto();
+    
+            if ($producto->buscar($idproducto)){
+    
+                $stockActual = (int)$producto->getProcantstock();
+                if ($stockActual > $cantidad) {
+                    $producto->setProcantstock($stockActual - $cantidad);
+                    $producto->modificar();
+                    $rta = true;
+                }
+            }
+        }
+    
+        return $rta;
+    }
 }
+
 ?>
 
