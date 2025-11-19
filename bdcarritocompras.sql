@@ -118,7 +118,7 @@ INSERT INTO menu (menombre, medescripcion, meurl, idpadre) VALUES
 ('Productos', 'ABM de productos del catálogo', 'productos.php', NULL);
 
 INSERT INTO menurol (idmenu, idrol) VALUES
-(1,1),(3,1),(4,1),(5,1),(6,1),(7,1),
+(3,1),(4,1),(5,1),(6,1),(7,1),
 (1,2),(2,2),(3,2);
 
 INSERT INTO usuario (usnombre, uspass, usmail) VALUES
