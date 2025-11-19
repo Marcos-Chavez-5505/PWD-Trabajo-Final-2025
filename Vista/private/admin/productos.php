@@ -18,16 +18,17 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   <title>Admin Dashboard - Productos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/icon.css">
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/color.css">
+  <!-- EasyUI -->
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/icon.css">
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/color.css">
 
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
-
-  <script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
-  <script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
+  <!-- JS de EasyUI -->
+  <script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
+  <script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
 </head>
 
 <body>
@@ -37,11 +38,10 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       <p>Administra los productos del sistema.</p>
 
       <table id="dg" title="Mis productos" class="easyui-datagrid"
-             url="/PWD-TP-FINAL/Vista/private/action/gestion/productos/get_productos.php"
-             toolbar="#toolbar" pagination="true" rownumbers="true" 
-             fitColumns="true" 
-             singleSelect="true" 
-             style="width: fit-content;max-height:400px;">
+             style="width:100%;height:400px"
+             url="/PWD-TP-FINAL/vista/private/action/gestion/productos/get_productos.php"
+             toolbar="#toolbar" pagination="true"
+             rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
           <tr>
             <th field="idproducto" width="50">ID</th>
@@ -58,6 +58,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         <a class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newProduct()">Nuevo Producto</a>
         <a class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editProduct()">Editar Producto</a>
         <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyProduct()">Eliminar Producto</a>
+        <a class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="uploadImage()">Subir Imagen</a>
       </div>
 
       <div id="dlg" class="easyui-dialog" style="width:500px"
@@ -88,6 +89,21 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         </form>
       </div>
 
+      <div id="dlg-img" class="easyui-dialog" style="width:400px"
+          data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-img-buttons'">
+          <form id="fm-img" method="post" enctype="multipart/form-data" style="margin:0;padding:20px 30px">
+              <h3>Subir Imagen</h3>
+              <input type="hidden" name="idproducto_img">
+              <div style="margin-bottom:20px">
+                  <input type="file" name="proimagen" accept="image/*" required>
+              </div>
+          </form>
+      </div>
+      <div id="dlg-img-buttons">
+          <a class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveImage()" style="width:90px">Guardar</a>
+          <a class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-img').dialog('close')" style="width:90px">Cancelar</a>
+      </div>
+
       <div id="dlg-buttons">
         <a class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveProduct()" style="width:90px">Guardar</a>
         <a class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancelar</a>
@@ -97,7 +113,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 <script type="text/javascript">
   var url;
-  var baseUrl = '/PWD-TP-FINAL/Vista/private/action/gestion/productos/';
+  var baseUrl = '/PWD-TP-FINAL/vista/private/action/gestion/productos/';
 
   function newProduct(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');
@@ -160,8 +176,44 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       $.messager.alert('Advertencia','Por favor selecciona un producto.','warning');
     }
   }
-</script>
 
+  function uploadImage(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        $('#dlg-img').dialog('open').dialog('center').dialog('setTitle', 'Subir Imagen');
+        $('#fm-img')[0].reset();
+        $('[name=idproducto_img]').val(row.idproducto);
+    } else {
+        $.messager.alert('Advertencia', 'Por favor selecciona un producto.', 'warning');
+    }
+  }
+
+  function saveImage() {
+      var formData = new FormData($('#fm-img')[0]);
+
+      $.ajax({
+          url: baseUrl + 'upload_imagen.php',
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(result) {
+              var result = typeof result === 'string' ? JSON.parse(result) : result;
+              
+              if (result.success) {
+                  $('#dlg-img').dialog('close');
+                  $('#dg').datagrid('reload');
+              } else {
+                  $.messager.show({
+                      title: 'Error',
+                      msg: result.errorMsg || 'Error subiendo imagen.'
+                  });
+              }
+          }
+      });
+  }
+
+</script>
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php';
 ?>
