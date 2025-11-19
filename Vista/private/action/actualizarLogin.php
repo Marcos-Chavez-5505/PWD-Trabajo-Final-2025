@@ -1,16 +1,12 @@
 <?php
-// Mostrar todos los errores
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// O más específico
-error_reporting(E_ALL | E_STRICT);
-ini_set('display_errors', 1);
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 $control = new ControlUsuario();
+$controlRol = new ControlRol(); // ✅ Para traer roles
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['idUsuario'])) {
@@ -25,14 +21,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         header("Location: /PWD-TP-FINAL/Vista/private/admin/usuarios.php?error=Usuario no encontrado");
         exit();
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // ✅ Traer lista de roles y rol actual
+    $listaRoles = $controlRol->listarRoles();
+    include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
+    $usuarioRol = new UsuarioRol();
+    $idRolActual = $usuarioRol->rolDeUsuario($usuario->getIdusuario());
+}
+
+elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idUsuario = intval($_POST['idUsuario']);
+    $idRol = intval($_POST['idrol']); // ✅ Nuevo campo rol
+
     $datos = [
         'idusuario' => $idUsuario,
         'usnombre' => trim($_POST['usnombre']),
         'uspass' => trim($_POST['uspass']),
         'usmail' => trim($_POST['usmail']),
-        'usdeshabilitado' => isset($_POST['usdeshabilitado']) ? null : date('Y-m-d H:i:s')
+        'usdeshabilitado' => isset($_POST['usdeshabilitado']) ? null : date('Y-m-d H:i:s'),
+        'idrol' => $idRol
     ];
 
     if ($control->modificarUsuario($datos)) {
@@ -45,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 ?>
 
 <!DOCTYPE html>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php'; ?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -54,8 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <link rel="stylesheet" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 </head>
 <body>
+
 <main class="container py-5 my-5 form-actualizar-usuario">
-    <div class="card p-4 shadow-sm mx-auto">
+    <div class="card p-4 shadow-sm mx-auto" style="max-width:600px;">
         <h2 class="text-center mb-4">Actualizar Usuario</h2>
 
         <form method="post" action="">
@@ -79,6 +86,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     value="<?= htmlspecialchars($usuario->getUsmail()); ?>" required>
             </div>
 
+            <!-- ✅ Combo de roles -->
+            <div class="mb-3">
+                <label for="idrol" class="form-label">Rol:</label>
+                <select class="form-select" id="idrol" name="idrol" required>
+                    <option value="">Seleccione un rol...</option>
+                    <?php foreach ($listaRoles as $rol): ?>
+                        <option value="<?= $rol->getIdRol(); ?>" <?= ($idRolActual == $rol->getIdRol()) ? 'selected' : ''; ?>>
+                            <?= htmlspecialchars($rol->getDescripcionRol()); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="usdeshabilitado" name="usdeshabilitado"
                     <?= $usuario->getUsdeshabilitado() == 0 ? 'checked' : ''; ?>>
@@ -89,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         </form>
     </div>
 </main>
-</body>
-</html>
 
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
+</body>
+</html>

@@ -25,6 +25,11 @@ class UsuarioRol{
 
     public function getObjRol(){ return $this->objRol; }
 
+    public function getObjPdo() {
+    return $this->objPdo;
+}
+
+
     //setters
     public function setIdusuario($idusuario){ $this->idusuario = $idusuario; }
 

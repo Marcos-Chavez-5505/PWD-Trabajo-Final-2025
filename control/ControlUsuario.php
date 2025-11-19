@@ -31,15 +31,42 @@ class ControlUsuario {
     public function modificarUsuario($datos) {
         $usuario = new Usuario();
         $resultado = false;
+
         if ($usuario->buscar($datos['idusuario'])) {
             $usuario->setUsnombre($datos['usnombre']);
             $usuario->setUspass($datos['uspass']);
             $usuario->setUsmail($datos['usmail']);
             $usuario->setUsdeshabilitado($datos['usdeshabilitado'] ?? null);
+
             $resultado = $usuario->modificar();
+
+            if (isset($datos['idrol'])) {
+                include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
+                include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
+
+                $idUsuario = intval($datos['idusuario']);
+                $idRol = intval($datos['idrol']);
+
+                $usuarioRol = new UsuarioRol();
+                $rol = new Rol();
+                $rol->buscar($idRol);
+
+                $lista = $usuarioRol->listar("idusuario = {$idUsuario}");
+
+                if (count($lista) > 0) {
+                    $sql = "UPDATE usuariorol SET idrol = {$idRol} WHERE idusuario = {$idUsuario}";
+                    $usuarioRol->getObjPdo()->Ejecutar($sql);
+                } else {
+                    $usuarioRol->setIdusuario($idUsuario);
+                    $usuarioRol->setIdrol($idRol);
+                    $usuarioRol->insertar();
+                }
+            }
         }
+
         return $resultado;
     }
+
 
     public function eliminarUsuario($idUsuario) {
         $usuario = new Usuario();
