@@ -26,9 +26,6 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Tu CSS global -->
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/css/estilos.css">
-
   <!-- JS de EasyUI -->
   <script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
   <script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
@@ -61,6 +58,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         <a class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newProduct()">Nuevo Producto</a>
         <a class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editProduct()">Editar Producto</a>
         <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyProduct()">Eliminar Producto</a>
+        <a class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="uploadImage()">Subir Imagen</a>
       </div>
 
       <div id="dlg" class="easyui-dialog" style="width:500px"
@@ -89,6 +87,21 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             <input name="proimagen" class="easyui-textbox" label="Imagen:" style="width:100%">
           </div>
         </form>
+      </div>
+
+      <div id="dlg-img" class="easyui-dialog" style="width:400px"
+          data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-img-buttons'">
+          <form id="fm-img" method="post" enctype="multipart/form-data" style="margin:0;padding:20px 30px">
+              <h3>Subir Imagen</h3>
+              <input type="hidden" name="idproducto_img">
+              <div style="margin-bottom:20px">
+                  <input type="file" name="proimagen" accept="image/*" required>
+              </div>
+          </form>
+      </div>
+      <div id="dlg-img-buttons">
+          <a class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveImage()" style="width:90px">Guardar</a>
+          <a class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-img').dialog('close')" style="width:90px">Cancelar</a>
       </div>
 
       <div id="dlg-buttons">
@@ -163,8 +176,44 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       $.messager.alert('Advertencia','Por favor selecciona un producto.','warning');
     }
   }
-</script>
 
+  function uploadImage(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row) {
+        $('#dlg-img').dialog('open').dialog('center').dialog('setTitle', 'Subir Imagen');
+        $('#fm-img')[0].reset();
+        $('[name=idproducto_img]').val(row.idproducto);
+    } else {
+        $.messager.alert('Advertencia', 'Por favor selecciona un producto.', 'warning');
+    }
+  }
+
+  function saveImage() {
+      var formData = new FormData($('#fm-img')[0]);
+
+      $.ajax({
+          url: baseUrl + 'upload_imagen.php',
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(result) {
+              var result = typeof result === 'string' ? JSON.parse(result) : result;
+              
+              if (result.success) {
+                  $('#dlg-img').dialog('close');
+                  $('#dg').datagrid('reload');
+              } else {
+                  $.messager.show({
+                      title: 'Error',
+                      msg: result.errorMsg || 'Error subiendo imagen.'
+                  });
+              }
+          }
+      });
+  }
+
+</script>
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php';
 ?>

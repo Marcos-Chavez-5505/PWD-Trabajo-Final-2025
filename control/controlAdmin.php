@@ -54,11 +54,25 @@ class controlAdmin{
         $producto->buscar($idProducto);
         
         $producto->setIdproducto($idProducto);
-        $producto->setProNombre($datos['pronombre']);
-        $producto->setProDetalle($datos['prodetalle']);
-        $producto->setProCantStock($datos['procantstock']);
-        $producto->setProPrecio($datos['proprecio']);
-        $producto->setProImagen($datos['proimagen']);
+        if (isset($datos['pronombre'])){
+            $producto->setProNombre($datos['pronombre']);
+        }
+
+        if (isset($datos['prodetalle'])){
+            $producto->setProDetalle($datos['prodetalle']);
+        }
+
+        if (isset($datos['procantstock'])){
+            $producto->setProCantStock($datos['procantstock']);
+        }
+
+        if (isset($datos['proprecio'])){
+            $producto->setProPrecio($datos['proprecio']);
+        }
+
+        if (isset($datos['proimagen'])){
+            $producto->setProImagen($datos['proimagen']);
+        }
         
         return $producto->modificar() > 0;
     }
