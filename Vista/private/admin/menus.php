@@ -22,15 +22,15 @@ $combo .= '</select>';
 <title>ABM - Menú</title>
 
 <!-- CSS de EasyUI -->
-<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/icon.css">
-<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/color.css">
-<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/demo/demo.css">
+<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/color.css">
+<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/demo/demo.css">
 
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">  
 <!-- Tu CSS global -->
-<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/css/tpFinal.css">
+<link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -41,8 +41,8 @@ $combo .= '</select>';
     <p>Seleccione la acción que desea realizar.</p>
 
     <table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid"
-        url="/PWD-TP-FINAL/vista/private/action/listar_menu.php"
-        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true">
+        url="/PWD-TP-FINAL/Vista/private/action/listar_menu.php"
+        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width: 100;max-height:400px;">
 
         <thead>
             <tr>
@@ -98,7 +98,7 @@ var url;
 function newMenu(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Menú');
     $('#fm').form('clear');
-    url = '/PWD-TP-FINAL/vista/admin/action/alta_menu.php';
+    url = '/PWD-TP-FINAL/Vista/private/action/alta_menu.php';
 }
 
 function editMenu(){
@@ -106,7 +106,7 @@ function editMenu(){
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Menú');
         $('#fm').form('load', row);
-        url = '/PWD-TP-FINAL/vista/admin/action/edit_menu.php?action=mod&idmenu=' + row.idmenu;
+        url = '/PWD-TP-FINAL/Vista/private/action/edit_menu.php?action=mod&idmenu=' + row.idmenu;
     }
 }
 
@@ -136,7 +136,7 @@ function destroyMenu(){
     if (row){
         $.messager.confirm('Confirmación','¿Seguro que desea eliminar el menú?', function(r){
             if (r){
-                $.post('/PWD-TP-FINAL/vista/admin/action/eliminar_menu.php?idmenu=' + row.idmenu,
+                $.post('/PWD-TP-FINAL/Vista/private/action/eliminar_menu.php?idmenu=' + row.idmenu,
                 {idmenu: row.id},
                 function(result){
                     if (result.respuesta){
@@ -155,8 +155,8 @@ function destroyMenu(){
 </script>
 
 <!-- JS de EasyUI -->
-<script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
-<script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
+<script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
 
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
 </body>

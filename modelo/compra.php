@@ -104,6 +104,39 @@ class Compra{
         return $resultado;
     }
 
+    public function listarComprasSinEstado($condicion = "") {
+        $arreglo = [];
+        
+        $sql = "SELECT c.* 
+                FROM compra c
+                LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
+                WHERE ce.idcompra IS NULL";
+        
+        if ($condicion !== "") {
+            $sql .= " AND " . $condicion; 
+        }
+        
+        if ($this->objPdo->Iniciar()) {
+                $this->objPdo->Ejecutar($sql);
+                $filas = $this->objPdo->getFilas();
+
+            if (!empty($filas)) {
+                foreach ($filas as $fila) {
+                $obj = new Compra(); 
+                $obj->setIdcompra($fila['idcompra']);
+                $obj->setCofecha($fila['cofecha']);
+                
+                
+                $usuario = new usuario();
+                $usuario->buscar($fila['idusuario']);
+                $obj->setObjUsuario($usuario);
+                
+                $arreglo[] = $obj;
+                }
+            }
+        }
+        return $arreglo;
+    }
 }
 ?>
 

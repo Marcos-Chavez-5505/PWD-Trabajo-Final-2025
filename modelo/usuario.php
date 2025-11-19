@@ -15,7 +15,7 @@ class Usuario {
         $this->uspass = "";
         $this->usmail = "";
         $this->usdeshabilitado = null;
-        $this->objBaseDatos = $objBaseDatos ?? new BDautenticacion();
+        $this->objBaseDatos = $objBaseDatos ?? new bdCarritoCompras();
     }
 
     public function getIdusuario() { return $this->idusuario; }
@@ -31,7 +31,7 @@ class Usuario {
     public function setUsdeshabilitado($usdeshabilitado) { $this->usdeshabilitado = $usdeshabilitado; }
 
     public function insertar() {
-        $baseDatos = new BDautenticacion();
+        $baseDatos = new bdCarritoCompras();
         $resultado = false;
         if ($baseDatos->Iniciar()) {
             $sql = "INSERT INTO usuario (usnombre, uspass, usmail, usdeshabilitado)
@@ -46,7 +46,7 @@ class Usuario {
     }
 
     public function modificar() {
-        $baseDatos = new BDautenticacion();
+        $baseDatos = new bdCarritoCompras();
         $resultado = false;
         if ($baseDatos->Iniciar()) {
             $sql = "UPDATE usuario SET 
@@ -63,7 +63,7 @@ class Usuario {
     }
 
     public function borradoLogico() {
-        $baseDatos = new BDautenticacion();
+        $baseDatos = new bdCarritoCompras();
         $resultado = false;
         if ($baseDatos->Iniciar()) {
             $sql = "UPDATE usuario SET usdeshabilitado = CURRENT_TIMESTAMP WHERE idusuario = {$this->idusuario}";
@@ -75,7 +75,7 @@ class Usuario {
     }
 
     public function buscar($idusuario) {
-        $baseDatos = new BDautenticacion();
+        $baseDatos = new bdCarritoCompras();
         $resultado = false;
         if ($baseDatos->Iniciar()) {
             $sql = "SELECT * FROM usuario WHERE idusuario = {$idusuario}";
@@ -94,7 +94,7 @@ class Usuario {
 
     public function listar($condicion = "") {
         $listaUsuarios = [];
-        $baseDatos = new BDautenticacion();
+        $baseDatos = new bdCarritoCompras();
         $sql = "SELECT * FROM usuario";
 
         if ($condicion != "") {

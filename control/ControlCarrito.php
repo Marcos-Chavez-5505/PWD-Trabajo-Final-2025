@@ -162,21 +162,58 @@ class ControlCarrito {
         return $total;
     }
 
-    public function comprarCarrito($idUsuario){
+    public function comprarCarrito($idUsuario) {
         $controlCompraEstado = new ControlCompraEstado();
         $controlCompra = new ControlCompra();
         $exito = false;
 
-        $comprasDeUsuario = $controlCompra->obtenerComprasPorUsuario($idUsuario);
-
-        foreach ($comprasDeUsuario as $objCompra){
-            $idCompra = $objCompra->getIdcompra();
-            if ($controlCompraEstado->iniciarCompra($idCompra)){
+        $comprasSinEstado = $controlCompra->obtenerComprasPorUsuario($idUsuario);
+        
+        foreach ($comprasSinEstado as $compra) {
+            $idCompra = $compra->getIdcompra();
+            if (!$exito && $controlCompraEstado->añadirEstadoCarrito($idCompra)) {
                 $exito = true;
             }
         }
-
+        
         return $exito;
     }
+
+    public function obtenerItemsSinEstado($idUsuario) {
+    $resultado = array();
+    $compra = new compra();
+    $comprasSinEstado = $compra->listarComprasSinEstado("idusuario = {$idUsuario}");
+    $exito = false;
+    
+    if (empty($comprasSinEstado)) {
+        $nuevaCompra = new compra();
+        $usuario = new usuario();
+        $usuario->setIdusuario($idUsuario);
+        $nuevaCompra->setObjUsuario($usuario);
+        $exito = $nuevaCompra->insertar();
+        
+        if ($exito) {
+            $idCompraNueva = $nuevaCompra->getIdcompra();
+            if (!empty($idCompraNueva)) {
+                $comprasSinEstado = array($nuevaCompra);
+            }
+        }
+    }
+    
+    if (!empty($comprasSinEstado)) {
+        $compraItem = new compraItem();
+        
+        foreach ($comprasSinEstado as $compraObj) {
+            $idCompra = $compraObj->getIdcompra();
+            if (!empty($idCompra)) {
+                $items = $compraItem->listar("idcompra = {$idCompra}");
+                $resultado = array_merge($resultado, $items);
+            }
+        }
+    }
+    
+    return $resultado;
 }
+}
+
 ?>

@@ -151,6 +151,20 @@ class CompraEstado{
         return $resultado;
     }
 
+    /**
+     * Busca las compras sin estado asociado
+     */
+    public function obtenerComprasSinEstado($idCompra){
+        $sql = "SELECT c.* 
+                FROM compra c
+                LEFT JOIN compraestado ce ON c.idcompra = ce.idcompra
+                WHERE ce.idcompra IS NULL AND c.idcompra = {$idCompra}";
+
+        
+        $this->getObjPdo()->Ejecutar($sql);
+        $filas = $this->objPdo->getFilas();
+        return !empty($filas);
+    }
+
 }
 ?>
-

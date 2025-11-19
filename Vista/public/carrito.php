@@ -13,7 +13,7 @@ if (!$session->activa()) {
 
 $idUsuario = $session->getIdUsuario();
 $controlCarrito = new ControlCarrito();
-$itemsCarrito = $controlCarrito->obtenerItemsDelCarrito($idUsuario);
+$itemsCarrito = $controlCarrito->obtenerItemsSinEstado($idUsuario);
 ?>
 <!DOCTYPE html>
 <html lang="es">

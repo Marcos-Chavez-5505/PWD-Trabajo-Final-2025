@@ -18,20 +18,16 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   <title>Admin Dashboard - Productos</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- EasyUI -->
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/icon.css">
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/themes/color.css">
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/icon.css">
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/color.css">
 
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Tu CSS global -->
-  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/vista/css/estilos.css">
+  <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 
-  <!-- JS de EasyUI -->
-  <script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
-  <script type="text/javascript" src="/PWD-TP-FINAL/vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
+  <script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
+  <script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
 </head>
 
 <body>
@@ -41,10 +37,11 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
       <p>Administra los productos del sistema.</p>
 
       <table id="dg" title="Mis productos" class="easyui-datagrid"
-             style="width:100%;height:400px"
-             url="/PWD-TP-FINAL/vista/private/action/gestion/productos/get_productos.php"
-             toolbar="#toolbar" pagination="true"
-             rownumbers="true" fitColumns="true" singleSelect="true">
+             url="/PWD-TP-FINAL/Vista/private/action/gestion/productos/get_productos.php"
+             toolbar="#toolbar" pagination="true" rownumbers="true" 
+             fitColumns="true" 
+             singleSelect="true" 
+             style="width: fit-content;max-height:400px;">
         <thead>
           <tr>
             <th field="idproducto" width="50">ID</th>
@@ -100,7 +97,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 <script type="text/javascript">
   var url;
-  var baseUrl = '/PWD-TP-FINAL/vista/private/action/gestion/productos/';
+  var baseUrl = '/PWD-TP-FINAL/Vista/private/action/gestion/productos/';
 
   function newProduct(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');

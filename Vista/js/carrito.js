@@ -95,6 +95,7 @@ async function realizarCompra(idUsuario){
 
         if (data.ok){
             alert('la compra se realizó exitosamente');
+            window.location.reload();
         } else {
             alert(data.error);
         }
