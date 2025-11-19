@@ -9,7 +9,6 @@ class ControlCarrito {
         $this->db = new bdCarritoCompras();
     }
 
-    /** Busca o crea un carrito abierto (estado “Iniciada”) para el usuario */
     public function buscarCarritoAbierto($idUsuario) {
         $resultado = null;
 
@@ -18,48 +17,48 @@ class ControlCarrito {
 
         if (!empty($compras)) {
             foreach ($compras as $c) {
-                $idCompra = $c->getIdcompra();
-                $compraEstado = new compraEstado();
-                $estado = $compraEstado->buscarCompraAsociada($idCompra);
+                if ($resultado === null) {
+                    $idCompra = $c->getIdcompra();
+                    $compraEstado = new compraEstado();
+                    $estado = $compraEstado->buscarCompraAsociada($idCompra);
 
-                if ($estado) {
-                    $estadoTipo = $compraEstado->getObjCompraEstadoTipo()->getCETdescripcion();
-                    if ($estadoTipo === 'Iniciada') {
+                    if ($estado) {
+                        $estadoTipo = $compraEstado->getObjCompraEstadoTipo()->getCETdescripcion();
+                        if ($estadoTipo === 'Iniciada') {
+                            $resultado = $idCompra;
+                        }
+                    } else {
                         $resultado = $idCompra;
-                        break;
                     }
-                } else {
-                    $resultado = $idCompra;
-                    break;
                 }
             }
         }
 
-        // Si no encontró carrito existente, crear uno nuevo
         if ($resultado === null) {
             $usuario = new usuario();
-            if (!$usuario->buscar($idUsuario)) {
-                return null;
-            }
+            $usuarioExiste = $usuario->buscar($idUsuario);
 
-            $nuevaCompra = new compra();
-            $nuevaCompra->setObjUsuario($usuario);
+            if ($usuarioExiste) {
+                $nuevaCompra = new compra();
+                $nuevaCompra->setObjUsuario($usuario);
 
-            if ($nuevaCompra->insertar()) {
-                $resultado = $nuevaCompra->getIdcompra();
+                if ($nuevaCompra->insertar()) {
+                    $resultado = $nuevaCompra->getIdcompra();
 
-                $estadoTipo = new compraEstadoTipo();
-                $estadoTipo->buscarDescripcion("Iniciada");
+                    $estadoTipo = new compraEstadoTipo();
+                    $estadoTipo->buscarDescripcion("Iniciada");
 
-                $nuevoEstado = new compraEstado();
-                $nuevoEstado->setObjCompra($nuevaCompra);
-                $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
-                $nuevoEstado->insertar();
+                    $nuevoEstado = new compraEstado();
+                    $nuevoEstado->setObjCompra($nuevaCompra);
+                    $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
+                    $nuevoEstado->insertar();
+                }
             }
         }
 
         return $resultado;
     }
+
 
     /** Agrega un producto al carrito del usuario */
     public function agregarAlCarrito($idUsuario, $idProducto, $cantidad = 1) {

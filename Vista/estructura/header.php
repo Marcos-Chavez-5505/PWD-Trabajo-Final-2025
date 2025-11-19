@@ -1,13 +1,19 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 
-// Mostrar todos los errores
+// Mostrar errores
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// O más específico
-error_reporting(E_ALL | E_STRICT);
-ini_set('display_errors', 1);
+$session = new Session();
+$usuarioActivo = $session->activa();
+$nombreUsuario = $usuarioActivo ? $session->getUsuario() : null;
+$rolUsuario = $usuarioActivo ? $session->getRol() : null;
+
+// Decidir link según rol
+$inicioLink = ($usuarioActivo && $rolUsuario === "Administrador") 
+              ? "/PWD-TP-FINAL/Vista/admin/panelAdmin.php" 
+              : "/PWD-TP-FINAL/Vista/public/index.php";
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +34,7 @@ ini_set('display_errors', 1);
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     
-    <a class="navbar-brand" href="/PWD-TP-FINAL/Vista/public/index.php">El Guapo Gamer</a>
+    <a class="navbar-brand" href="<?= $inicioLink ?>">El Guapo Gamer</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -37,8 +43,31 @@ ini_set('display_errors', 1);
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul id="menu-dinamico" class="navbar-nav ms-auto">
       </ul>
-    </div>
 
+      <div class="ms-3">
+        <?php if ($usuarioActivo): ?>
+            <div class="dropdown">
+                <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i> <?= htmlspecialchars($nombreUsuario); ?>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <?php if ($rolUsuario === "Administrador"): ?>
+                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/private/admin/cuenta.php">Mi Cuenta</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                    <?php else: ?>
+                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Mi Cuenta</a></li>
+                    <?php endif; ?>
+                    <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/private/logout.php">Cerrar sesión</a></li>
+                </ul>
+            </div>
+        <?php else: ?>
+            <a href="/PWD-TP-FINAL/Vista/public/cuenta.php" class="btn btn-outline-primary">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+            </a>
+        <?php endif; ?>
+      </div>
+
+    </div>
   </div>
 </nav>
 
@@ -58,3 +87,5 @@ $(document).ready(function() {
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -202,5 +202,5 @@ class bdCarritoCompras extends PDO {
    }
    public function getFilas() {
         return $this->getResultado() ?? [];
-   }
+   }   
 } 

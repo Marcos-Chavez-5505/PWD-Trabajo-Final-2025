@@ -1,5 +1,4 @@
 <?php
-
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 
 class Rol {
@@ -10,26 +9,20 @@ class Rol {
     public function __construct($objBaseDatos = null) {
         $this->idrol = null;
         $this->rodescripcion = "";
-        $this->objBaseDatos = $objBaseDatos ?? new BDautenticacion();
+        $this->objBaseDatos = $objBaseDatos ?? new bdCarritoCompras();
     }
 
-    // Getters y Setters
     public function getIdRol() { return $this->idrol; }
     public function getDescripcionRol() { return $this->rodescripcion; }
 
     public function setIdRol($idrol) { $this->idrol = $idrol; }
     public function setDescripcionRol($rodescripcion) { $this->rodescripcion = $rodescripcion; }
 
-    // CRUD
     public function insertar() {
-        $base = new BDautenticacion();
         $exito = false;
-
-        if ($base->Iniciar()) {
-            $sql = "INSERT INTO rol (rodescripcion)
-                    VALUES ('{$this->rodescripcion}')";
-            $id = $base->Ejecutar($sql);
-
+        if ($this->objBaseDatos->Iniciar()) {
+            $sql = "INSERT INTO rol (rodescripcion) VALUES ('{$this->rodescripcion}')";
+            $id = $this->objBaseDatos->Ejecutar($sql);
             if ($id != -1) {
                 $this->idrol = $id;
                 $exito = true;
@@ -39,40 +32,29 @@ class Rol {
     }
 
     public function modificar() {
-        $base = new BDautenticacion();
         $exito = false;
-
-        if ($base->Iniciar()) {
-            $sql = "UPDATE rol SET rodescripcion = '{$this->rodescripcion}'
-                    WHERE idrol = {$this->idrol}";
-            if ($base->Ejecutar($sql) >= 0) {
-                $exito = true;
-            }
+        if ($this->objBaseDatos->Iniciar()) {
+            $sql = "UPDATE rol SET rodescripcion = '{$this->rodescripcion}' WHERE idrol = {$this->idrol}";
+            if ($this->objBaseDatos->Ejecutar($sql) >= 0) $exito = true;
         }
         return $exito;
     }
 
     public function eliminar() {
-        $base = new BDautenticacion();
         $exito = false;
-
-        if ($base->Iniciar()) {
+        if ($this->objBaseDatos->Iniciar()) {
             $sql = "DELETE FROM rol WHERE idrol = {$this->idrol}";
-            if ($base->Ejecutar($sql) >= 0) {
-                $exito = true;
-            }
+            if ($this->objBaseDatos->Ejecutar($sql) >= 0) $exito = true;
         }
         return $exito;
     }
 
     public function buscar($idrol) {
-        $base = new BDautenticacion();
         $exito = false;
-
-        if ($base->Iniciar()) {
+        if ($this->objBaseDatos->Iniciar()) {
             $sql = "SELECT * FROM rol WHERE idrol = {$idrol}";
-            if ($base->Ejecutar($sql) > 0) {
-                $fila = $base->Registro();
+            if ($this->objBaseDatos->Ejecutar($sql) > 0) {
+                $fila = $this->objBaseDatos->Registro();
                 $this->idrol = $fila['idrol'];
                 $this->rodescripcion = $fila['rodescripcion'];
                 $exito = true;
@@ -83,23 +65,18 @@ class Rol {
 
     public function listar($condicion = "") {
         $arreglo = [];
-        $base = new BDautenticacion();
         $sql = "SELECT * FROM rol";
-
-        if ($condicion != "") {
-            $sql .= " WHERE " . $condicion;
-        }
-
+        if ($condicion != "") $sql .= " WHERE " . $condicion;
         $sql .= " ORDER BY idrol";
 
-        if ($base->Iniciar() && $base->Ejecutar($sql) > 0) {
-            while ($fila = $base->Registro()) {
-                $obj = new Rol();
+        if ($this->objBaseDatos->Iniciar() && $this->objBaseDatos->Ejecutar($sql) > 0) {
+            while ($fila = $this->objBaseDatos->Registro()) {
+                $obj = new Rol($this->objBaseDatos);
                 $obj->buscar($fila['idrol']);
                 $arreglo[] = $obj;
             }
         }
-
         return $arreglo;
     }
 }
+?>

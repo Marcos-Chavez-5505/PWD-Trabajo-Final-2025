@@ -115,10 +115,11 @@ INSERT INTO menu (menombre, medescripcion, meurl, idpadre) VALUES
 ('Mis Compras', 'Muestra las compras del usuario', 'misCompras.php', NULL),
 ('Usuarios', 'Administración de usuarios del sistema', 'usuarios.php', NULL),
 ('Menús', 'Gestión del menú dinámico', 'menus.php', NULL),
-('Productos', 'ABM de productos del catálogo', 'productos.php', NULL);
+('Productos', 'ABM de productos del catálogo', 'productos.php', NULL),
+('Gestionar Compras', 'Gestion de compras del usuaio', 'listarCompras.php', NULL);
 
 INSERT INTO menurol (idmenu, idrol) VALUES
-(3,1),(5,1),(6,1),(7,1),
+(3,1),(5,1),(6,1),(7,1),(8,1),
 (1,2),(2,2),(3,2),(4,2);
 
 INSERT INTO usuario (usnombre, uspass, usmail) VALUES

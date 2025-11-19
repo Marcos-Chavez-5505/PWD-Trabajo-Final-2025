@@ -157,6 +157,7 @@ function destroyMenu(){
 <!-- JS de EasyUI -->
 <script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.min.js"></script>
 <script type="text/javascript" src="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/jquery.easyui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
 </body>
