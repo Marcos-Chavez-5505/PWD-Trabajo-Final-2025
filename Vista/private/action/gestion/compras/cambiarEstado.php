@@ -45,15 +45,15 @@ if (isset($_POST['idcompra']) && isset($_POST['accion'])){
             if ($controlCompraEstado->cancelarCompra($idCompra)){
                 $response['success'] = true;
                 $response['message'] = "Compra cancelada exitosamente";
+
+                $mail = new MailerService();
+                $mail->generarMail($idCompra, 4);
+
             } else {
                 $estadoActual = $controlCompraEstado->obtenerIdCompraEstadoTipo($idCompra);
                 if ($estadoActual == 4) {
                     $response['success'] = false;
-                    $response['error'] = "La compra ya está cancelada";
-                    
-                    $mail = new MailerService();
-                    $mail->generarMail($idCompra, $estadoActual);
-                    
+                    $response['error'] = "La compra ya está cancelada";                    
                 } else {
                     $response['success'] = false;
                     $response['error'] = "No se pudo cancelar la compra";
