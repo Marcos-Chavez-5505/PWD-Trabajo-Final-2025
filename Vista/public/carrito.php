@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/modelo/conector/bdCarritoCompras.php";
@@ -21,23 +22,32 @@ $itemsCarrito = $controlCarrito->obtenerItemsSinEstado($idUsuario);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carrito de compras</title>
-  
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
     const BASE_URL = "/PWD-TP-FINAL/";
   </script>
 
-  <script src="<?= BASE_URL ?>Vista/js/carrito.js"></script>
+  <script src="<?= BASE_URL ?>Vista/js/carrito.js?v=<?= time() ?>"></script>
 </head>
 
 <body>
 <main class="container py-5 min-vh-100 d-flex flex-column">
   <h2 class="text-center mb-4">🛒 Mi Carrito</h2>
+
+  <?php if (isset($_SESSION['flash_msg'])): ?>
+    <div class="alert alert-<?= $_SESSION['flash_msg']['tipo']; ?> alert-dismissible fade show text-center shadow-sm mx-auto" style="max-width:600px;">
+      <?= $_SESSION['flash_msg']['texto']; ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php unset($_SESSION['flash_msg']); ?>
+  <?php endif; ?>
 
   <?php if (empty($itemsCarrito)): ?>
     <div class="alert alert-info text-center">Tu carrito está vacío.</div>
@@ -81,8 +91,8 @@ $itemsCarrito = $controlCarrito->obtenerItemsSinEstado($idUsuario);
             <td colspan="4" class="text-end">Total:</td>
             <td id="total-carrito">$<?= number_format($total, 2, ',', '.'); ?></td>
             <td>
-              <button id="finalizar-compra" 
-                      class="btn btn-success btn-sm" 
+              <button id="finalizar-compra"
+                      class="btn btn-success btn-sm"
                       data-usuario-id="<?php echo $idUsuario; ?>">
                 <i class="bi bi-bag-check"></i> Finalizar Compra
               </button>
@@ -93,6 +103,7 @@ $itemsCarrito = $controlCarrito->obtenerItemsSinEstado($idUsuario);
     </div>
   <?php endif; ?>
 </main>
+
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/footer.php"; ?>
 </body>
 </html>

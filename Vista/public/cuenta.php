@@ -121,15 +121,6 @@ if ($idUsuario) {
             </div>
           </div>
 
-          <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white fw-semibold">
-              <i class="bi bi-bag-check me-2"></i> Mis compras
-            </div>
-            <div class="card-body">
-              <p class="text-muted text-center mb-0">La visualización de compras estará disponible próximamente.</p>
-            </div>
-          </div>
-
           <div class="text-center mt-4">
             <a href="/PWD-TP-FINAL/Vista/private/logout.php" class="btn btn-outline-danger w-50">
               <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
