@@ -72,11 +72,16 @@ class Rol {
         if ($this->objBaseDatos->Iniciar() && $this->objBaseDatos->Ejecutar($sql) > 0) {
             while ($fila = $this->objBaseDatos->Registro()) {
                 $obj = new Rol($this->objBaseDatos);
-                $obj->buscar($fila['idrol']);
+                
+                // Cargar los datos directamente desde la fila de la BD
+                $obj->setIdRol($fila['idrol']);
+                $obj->setDescripcionRol($fila['rodescripcion']);
+                
                 $arreglo[] = $obj;
             }
         }
         return $arreglo;
     }
+
 }
 ?>
