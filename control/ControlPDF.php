@@ -20,8 +20,6 @@ public function generarPdf($idCompra, $estado){
         $pdf = new FPDF();
         $pdf->AddPage();
 
-        $pdf->AddPage();
-
         // === TÍTULO PRINCIPAL ===
         $pdf->SetFont('Arial', 'B', 28);
         $pdf->SetTextColor(255, 128, 0); // Naranja
