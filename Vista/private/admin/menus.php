@@ -1,18 +1,6 @@
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
-
-$objControl = new AbmMenu();
-$List_Menu = $objControl->buscar(null);
-
-$combo = '<select class="easyui-combobox" id="idpadre" name="idpadre" label="Submenú de?:" labelPosition="top" style="width:90%;">
-<option></option>';
-
-foreach ($List_Menu as $objMenu) {
-    $combo .= '<option value="' . $objMenu->getIdmenu() . '">' . $objMenu->getMenombre() . ': ' . $objMenu->getMedescripcion() . '</option>';
-}
-
-$combo .= '</select>';
 ?>
 
 <!DOCTYPE html>
@@ -21,15 +9,13 @@ $combo .= '</select>';
 <meta charset="UTF-8">
 <title>ABM - Menú</title>
 
-<!-- CSS de EasyUI -->
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/color.css">
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/demo/demo.css">
 
-<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">  
-<!-- Tu CSS global -->
+
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>

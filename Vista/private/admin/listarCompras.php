@@ -14,8 +14,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <!-- Tu header aquí -->
-    
     <div style="margin:20px;">
         <h2>Gestión de Compras</h2>
         
@@ -43,10 +41,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.
         </table>
     </div>
 
-    <!-- Tu footer aquí -->
-
     <script>
-    // Función para formatear los botones de acción
+    
     function formatAcciones(value, row) {
         var html = '';
         
@@ -56,7 +52,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.
                    'onclick="avanzarEstado(' + row.idcompra + ')">Siguiente</a>&nbsp;';
         }
         
-        // Botón "Cancelar" (si no está ya cancelada)
+        
         if (row.estado_actual !== 'Cancelada' && row.estado_actual !== 'cancelada') {
             html += '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
                    'iconCls="icon-cancel" plain="true" ' +
@@ -68,7 +64,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.
         return html;
     }
 
-    // Función para avanzar al siguiente estado
     function avanzarEstado(idcompra) {
         $.messager.confirm('Confirmar', '¿Avanzar al siguiente estado?', function(r) {
             if (r) {
@@ -87,7 +82,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.
         });
     }
 
-    // Función para cancelar compra
     function cancelarCompra(idcompra) {
         $.messager.confirm('Confirmar', '¿Cancelar esta compra?', function(r) {
             if (r) {

@@ -1,29 +1,4 @@
 <?php
-//! Respuesta de obtenerComprasConEstadoYUsuario()
-//* $compras = [
-//*     0 => [
-//*         'idcompra' => 2,
-//*         'fecha' => '2025-11-17 16:17:57',
-//*         'id_usuario' => 2,
-//*         'nombre_usuario' => 'cliente1',
-//*         'email_usuario' => 'cliente1@correo.com',
-//*         'estado_actual' => 'Sin estado',
-//*         'fecha_estado' => null,
-//*         'tiene_estado' => false
-//*     ],
-//*     1 => [
-//*         'idcompra' => 1,
-//*         'fecha' => '2025-11-17 16:11:45',
-//*         'id_usuario' => 1,
-//*         'nombre_usuario' => 'admin',
-//*         'email_usuario' => 'admin@tienda.com',
-//*         'estado_actual' => 'iniciada',
-//*         'fecha_estado' => null,
-//*         'tiene_estado' => true
-//*     ]
-//* ];
-//* despues lo filtro con array_filter para mantener solo los que tienen estado distinto de null
-
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 
 $controlCompra = new ControlCompra();

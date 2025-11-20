@@ -165,6 +165,5 @@ class CompraEstado{
         $filas = $this->objPdo->getFilas();
         return !empty($filas);
     }
-
 }
 ?>

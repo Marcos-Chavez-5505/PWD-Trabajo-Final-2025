@@ -6,7 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 $control = new ControlUsuario();
-$controlRol = new ControlRol(); // ✅ Para traer roles
+$controlRol = new ControlRol(); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['idUsuario'])) {
@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         exit();
     }
 
-    // ✅ Traer lista de roles y rol actual
     $listaRoles = $controlRol->listarRoles();
     include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
     $usuarioRol = new UsuarioRol();
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idUsuario = intval($_POST['idUsuario']);
-    $idRol = intval($_POST['idrol']); // ✅ Nuevo campo rol
+    $idRol = intval($_POST['idrol']); 
 
     $datos = [
         'idusuario' => $idUsuario,
@@ -87,7 +86,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.
                     value="<?= htmlspecialchars($usuario->getUsmail()); ?>" required>
             </div>
 
-            <!-- ✅ Combo de roles -->
             <div class="mb-3">
                 <label for="idrol" class="form-label">Rol:</label>
                 <select class="form-select" id="idrol" name="idrol" required>
