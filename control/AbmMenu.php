@@ -126,20 +126,5 @@ class AbmMenu{
         $arreglo = Menu::listar($where);  
         return $arreglo;
     }
-
-    public function listarOpciones($id){
-        $List_Menu = $this->buscar(null);
-
-        $combo = '<select class="easyui-combobox" id="idpadre" name="idpadre" label="Submenú de?:" labelPosition="top" style="width:90%;">
-        <option></option>';
-
-        foreach ($List_Menu as $objMenu) {
-            $combo .= '<option value="' . $objMenu->getIdmenu() . '">' . $objMenu->getMenombre() . ': ' . $objMenu->getMedescripcion() . '</option>';
-        }
-
-        $combo .= '</select>';
-
-        return $combo;
-    }
 }
 ?>

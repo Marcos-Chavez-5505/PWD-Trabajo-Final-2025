@@ -1,6 +1,18 @@
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
+//por alguna razon si lo muevo a un action no funciona
+$objControl = new AbmMenu();
+$List_Menu = $objControl->buscar(null);
+
+$combo = '<select class="easyui-combobox" id="idpadre" name="idpadre" label="Submenú de?:" labelPosition="top" style="width:90%;">
+<option></option>';
+
+foreach ($List_Menu as $objMenu) {
+    $combo .= '<option value="' . $objMenu->getIdmenu() . '">' . $objMenu->getMenombre() . ': ' . $objMenu->getMedescripcion() . '</option>';
+}
+
+$combo .= '</select>';
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +40,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.
 
     <table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid"
         url="/PWD-TP-FINAL/Vista/private/action/listar_menu.php"
-        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width: 100;max-height:400px;">
+        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width:100%;max-height:fit-content;">
 
         <thead>
             <tr>
