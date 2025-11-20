@@ -12,7 +12,7 @@ $rolUsuario = $usuarioActivo ? $session->getRol() : null;
 
 // Decidir link según rol
 $inicioLink = ($usuarioActivo && $rolUsuario === "Administrador") 
-              ? "/PWD-TP-FINAL/Vista/admin/panelAdmin.php" 
+              ? "/PWD-TP-FINAL/Vista/private/admin/usuarios.php" 
               : "/PWD-TP-FINAL/Vista/public/index.php";
 ?>
 
