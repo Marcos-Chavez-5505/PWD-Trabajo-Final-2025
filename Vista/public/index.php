@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/control/ControlProducto.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/control/controlProducto.php';
 
 $session = new Session();
 $usuarioActivo = $session->activa();
