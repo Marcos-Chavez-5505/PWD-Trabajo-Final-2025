@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 class Session{
 
     public function __construct() {
@@ -14,33 +15,76 @@ class Session{
         return true;
     }
 
-    public function validar() {
+    // public function validar() {
+    //     $resultado = false;
+
+    //     if (isset($_SESSION['idusuario'])) {
+
+    //         include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
+    //         $user = new Usuario();
+
+    //         if ($user->buscar($_SESSION['idusuario'])) {
+    //             if ($user->getUsdeshabilitado() === null) {
+    //                 $resultado = true;
+    //             }
+    //         }
+    //     }
+
+    //     return $resultado;
+    // }
+/**
+ * Valida que el usuario esté logueado, no esté deshabilitado
+ * y que posea el rol requerido.
+ *
+ * @param string|null $rolRequerido  Ej: 1 (administrador), 2 (cliente), etc.
+ *                                   Si es null, solo valida login.
+ */
+    public function validar($rolRequerido = null) {
+        // No hay sesión → redirigir
+        if (!isset($_SESSION['idusuario'])) {
+            header("Location: /PWD-TP-FINAL/Vista/public/cuenta.php");
+            exit();
+        }
+
+        $user = new Usuario();
+
+        // Usuario inexistente o deshabilitado
+        if (!$user->buscar($_SESSION['idusuario']) || $user->getUsdeshabilitado() !== null){
+            session_unset();
+            session_destroy();
+            header("Location: /PWD-TP-FINAL/Vista/public/cuenta.php");
+            exit();
+        }
+
+        // Si se requiere un rol, verificarlo
+        if ($rolRequerido !== null){
+            $usrol = new UsuarioRol();
+            $idrol = $usrol->rolDeUsuario($_SESSION['idusuario']);
+            if ($idrol >= 0){    
+                if ((int)$idrol !== (int)$rolRequerido){
+                    // Usuario logueado pero sin permisos
+                    header("Location: /PWD-TP-FINAL/Vista/public/cuenta.php");
+                    exit();
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Solo verificasi la sesión está activa o no
+     */
+    public function activa() {
         $resultado = false;
 
-        if (isset($_SESSION['idusuario'])) {
-
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuario.php';
+        if (isset($_SESSION['activa']) && $_SESSION['activa'] === true) {
             $user = new Usuario();
-
             if ($user->buscar($_SESSION['idusuario'])) {
                 if ($user->getUsdeshabilitado() === null) {
                     $resultado = true;
                 }
             }
         }
-
-        return $resultado;
-    }
-
-    public function activa() {
-        $resultado = false;
-
-        if (isset($_SESSION['activa']) && $_SESSION['activa'] === true) {
-            if ($this->validar()) {
-                $resultado = true;
-            }
-        }
-
         return $resultado;
     }
 

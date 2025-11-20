@@ -26,9 +26,6 @@ try {
     $ext = pathinfo($_FILES['proimagen']['name'], PATHINFO_EXTENSION);
     $nombreImagen = $_FILES['proimagen']['name'];
 
-    // forma vieja que pone un nombre con letras random
-    // $nombreImagen = 'prod_' . uniqid() . '.' . $ext;
-
     move_uploaded_file($_FILES['proimagen']['tmp_name'], $dir . '/' . $nombreImagen);
 
     modificarImagenExistente($dir . '/' . $nombreImagen);
@@ -55,7 +52,7 @@ function modificarImagenExistente($rutaImagen, $ancho = 300, $alto = 300, $calid
 
     // Cargar, modificar y sobrescribir
     $manager->read($rutaImagen)
-            ->cover($ancho, $alto)  // Recorte centrado
+            ->cover($ancho, $alto)
             ->save($rutaImagen, $calidad);
 }
 ?>

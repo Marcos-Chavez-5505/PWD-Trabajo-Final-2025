@@ -115,7 +115,7 @@ if ($idUsuario) {
                   <p class="text-muted mb-0"><?= htmlspecialchars($usuario->getUsmail()) ?></p>
                 </div>
               </div>
-              <a href="/PWD-TP-FINAL/Vista/public/action/modificarCuenta.php" class="btn btn-outline-primary w-100">
+              <a href="/PWD-TP-FINAL/Vista/public/modificarCuenta.php" class="btn btn-outline-primary w-100">
                 <i class="bi bi-pencil-square me-2"></i>Modificar mis datos
               </a>
             </div>

@@ -3,10 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $session = new Session();
-if (!$session->validar()) {
-    header("Location: login.php");
-    exit;
-}
+$session->validar(2);
 
 $idUsuario = $session->getIdusuario();
 

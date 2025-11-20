@@ -1,33 +1,66 @@
 <?php
-spl_autoload_register(function ($claseSolicitada) {
-    error_log("🎯 AUTOLOADER INICIADO - Buscando clase: '" . $claseSolicitada . "'");
+// spl_autoload_register(function ($claseSolicitada) {
+//     error_log("🎯 AUTOLOADER INICIADO - Buscando clase: '" . $claseSolicitada . "'");
     
+//     $directorios = [
+//         ROOT . 'control/',
+//         ROOT . 'modelo/', 
+//         ROOT . 'modelo/conector/',
+//         ROOT . 'util/'
+//     ];
+//     $totalArchivosRevisados = 0;
+//     $archivosCargados = 0;
+
+//     foreach ($directorios as $directorio) {
+//         if (!is_dir($directorio)) {
+//             continue;
+//         }
+        
+//         $archivos = glob($directorio . '*.php');
+//         foreach ($archivos as $archivo) {
+//             $totalArchivosRevisados++;
+//             $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
+//             if (strcasecmp($nombreArchivo, $claseSolicitada) === 0) {
+//                 require_once $archivo;
+//                 $archivosCargados++;
+//             }
+//         }
+//     }
+// });
+spl_autoload_register(function ($claseSolicitada) {
+    // Normalizar el nombre solicitado
+    $claseNormalizada = strtolower(trim($claseSolicitada));
+
+    // Directorios donde buscar
     $directorios = [
         ROOT . 'control/',
-        ROOT . 'modelo/', 
+        ROOT . 'modelo/',
         ROOT . 'modelo/conector/',
         ROOT . 'util/'
     ];
-    $totalArchivosRevisados = 0;
-    $archivosCargados = 0;
 
     foreach ($directorios as $directorio) {
+
         if (!is_dir($directorio)) {
             continue;
         }
-        
-        $archivos = glob($directorio . '*.php');
-        foreach ($archivos as $archivo) {
-            $totalArchivosRevisados++;
-            $nombreArchivo = pathinfo($archivo, PATHINFO_FILENAME);
-            if (strcasecmp($nombreArchivo, $claseSolicitada) === 0) {
+
+        // Obtener archivos PHP del directorio
+        foreach (glob($directorio . '*.php') as $archivo) {
+
+            $nombreArchivo = basename($archivo, '.php');
+
+            // Comparación case-insensitive
+            if (strtolower($nombreArchivo) === $claseNormalizada) {
                 require_once $archivo;
-                $archivosCargados++;
+                return; // Se encontró → finalizar
             }
         }
     }
-});
 
+    // Log opcional si no se encontró
+    error_log("Autoloader: No se encontró archivo para clase '$claseSolicitada'");
+});
 
 
 function verEstructura($e){
