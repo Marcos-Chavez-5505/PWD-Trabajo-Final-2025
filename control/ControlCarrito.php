@@ -9,55 +9,6 @@ class ControlCarrito {
         $this->db = new bdCarritoCompras();
     }
 
-    // public function buscarCarritoAbierto($idUsuario) {
-    //     $resultado = null;
-
-    //     $compra = new compra();
-    //     $compras = $compra->listar("idusuario = {$idUsuario} ORDER BY idcompra DESC");
-
-    //     if (!empty($compras)) {
-    //         foreach ($compras as $c) {
-    //             if ($resultado === null) {
-    //                 $idCompra = $c->getIdcompra();
-    //                 $compraEstado = new compraEstado();
-    //                 $estado = $compraEstado->buscarCompraAsociada($idCompra);
-
-    //                 if ($estado) {
-    //                     $estadoTipo = $compraEstado->getObjCompraEstadoTipo()->getCETdescripcion();
-    //                     if ($estadoTipo === 'Iniciada') {
-    //                         $resultado = $idCompra;
-    //                     }
-    //                 } else {
-    //                     $resultado = $idCompra;
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     if ($resultado === null) {
-    //         $usuario = new usuario();
-    //         $usuarioExiste = $usuario->buscar($idUsuario);
-
-    //         if ($usuarioExiste) {
-    //             $nuevaCompra = new compra();
-    //             $nuevaCompra->setObjUsuario($usuario);
-
-    //             if ($nuevaCompra->insertar()) {
-    //                 $resultado = $nuevaCompra->getIdcompra();
-
-    //                 $estadoTipo = new compraEstadoTipo();
-    //                 $estadoTipo->buscarDescripcion("Iniciada");
-
-    //                 $nuevoEstado = new compraEstado();
-    //                 $nuevoEstado->setObjCompra($nuevaCompra);
-    //                 $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
-    //                 $nuevoEstado->insertar();
-    //             }
-    //         }
-    //     }
-
-    //     return $resultado;
-    // }
     
     /**
      * Busca la primer compra (carrito) asociado al usuario con $idUsuario y retorna idcompra.
