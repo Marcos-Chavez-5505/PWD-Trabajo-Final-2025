@@ -1,7 +1,7 @@
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
-
+//por alguna razon si lo muevo a un action no funciona
 $objControl = new AbmMenu();
 $List_Menu = $objControl->buscar(null);
 
@@ -21,15 +21,13 @@ $combo .= '</select>';
 <meta charset="UTF-8">
 <title>ABM - Menú</title>
 
-<!-- CSS de EasyUI -->
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/themes/color.css">
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/js/jquery-easyui-1.6.6/demo/demo.css">
 
-<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">  
-<!-- Tu CSS global -->
+
 <link rel="stylesheet" type="text/css" href="/PWD-TP-FINAL/Vista/css/tpFinal.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -42,7 +40,7 @@ $combo .= '</select>';
 
     <table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid"
         url="/PWD-TP-FINAL/Vista/private/action/listar_menu.php"
-        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width: 100;max-height:400px;">
+        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width:100%;max-height:fit-content;">
 
         <thead>
             <tr>

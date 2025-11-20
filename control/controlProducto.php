@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/modelo/Producto.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/modelo/producto.php";
 
 class ControlProducto {
     private $modelo;

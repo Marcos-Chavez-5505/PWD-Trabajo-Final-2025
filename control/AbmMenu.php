@@ -125,10 +125,6 @@ class AbmMenu{
         }*/
         $arreglo = Menu::listar($where);  
         return $arreglo;
-            
-            
-      
-        
     }
 }
 ?>
