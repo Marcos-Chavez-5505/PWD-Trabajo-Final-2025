@@ -9,56 +9,97 @@ class ControlCarrito {
         $this->db = new bdCarritoCompras();
     }
 
+    // public function buscarCarritoAbierto($idUsuario) {
+    //     $resultado = null;
+
+    //     $compra = new compra();
+    //     $compras = $compra->listar("idusuario = {$idUsuario} ORDER BY idcompra DESC");
+
+    //     if (!empty($compras)) {
+    //         foreach ($compras as $c) {
+    //             if ($resultado === null) {
+    //                 $idCompra = $c->getIdcompra();
+    //                 $compraEstado = new compraEstado();
+    //                 $estado = $compraEstado->buscarCompraAsociada($idCompra);
+
+    //                 if ($estado) {
+    //                     $estadoTipo = $compraEstado->getObjCompraEstadoTipo()->getCETdescripcion();
+    //                     if ($estadoTipo === 'Iniciada') {
+    //                         $resultado = $idCompra;
+    //                     }
+    //                 } else {
+    //                     $resultado = $idCompra;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     if ($resultado === null) {
+    //         $usuario = new usuario();
+    //         $usuarioExiste = $usuario->buscar($idUsuario);
+
+    //         if ($usuarioExiste) {
+    //             $nuevaCompra = new compra();
+    //             $nuevaCompra->setObjUsuario($usuario);
+
+    //             if ($nuevaCompra->insertar()) {
+    //                 $resultado = $nuevaCompra->getIdcompra();
+
+    //                 $estadoTipo = new compraEstadoTipo();
+    //                 $estadoTipo->buscarDescripcion("Iniciada");
+
+    //                 $nuevoEstado = new compraEstado();
+    //                 $nuevoEstado->setObjCompra($nuevaCompra);
+    //                 $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
+    //                 $nuevoEstado->insertar();
+    //             }
+    //         }
+    //     }
+
+    //     return $resultado;
+    // }
+    
+    /**
+     * Busca la primer compra (carrito) asociado al usuario con $idUsuario y retorna idcompra.
+     * En caso de no hallar compras (sin estado) asociadas al usuario, se crea una nueva compra
+     */
     public function buscarCarritoAbierto($idUsuario) {
         $resultado = null;
 
-        $compra = new compra();
+        $compra = new Compra();
         $compras = $compra->listar("idusuario = {$idUsuario} ORDER BY idcompra DESC");
 
         if (!empty($compras)) {
             foreach ($compras as $c) {
-                if ($resultado === null) {
-                    $idCompra = $c->getIdcompra();
-                    $compraEstado = new compraEstado();
-                    $estado = $compraEstado->buscarCompraAsociada($idCompra);
+                $idCompra = $c->getIdcompra();
 
-                    if ($estado) {
-                        $estadoTipo = $compraEstado->getObjCompraEstadoTipo()->getCETdescripcion();
-                        if ($estadoTipo === 'Iniciada') {
-                            $resultado = $idCompra;
-                        }
-                    } else {
-                        $resultado = $idCompra;
-                    }
+                $compraEstado = new CompraEstado();
+                $tieneEstado = $compraEstado->buscarCompraAsociada($idCompra);
+
+                if (!$tieneEstado) {
+                    $resultado = $idCompra;
+                    break;
                 }
             }
         }
-
+        // si no encontro carrito
         if ($resultado === null) {
-            $usuario = new usuario();
-            $usuarioExiste = $usuario->buscar($idUsuario);
+            $usuario = new Usuario();
+            $usuario->buscar($idUsuario);
 
-            if ($usuarioExiste) {
-                $nuevaCompra = new compra();
-                $nuevaCompra->setObjUsuario($usuario);
+            $nuevaCompra = new Compra();
+            $nuevaCompra->setObjUsuario($usuario);
 
-                if ($nuevaCompra->insertar()) {
-                    $resultado = $nuevaCompra->getIdcompra();
-
-                    $estadoTipo = new compraEstadoTipo();
-                    $estadoTipo->buscarDescripcion("Iniciada");
-
-                    $nuevoEstado = new compraEstado();
-                    $nuevoEstado->setObjCompra($nuevaCompra);
-                    $nuevoEstado->setObjCompraEstadoTipo($estadoTipo);
-                    $nuevoEstado->insertar();
+            $insertOk = $nuevaCompra->insertar();
+            if ($insertOk) {
+                $ultimas = $compra->listar("idusuario = {$idUsuario} ORDER BY idcompra DESC LIMIT 1");
+                if (!empty($ultimas)) {
+                    $resultado = $ultimas[0]->getIdcompra();
                 }
             }
         }
-
         return $resultado;
     }
-
 
     /** Agrega un producto al carrito del usuario */
     public function agregarAlCarrito($idUsuario, $idProducto, $cantidad = 1) {
@@ -210,18 +251,38 @@ class ControlCarrito {
 
         foreach ($compras as $compra) {
             $idCompra = $compra->getIdcompra();
-
-            if ($controlCompraEstado->añadirEstadoCarrito($idCompra)) {
-                $items = $compraItem->obtenerIdsYCantidadPorCompra($idCompra);
-                foreach ($items as $prod) {
-                    $producto->reducirStock($prod['idproducto'], $prod['cicantidad']);
+            if ($compraItem->tieneItems($idCompra)){
+                if ($controlCompraEstado->añadirEstadoCarrito($idCompra)) {
+                    $items = $compraItem->obtenerIdsYCantidadPorCompra($idCompra);
+                    foreach ($items as $prod) {
+                        $producto->reducirStock($prod['idproducto'], $prod['cicantidad']);
+                    }
+                    $mail->generarMail($idCompra, 1);
+                    $exito = true;
                 }
-                $mail->generarMail($idCompra, 1);
-                $exito = true;
+            }
+            else {
+                $exito = false;
             }
         }
 
         return $exito;
+    }
+
+
+    public function eliminarDelCarrito($idUsuario, $idProducto) {
+        $resultado = false;
+
+        $idCompra = $this->buscarCarritoAbierto($idUsuario);
+
+        if ($idCompra !== null) {
+            $compraItem = new compraItem();
+            $resultado = $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
+        } else {
+            $resultado = false;
+        }
+
+        return $resultado;
     }
 }
 ?>

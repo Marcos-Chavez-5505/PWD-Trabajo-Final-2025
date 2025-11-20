@@ -206,6 +206,21 @@ class CompraItem {
         return $resultado;
     }
 
+
+    /** Retorna true si la compra tiene al menos 1 item */
+    public function tieneItems($idCompra) {
+        $rta = false;
+        $sql = "SELECT 1 FROM compraitem WHERE idcompra = {$idCompra} LIMIT 1";
+
+        if ($this->objPdo->Iniciar()) {
+            if ($this->objPdo->Ejecutar($sql)) {
+                if (!empty($this->objPdo->getFilas())){
+                    $rta = true;
+                }
+            }
+        }
+        return $rta;
+    }
 }
 
 ?>
