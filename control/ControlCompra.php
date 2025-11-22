@@ -191,5 +191,45 @@ class ControlCompra{
         return $response;
     }
 
+    /*
+    *Esta funcion lo que hace es devolver todas las compras del usuario ya armadas
+    */ 
+    public function obtenerComprasDetalladasPorUsuario($idUsuario) {
+    $comprasObj = $this->obtenerComprasPorUsuario($idUsuario);
+    $controlEstado = new ControlCompraEstado();
+    $detalladas = [];
+
+    foreach ($comprasObj as $compraObj) {
+        $idCompra = $compraObj->getIdcompra();
+
+        $estadoObj = $controlEstado->obtenerEstadoActual($idCompra);
+        $estado = $estadoObj ? $estadoObj->getObjCompraEstadoTipo()->getCETdescripcion() : "Sin estado";
+
+        $itemObj = new compraItem();
+        $itemsBD = $itemObj->listar("idcompra = {$idCompra}");
+
+        $items = [];
+        foreach ($itemsBD as $it) {
+            $producto = $it->getObjProducto();
+
+            $items[] = [
+                'producto' => [
+                    'nombre' => $producto->getPronombre(),
+                    'precio' => $producto->getProprecio()
+                ],
+                'cantidad' => $it->getCicantidad(),
+                'subtotal' => $it->getCicantidad() * $producto->getProprecio()
+            ];
+        }
+        
+        $detalladas[] = [
+            'id'     => $idCompra,
+            'fecha'  => $compraObj->getCofecha(),
+            'estado' => $estado,
+            'items'  => $items
+        ];
+    }
+    return $detalladas;
+}
 }
 ?>
