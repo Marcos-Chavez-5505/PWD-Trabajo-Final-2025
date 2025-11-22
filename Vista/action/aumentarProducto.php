@@ -1,15 +1,14 @@
 <?php
-include_once '../../../configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $idProducto = $_POST['idproducto'] ?? null;
-
 $session = new Session();
 $idUsuario = $session->getIdUsuario();
 
 $control = new ControlCompra();
-$res = $control->disminuirCantidadProducto($idUsuario, $idProducto);
+$result = $control->aumentarCantidadProducto($idUsuario, $idProducto);
 
-switch ($res['code']){
+switch ($result['code']) {
     case 1:
         echo json_encode(['ok' => false, 'msg' => 'Datos incompletos']);
         break;
@@ -20,15 +19,18 @@ switch ($res['code']){
         echo json_encode(['ok' => false, 'msg' => 'Producto no encontrado']);
         break;
     case 4:
-        echo json_encode(['ok' => false, 'msg' => 'Error al actualizar el producto']);
+        echo json_encode(['ok' => false, 'msg' => 'Stock insuficiente']);
         break;
     case 5:
-        echo json_encode(['ok' => true, 'cantidad' => $res['cantidad'], 'precio' => $res['precio']
-        ]);
+        echo json_encode(['ok' => false, 'msg' => 'Error al modificar la cantidad']);
+        break;
+    case 6:
+        echo json_encode(['ok' => true, 'cantidad' => $result['cantidad'], 'precio' => $result['precio']]);
         break;
     default:
         echo json_encode(['ok' => false, 'msg' => 'Error inesperado']);
 }
+
 
 
 
@@ -63,20 +65,17 @@ switch ($res['code']){
 // $compraItem = new CompraItem();
 // $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
 
+
 // if (!$item) { 
 //     echo json_encode(['ok'=>false,'msg'=>'Producto no encontrado']); 
 //     exit; 
 // }
 
-// $nuevaCantidad = $item['cicantidad'] - 1;
-
-// if ($nuevaCantidad > 0) {
+// $nuevaCantidad = $item['cicantidad'] + 1;
+// if ($nuevaCantidad < $item['procantstock']){
 //     $compraItem->setCicantidad($nuevaCantidad);
 //     $compraItem->modificar();
-// } else {
-//     $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
 // }
 
-// echo json_encode(['ok'=>true,'cantidad'=>max(0,$nuevaCantidad),'precio'=>$item['proprecio']]);
-
+// echo json_encode(['ok'=>true,'cantidad'=>$nuevaCantidad,'precio'=>$item['proprecio']]);
 ?>

@@ -19,7 +19,7 @@ class abmGestionarRoles{
 
         $objRol = new Rol();
 
-        if ($objRol->buscar($idrol)) {
+        if ($objRol->buscar($rol)) {
             if ($objRol->eliminar()) {
                 $rta = true;
             }

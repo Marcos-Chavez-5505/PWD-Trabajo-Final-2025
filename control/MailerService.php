@@ -66,7 +66,8 @@ class MailerService{
             $this->mail->addAttachment($rutaPDF, 'factura_' . $idCompra . '.pdf');
 
 
-            return $this->mail->send();
+            // return $this->mail->send();
+
 
         } catch (Exception $e) {
             error_log("Error al enviar correo: " . $e->getMessage());

@@ -112,12 +112,11 @@ INSERT INTO menu (menombre, medescripcion, meurl, idpadre) VALUES
 ('Inicio', 'Página principal y listado de productos', '/PWD-TP-FINAL/Vista/public/index.php', NULL), 
 ('Carrito', 'Visualiza y gestiona los productos seleccionados', '/PWD-TP-FINAL/Vista/public/carrito.php', NULL), 
 ('Mi Cuenta', 'Gestión de datos del usuario cliente', '/PWD-TP-FINAL/Vista/public/cuenta.php', NULL), 
-('Mis Compras', 'Muestra las compras del usuario', '/PWD-TP-FINAL/Vista/public/misCompras.php', NULL), 
-('Usuarios', 'Administración de usuarios del sistema', '/PWD-TP-FINAL/Vista/private/admin/usuarios.php', NULL), 
-('Menús', 'Gestión del menú dinámico', '/PWD-TP-FINAL/Vista/private/admin/menus.php', NULL),
-('Productos', 'ABM de productos del catálogo', '/PWD-TP-FINAL/Vista/private/admin/productos.php', NULL),
-('Gestionar Compras', 'Gestion de compras del usuaio', '/PWD-TP-FINAL/Vista/private/admin/listarCompras.php', NULL);
-
+('Mis Compras', 'Muestra las compras del usuario', '/PWD-TP-FINAL/Vista/private/misCompras.php', NULL), 
+('Usuarios', 'Administración de usuarios del sistema', '/PWD-TP-FINAL/Vista/admin/usuarios.php', NULL), 
+('Menús', 'Gestión del menú dinámico', '/PWD-TP-FINAL/Vista/admin/menus.php', NULL),
+('Productos', 'ABM de productos del catálogo', '/PWD-TP-FINAL/Vista/admin/productos.php', NULL),
+('Gestionar Compras', 'Gestion de compras del usuaio', '/PWD-TP-FINAL/Vista/admin/listarCompras.php', NULL);
 
 INSERT INTO menurol (idmenu, idrol) VALUES
 (3,1),(5,1),(6,1),(7,1),(8,1),

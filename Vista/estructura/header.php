@@ -1,19 +1,6 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/inicioLinkHeader.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-
-// Mostrar errores
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-$session = new Session();
-$usuarioActivo = $session->activa();
-$nombreUsuario = $usuarioActivo ? $session->getUsuario() : null;
-$rolUsuario = $usuarioActivo ? $session->getRol() : null;
-
-// Decidir link según rol
-$inicioLink = ($usuarioActivo && $rolUsuario === "Administrador") 
-              ? "/PWD-TP-FINAL/Vista/private/admin/usuarios.php" 
-              : "/PWD-TP-FINAL/Vista/public/index.php";
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +39,7 @@ $inicioLink = ($usuarioActivo && $rolUsuario === "Administrador")
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <?php if ($rolUsuario === "Administrador"): ?>
-                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/private/admin/cuenta.php">Mi Cuenta</a></li>
+                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/cuenta.php">Mi Cuenta</a></li>
                         <li><hr class="dropdown-divider"></li>
                     <?php else: ?>
                         <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Mi Cuenta</a></li>
@@ -74,7 +61,7 @@ $inicioLink = ($usuarioActivo && $rolUsuario === "Administrador")
 <script>
 $(document).ready(function() {
     $.ajax({
-        url: "/PWD-TP-FINAL/Vista/estructura/menuHeader.php",
+        url: "/PWD-TP-FINAL/Vista/action/menuHeader.php",
         method: "GET",
         success: function(response) {
             $("#menu-dinamico").html(response);

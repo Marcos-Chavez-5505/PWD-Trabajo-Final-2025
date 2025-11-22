@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($rol === "Administrador") {
-            header('Location: /PWD-TP-FINAL/Vista/private/admin/usuarios.php');
+            header('Location: /PWD-TP-FINAL/Vista/admin/usuarios.php');
         } else {
             header('Location: /PWD-TP-FINAL/Vista/public/index.php');
         }
@@ -59,6 +59,25 @@ if ($idUsuario) {
 </head>
 
 <body class="bg-light">
+
+<!-- Recibe un error (403, 401, 423) mediante GET desde authMiddleware.php en caso de acceder a una página con un rol incorrecto -->
+  <?php if (isset($_GET['err']) && $_GET['err'] === '403'): ?>
+    <div class="alert alert-danger text-center">
+        Error 403: No tienes permisos para acceder a esa página.
+    </div>
+  
+  <?php elseif (isset($_GET['err']) && $_GET['err'] === '401'): ?>
+    <div class="alert alert-warning text-center">
+        Error 401: Debes iniciar sesión para acceder a esa página.
+    </div>
+
+  <?php elseif (isset($_GET['err']) && $_GET['err'] === '423'): ?>
+    <div class="alert alert-warning text-center">
+        Error 423: Tu cuenta está deshabilitada.
+    </div>
+  <?php endif; ?>
+
+
 <main class="d-flex align-items-center justify-content-center min-vh-100">
   <?php if (!$usuario): ?>
     <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
@@ -115,7 +134,7 @@ if ($idUsuario) {
                   <p class="text-muted mb-0"><?= htmlspecialchars($usuario->getUsmail()) ?></p>
                 </div>
               </div>
-              <a href="/PWD-TP-FINAL/Vista/public/modificarCuenta.php" class="btn btn-outline-primary w-100">
+              <a href="/PWD-TP-FINAL/Vista/private/modificarCuenta.php" class="btn btn-outline-primary w-100">
                 <i class="bi bi-pencil-square me-2"></i>Modificar mis datos
               </a>
             </div>
@@ -131,7 +150,6 @@ if ($idUsuario) {
     </div>
   <?php endif; ?>
 </main>
-
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

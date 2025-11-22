@@ -1,8 +1,8 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPermitidos.php";
+
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
-$session = new Session();
-$session->validar(1);
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@ $session->validar(1);
 
       <table id="dg" title="Mis productos" class="easyui-datagrid"
              style="max-width:100%;max-height:400px"
-             url="/PWD-TP-FINAL/Vista/private/action/gestion/productos/get_productos.php"
+             url="/PWD-TP-FINAL/Vista/action/get_productos.php"
              toolbar="#toolbar" pagination="true"
              rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>

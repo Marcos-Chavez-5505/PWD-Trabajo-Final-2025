@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     boton.addEventListener('click', async () => {
       const id = boton.dataset.id;
 
-      // ✅ Dar feedback visual inmediato
+      // Dar feedback visual inmediato
       boton.disabled = true;
       boton.classList.remove('btn-compra');
       boton.classList.add('btn-warning');
       boton.innerHTML = '<i class="bi bi-hourglass-split"></i> Agregando...';
 
       try {
-        const respuesta = await fetch(BASE_URL + 'Vista/public/action/agregarProducto.php', {
+        const respuesta = await fetch(BASE_URL + 'Vista/action/agregarProducto.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: 'idproducto=' + encodeURIComponent(id)

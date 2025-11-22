@@ -1,8 +1,8 @@
-<?php 
+<?php
+require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPermitidos.php";
+
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
-$session = new Session();
-$session->validar(1);
 
 //por alguna razon si lo muevo a un action no funciona
 $objControl = new AbmMenu();
@@ -42,7 +42,7 @@ $combo .= '</select>';
     <p>Seleccione la acción que desea realizar.</p>
 
     <table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid"
-        url="/PWD-TP-FINAL/Vista/private/action/listar_menu.php"
+        url="/PWD-TP-FINAL/Vista/action/listar_menu.php"
         toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width:100%;max-height:fit-content;">
 
         <thead>
@@ -99,7 +99,7 @@ var url;
 function newMenu(){
     $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Menú');
     $('#fm').form('clear');
-    url = '/PWD-TP-FINAL/Vista/private/action/alta_menu.php';
+    url = '/PWD-TP-FINAL/Vista/action/alta_menu.php';
 }
 
 function editMenu(){
@@ -107,7 +107,7 @@ function editMenu(){
     if (row){
         $('#dlg').dialog('open').dialog('center').dialog('setTitle','Editar Menú');
         $('#fm').form('load', row);
-        url = '/PWD-TP-FINAL/Vista/private/action/edit_menu.php?action=mod&idmenu=' + row.idmenu;
+        url = '/PWD-TP-FINAL/Vista/action/edit_menu.php?action=mod&idmenu=' + row.idmenu;
     }
 }
 
@@ -137,7 +137,7 @@ function destroyMenu(){
     if (row){
         $.messager.confirm('Confirmación','¿Seguro que desea eliminar el menú?', function(r){
             if (r){
-                $.post('/PWD-TP-FINAL/Vista/private/action/eliminar_menu.php?idmenu=' + row.idmenu,
+                $.post('/PWD-TP-FINAL/Vista/action/eliminar_menu.php?idmenu=' + row.idmenu,
                 {idmenu: row.id},
                 function(result){
                     if (result.respuesta){

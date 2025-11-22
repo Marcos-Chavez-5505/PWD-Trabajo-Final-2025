@@ -1,6 +1,6 @@
 // productosAdmin.js
 var url;
-var baseUrl = '/PWD-TP-FINAL/vista/private/action/gestion/productos/';
+var baseUrl = '/PWD-TP-FINAL/vista/action/';
 
 function newProduct(){
   $('#dlg').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');

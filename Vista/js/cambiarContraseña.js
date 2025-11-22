@@ -57,7 +57,7 @@ async function cambiarContraseña() {
         formData.append('currentPassword', currentPassword);
         formData.append('newPassword', newPassword);
 
-        const respuesta = await fetch('/PWD-TP-FINAL/Vista/private/action/user/cambiarContraseña.php', {
+        const respuesta = await fetch('/PWD-TP-FINAL/Vista/action/cambiarContraseña.php', {
             method: 'POST',
             body: formData  
         });

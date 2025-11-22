@@ -1,6 +1,5 @@
 <?php
-include_once "../modelo/usuario.php";
-include_once "../modelo/session.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $session = new Session();
 

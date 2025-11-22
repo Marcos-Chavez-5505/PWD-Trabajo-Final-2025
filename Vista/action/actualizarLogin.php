@@ -10,7 +10,7 @@ $controlRol = new ControlRol();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['idUsuario'])) {
-        header("Location: /PWD-TP-FINAL/Vista/private/admin/usuarios.php");
+        header("Location: /PWD-TP-FINAL/Vista/admin/usuarios.php");
         exit();
     }
 
@@ -18,13 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $usuario = $control->buscarUsuario($idUsuario);
 
     if (!$usuario) {
-        header("Location: /PWD-TP-FINAL/Vista/private/admin/usuarios.php?error=Usuario no encontrado");
+        header("Location: /PWD-TP-FINAL/Vista/admin/usuarios.php?error=Usuario no encontrado");
         exit();
     }
 
     $listaRoles = $controlRol->listarRoles();
     
-    include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
     $usuarioRol = new UsuarioRol();
     
     // CORRECCIÓN: obtener solo el ID del rol actual
@@ -47,9 +46,9 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     if ($control->modificarUsuario($datos)) {
-        header("Location: /PWD-TP-FINAL/Vista/private/admin/usuarios.php?exito=Usuario actualizado correctamente");
+        header("Location: /PWD-TP-FINAL/Vista/admin/usuarios.php?exito=Usuario actualizado correctamente");
     } else {
-        header("Location: /PWD-TP-FINAL/Vista/private/admin/usuarios.php?error=No se pudo actualizar el usuario");
+        header("Location: /PWD-TP-FINAL/Vista/admin/usuarios.php?error=No se pudo actualizar el usuario");
     }
     exit();
 }

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function actualizarCantidad(accion, idProducto) {
     try {
-      const url = '/PWD-TP-FINAL/Vista/public/action/' + accion + '.php';
+      const url = '/PWD-TP-FINAL/Vista/action/' + accion + '.php';
 
       const respuesta = await fetch(url, {
         method: 'POST',
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const idUsuario = botonFinalizar.getAttribute('data-usuario-id');
       if (idUsuario) {
         try {
-          const response = await fetch('/PWD-TP-FINAL/Vista/public/action/realizarCompra.php', {
+          const response = await fetch('/PWD-TP-FINAL/Vista/action/realizarCompra.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ idUsuario: parseInt(idUsuario) })
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
 
           if (data.ok) {
-            // 🔁 Recargar para mostrar mensaje de sesión
+            // Recargar para mostrar mensaje de sesión
             window.location.reload();
           } else {
             mostrarAlerta('danger', 'Error', 'No se pudo completar la compra.');

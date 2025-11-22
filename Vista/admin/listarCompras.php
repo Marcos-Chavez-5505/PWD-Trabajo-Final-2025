@@ -1,8 +1,8 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPermitidos.php";
+
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-$session = new Session();
-$session->validar(1);
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ $session->validar(1);
                style="width:100%;height:500px"
                title="Lista de Compras"
                data-options="
-                   url:'../action/gestion/compras/compraAdmin.php',
+                   url:'/PWD-TP-FINAL/Vista/action/compraAdmin.php',
                    method:'GET',
                    pagination:true,
                    rownumbers:true,
@@ -70,7 +70,7 @@ $session->validar(1);
     function avanzarEstado(idcompra) {
         $.messager.confirm('Confirmar', '¿Avanzar al siguiente estado?', function(r) {
             if (r) {
-                $.post('../action/gestion/compras/cambiarEstado.php', {
+                $.post('/PWD-TP-FINAL/Vista/action/cambiarEstado.php', {
                     idcompra: idcompra,
                     accion: 'siguienteEstado'
                 }, function(response) {
@@ -88,7 +88,7 @@ $session->validar(1);
     function cancelarCompra(idcompra) {
         $.messager.confirm('Confirmar', '¿Cancelar esta compra?', function(r) {
             if (r) {
-                $.post('../action/gestion/compras/cambiarEstado.php', {
+                $.post('/PWD-TP-FINAL/Vista/action/cambiarEstado.php', {
                     idcompra: idcompra,
                     accion: 'cancelar'
                 }, function(response) {
