@@ -2,6 +2,8 @@
 require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPermitidos.php";
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/verificarAcceso.php";
+verificarAcceso();
 
 $controlUsuario = new ControlUsuario();
 $listaUsuarios = $controlUsuario->listarUsuarios();
