@@ -46,7 +46,7 @@ if ($usuarioRol === 'Cliente' && $currentScript !== 'cliente.php') {
     <?php endif; ?>
 
     <div class="text-center mt-5">
-        <a href="/PWD-TP-FINAL/control/logout.php" class="btn btn-danger">Cerrar Sesión</a>
+        <a href="/PWD-TP-FINAL/Vista/action/logout.php" class="btn btn-danger">Cerrar Sesión</a>
     </div>
 </div>
 

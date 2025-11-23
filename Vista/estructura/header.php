@@ -44,7 +44,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
                     <?php else: ?>
                         <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Mi Cuenta</a></li>
                     <?php endif; ?>
-                    <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/private/logout.php">Cerrar sesión</a></li>
+                    <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/action/logout.php">Cerrar sesión</a></li>
                 </ul>
             </div>
         <?php else: ?>

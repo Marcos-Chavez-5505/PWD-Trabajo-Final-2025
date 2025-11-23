@@ -141,7 +141,7 @@ if ($idUsuario) {
           </div>
 
           <div class="text-center mt-4">
-            <a href="/PWD-TP-FINAL/Vista/private/logout.php" class="btn btn-outline-danger w-50">
+            <a href="/PWD-TP-FINAL/Vista/action/logout.php" class="btn btn-outline-danger w-50">
               <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
             </a>
           </div>
