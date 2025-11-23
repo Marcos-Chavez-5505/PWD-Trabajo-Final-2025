@@ -6,38 +6,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
 
 $session = new Session();
 $control = new ControlUsuario();
-$mensaje = '';
+
 $usuario = null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombreUsuario = $_POST['nombreUsuario'];
-    $password = $_POST['password'];
-    $usuario = $control->autenticar($nombreUsuario, $password);
-
-    if ($usuario) {
-        $session->iniciarSesion($usuario);
-
-        $usuarioRol = new UsuarioRol();
-        $listaRoles = $usuarioRol->listar("idusuario = {$usuario->getIdusuario()}");
-        $rol = "cliente"; 
-
-        if (count($listaRoles) > 0) {
-            $rol = $listaRoles[0]->getObjRol()->getDescripcionRol(); // admin o cliente
-        }
-
-        if ($rol === "Administrador") {
-            header('Location: /PWD-TP-FINAL/Vista/admin/usuarios.php');
-        } else {
-            header('Location: /PWD-TP-FINAL/Vista/public/index.php');
-        }
-        exit();
-    } else {
-        $mensaje = 'Usuario o contraseña incorrectos';
-    }
-}
-
 $idUsuario = $session->getIdUsuario();
-$usuario = null;
 
 if ($idUsuario) {
     $lista = $control->listarUsuarios("idusuario = $idUsuario");
@@ -87,7 +58,7 @@ if ($idUsuario) {
         <p class="text-muted mb-0">Accede a tu cuenta</p>
       </div>
 
-      <form method="POST">
+      <form method="POST" action="/PWD-TP-FINAL/Vista/action/accionLogin.php">
         <div class="mb-3">
           <label for="nombreUsuario" class="form-label fw-semibold">Nombre de usuario</label>
           <div class="input-group">
@@ -108,10 +79,10 @@ if ($idUsuario) {
           </div>
         </div>
 
-        <?php if ($mensaje): ?>
+        <?php if (isset($_GET['errLogin'])): ?>
           <div class="alert alert-danger d-flex align-items-center py-2" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <div><?= $mensaje ?></div>
+            <div>Usuario o contraseña incorrectos.</div>
           </div>
         <?php endif; ?>
 
