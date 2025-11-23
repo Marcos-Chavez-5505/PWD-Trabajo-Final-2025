@@ -1,15 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
+function inicializarBotonesCarrito() {
   const botones = document.querySelectorAll('.agregar-carrito');
 
   botones.forEach(boton => {
-    boton.addEventListener('click', async () => {
-      const id = boton.dataset.id;
+    const nuevoBoton = boton.cloneNode(true);
+    boton.parentNode.replaceChild(nuevoBoton, boton);
 
-      // Dar feedback visual inmediato
-      boton.disabled = true;
-      boton.classList.remove('btn-compra');
-      boton.classList.add('btn-warning');
-      boton.innerHTML = '<i class="bi bi-hourglass-split"></i> Agregando...';
+    nuevoBoton.addEventListener('click', async () => {
+      const id = nuevoBoton.dataset.id;
+
+      nuevoBoton.disabled = true;
+      nuevoBoton.classList.remove('btn-compra');
+      nuevoBoton.classList.add('btn-warning');
+      nuevoBoton.innerHTML = '<i class="bi bi-hourglass-split"></i> Agregando...';
 
       try {
         const respuesta = await fetch(BASE_URL + 'Vista/action/agregarProducto.php', {
@@ -18,45 +20,48 @@ document.addEventListener('DOMContentLoaded', () => {
           body: 'idproducto=' + encodeURIComponent(id)
         });
 
-        const texto = await respuesta.text();
-        let data;
-        try {
-          data = JSON.parse(texto);
-        } catch {
-          alert("⚠ Error inesperado:\n\n" + texto);
-          return;
-        }
+        const data = await respuesta.text();
+        let json;
+        try { json = JSON.parse(data); } catch { alert("⚠ Error inesperado:\n\n" + data); return; }
 
-        if (data.ok) {
-          boton.classList.remove('btn-warning');
-          boton.classList.add('btn-success');
-          boton.innerHTML = '<i class="bi bi-check-circle"></i> Agregado';
+        if (json.ok) {
+          nuevoBoton.classList.remove('btn-warning');
+          nuevoBoton.classList.add('btn-success');
+          nuevoBoton.innerHTML = '<i class="bi bi-check-circle"></i> Agregado';
+          if (typeof window.actualizarContadorCarrito === 'function') {
+            window.actualizarContadorCarrito();
+          }
+
           setTimeout(() => {
-            boton.classList.remove('btn-success');
-            boton.classList.add('btn-compra');
-            boton.innerHTML = '<i class="bi bi-cart-fill"></i> Agregar al carrito';
-            boton.disabled = false;
+            nuevoBoton.disabled = false;
+            nuevoBoton.classList.remove('btn-success');
+            nuevoBoton.classList.add('btn-compra');
+            nuevoBoton.innerHTML = '<i class="bi bi-cart-fill"></i> Agregar al carrito';
           }, 1200);
+
         } else {
-          boton.classList.remove('btn-warning');
-          boton.classList.add('btn-danger');
-          boton.innerHTML = '<i class="bi bi-x-circle"></i> Error';
-          alert("⚠ " + data.msg);
+          nuevoBoton.classList.remove('btn-warning');
+          nuevoBoton.classList.add('btn-danger');
+          nuevoBoton.innerHTML = '<i class="bi bi-x-circle"></i> Error';
+          alert("⚠ " + json.msg);
           setTimeout(() => {
-            boton.classList.remove('btn-danger');
-            boton.classList.add('btn-compra');
-            boton.innerHTML = '<i class="bi bi-cart-fill"></i> Agregar al carrito';
-            boton.disabled = false;
+            nuevoBoton.classList.remove('btn-danger');
+            nuevoBoton.classList.add('btn-compra');
+            nuevoBoton.innerHTML = '<i class="bi bi-cart-fill"></i> Agregar al carrito';
+            nuevoBoton.disabled = false;
           }, 1200);
         }
 
       } catch (error) {
         alert("❌ Error de conexión:\n\n" + error);
-        boton.classList.remove('btn-warning');
-        boton.classList.add('btn-compra');
-        boton.innerHTML = '<i class="bi bi-cart-fill"></i> Agregar al carrito';
-        boton.disabled = false;
+        nuevoBoton.classList.remove('btn-warning');
+        nuevoBoton.classList.add('btn-compra');
+        nuevoBoton.innerHTML = '<i class="bi bi-cart-fill"></i> Agregar al carrito';
+        nuevoBoton.disabled = false;
       }
     });
   });
-});
+}
+
+// Escuchar evento del menú cargado
+document.addEventListener('menuListo', inicializarBotonesCarrito);

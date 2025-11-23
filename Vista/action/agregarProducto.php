@@ -17,10 +17,21 @@ $idProducto = isset($_POST['idproducto']) ? intval($_POST['idproducto']) : 0;
 
 if ($idProducto > 0) {
     $carrito = new ControlCarrito;
-    if ($carrito->agregarAlCarrito($idUsuario, $idProducto, 1)){
-        echo json_encode(['ok' => true, 'msg' => 'Producto añadido al carrito.']);
-    }else{
-        echo json_encode(['ok' => false, 'msg' => 'No hay suficiente Stock']);    
+    if ($carrito->agregarAlCarrito($idUsuario, $idProducto, 1)) {
+        // 🔹 Calcular cantidad total actualizada del carrito
+        $items = $carrito->obtenerItemsSinEstado($idUsuario);
+        $cantidadTotal = 0;
+        foreach ($items as $item) {
+            $cantidadTotal += $item->getCicantidad();
+        }
+
+        echo json_encode([
+            'ok' => true,
+            'msg' => 'Producto añadido al carrito.',
+            'cantidad' => $cantidadTotal 
+        ]);
+    } else {
+        echo json_encode(['ok' => false, 'msg' => 'No hay suficiente stock.']);
     }
 } else {
     echo json_encode(['ok' => false, 'msg' => 'Producto no válido.']);
