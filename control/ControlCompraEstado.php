@@ -164,7 +164,7 @@ class ControlCompraEstado {
         return false;
     }
 
-       function procesarEstadoCompra($idCompra, $accion) {
+    function procesarEstadoCompra($idCompra, $accion) {
     $response = ['success' => false];
     $controlCompraEstado = new ControlCompraEstado();
 
@@ -174,7 +174,7 @@ class ControlCompraEstado {
             if (!is_null($idEstado)) {
                 $proximoEstado = intval($idEstado) + 1;
                 
-                if ($proximoEstado <= 4 && $proximoEstado > 0) {
+                if ($proximoEstado <= 3 && $proximoEstado > 0) {
                     if ($controlCompraEstado->cambiarEstado($idCompra, $proximoEstado)) {
                         $response['success'] = true;
                         $response['message'] = "Estado cambiado a: " . $proximoEstado;

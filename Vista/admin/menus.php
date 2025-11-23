@@ -43,16 +43,23 @@ $combo .= '</select>';
 
     <table id="dg" title="Administrador de ítems del menú" class="easyui-datagrid"
         url="/PWD-TP-FINAL/Vista/action/listar_menu.php"
-        toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="true" singleSelect="true" style="width:100%;max-height:fit-content;">
+        toolbar="#toolbar" 
+        pagination:true,
+        rownumbers:true,
+            fitColumns:true,
+            nowrap:false,
+            autoRowHeight:true,
+            singleSelect:true,
+            style="min-width: fit-content;">
 
         <thead>
             <tr>
-                <th field="idmenu" width="50">ID</th>
-                <th field="menombre" width="80">Nombre</th>
-                <th field="medescripcion" width="120">Descripción</th>
-                <th field="meurl" width="120">URL</th>
-                <th field="idpadre" width="100">Submenú de</th>
-                <th field="medeshabilitado" width="80">Deshabilitado</th>
+                <th field="idmenu" width="fit-content">ID</th>
+                <th field="menombre" width="fit-content">Nombre</th>
+                <th field="medescripcion" width="fit-content">Descripción</th>
+                <th field="meurl" width="fit-content">URL</th>
+                <th field="idpadre" width="fit-content">Submenú de</th>
+                <th field="medeshabilitado" width="fit-content">Deshabilitado</th>
             </tr>
         </thead>
     </table>

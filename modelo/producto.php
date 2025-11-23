@@ -129,9 +129,10 @@ class Producto{
             if ($producto->buscar($idproducto)){
     
                 $stockActual = (int)$producto->getProcantstock();
-                if ($stockActual > $cantidad) {
+                if ($stockActual >= $cantidad) {
                     $producto->setProcantstock($stockActual - $cantidad);
                     $producto->modificar();
+                    $stockActual = (int)$producto->getProcantstock();
                     $rta = true;
                 }
             }

@@ -46,7 +46,9 @@ $productos = $controlProducto->listarProductos();
                         <h5 class="card-title product-title"><?= htmlspecialchars($p->getPronombre()); ?></h5>
                         <p class="card-text text-muted flex-grow-1 product-description"><?= htmlspecialchars($p->getProdetalle()); ?></p>
                         <p class="product-price"><strong>Precio:</strong> $<?= number_format($p->getProprecio(), 2); ?></p>
-                        <p class="product-stock"><strong>Stock:</strong> <?= (int)$p->getProcantstock(); ?></p>
+                        <p class="product-stock">
+                            <strong>Stock:</strong> <?= (int)$p->getProcantstock(); ?>
+                        </p>
 
                         <?php if ($usuarioActivo): ?>
                             <button class="btn btn-compra mt-auto w-100 agregar-carrito" data-id="<?= $p->getIdproducto(); ?>">
@@ -67,6 +69,30 @@ $productos = $controlProducto->listarProductos();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   const BASE_URL = "<?= BASE_URL ?>";
+  document.addEventListener("DOMContentLoaded", function(){
+    document.querySelectorAll('.product-stock').forEach((stockElement) => {
+        const stockText = stockElement.textContent || stockElement.innerText;
+        const stockMatch = stockText.match(/\d+/);
+        const stock = stockMatch ? parseInt(stockMatch[0]) : NaN;
+        
+        if (!isNaN(stock) && stock === 0) {
+            const productCard = stockElement.closest(".card, .product-card, .product-item");
+            if (productCard) {
+                productCard.classList.add('border-danger','text-white');
+                
+                const addButton = productCard.querySelector('.agregar-carrito');
+                if (addButton) {
+                    addButton.disabled = true;
+                    addButton.textContent = ' Sin stock';
+                    addButton.classList.remove('btn-primary', 'btn-success', 'btn-compra');
+                    addButton.classList.remove('btn-compra');
+                    addButton.classList.add('btn-danger');
+                }
+            }
+        }
+    });
+});
+    
 </script>
 <script src="/PWD-TP-FINAL/Vista/js/agregarProducto.js"></script>
 

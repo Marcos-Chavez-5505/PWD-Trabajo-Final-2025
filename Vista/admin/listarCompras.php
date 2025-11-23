@@ -24,12 +24,54 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
                style="width:100%;height:500px"
                title="Lista de Compras"
                data-options="
-                   url:'/PWD-TP-FINAL/Vista/action/compraAdmin.php',
-                   method:'GET',
-                   pagination:true,
-                   rownumbers:true,
-                   fitColumns:true,
-                   singleSelect:true">
+                    url:'/PWD-TP-FINAL/Vista/action/compraAdmin.php',
+                    method:'GET',
+                    pagination:true,
+                    rownumbers:true,
+                    fitColumns:true,
+                    singleSelect:true,
+                    onLoadSuccess: function(data) {
+                    var datosOrdenados = ordenarCompras(data);
+                    $(this).datagrid('loadData', { 
+                        total: data.total, 
+                        rows: datosOrdenados 
+                    });
+                },
+                rowStyler: function(index, row) {
+                    var allData = $(this).datagrid('getData');
+                    
+                    var grupos = {};
+                    allData.rows.forEach(item => {
+                        if (!grupos[item.idcompra]) {
+                            grupos[item.idcompra] = [];
+                        }
+                        grupos[item.idcompra].push(item);
+                    });
+                    
+                    var ultimosRegistros = [];
+                    Object.keys(grupos).forEach(id => {
+                        var registros = grupos[id];
+                        if (registros.length > 0) {
+                            var masReciente = registros.sort((a, b) => 
+                                new Date(b.fecha_estado || b.fecha) - new Date(a.fecha_estado || a.fecha)
+                            )[0];
+                            ultimosRegistros.push(masReciente);
+                        }
+                    });
+                    
+                    var esMasReciente = ultimosRegistros.some(ultimo => 
+                        ultimo.idcompra === row.idcompra && 
+                        ultimo.fecha_estado === row.fecha_estado &&
+                        ultimo.fecha === row.fecha
+                    );
+                    
+                    if (esMasReciente) {
+                        return {
+                            style: 'background-color: #e8f5e8; border-left: 4px solid #4caf50; font-weight: bold;',
+                            class: 'registro-mas-reciente'
+                        };
+                    }
+                }">
             <thead>
                 <tr>
                     <th data-options="field:'idcompra',width:50">ID</th>
@@ -48,22 +90,21 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
     
     function formatAcciones(value, row) {
         var html = '';
-        
-        if (row.estado_actual !== 'Cancelada' && row.estado_actual !== 'cancelada') {
-            html += '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                   'iconCls="icon-arrow-right" plain="true" ' +
-                   'onclick="avanzarEstado(' + row.idcompra + ')">Siguiente</a>&nbsp;';
-        }
-        
-        
-        if (row.estado_actual !== 'Cancelada' && row.estado_actual !== 'cancelada') {
-            html += '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
-                   'iconCls="icon-cancel" plain="true" ' +
-                   'onclick="cancelarCompra(' + row.idcompra + ')">Cancelar</a>';
+
+        if (row.estado_actual === 'Enviada') {
+            html += '<span style="color:#d63031; font-weight:bold">Ya no se puede cancelar la compra</span>';
+        } else if (row.estado_actual === 'Cancelada') {
+            html += '<span style="color:#999; font-weight:bold">La compra ya está cancelada</span>';
         } else {
-            html += '<span style="color:#999">Cancelada</span>';
+            html += '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                'iconCls="icon-arrow-right" plain="false" ' +
+                'onclick="avanzarEstado(' + row.idcompra + ')">Siguiente</a>&nbsp;';
+            
+            html += '<a href="javascript:void(0)" class="easyui-linkbutton" ' +
+                'iconCls="icon-cancel" plain="true" ' +
+                'onclick="cancelarCompra(' + row.idcompra + ')">Cancelar</a>';
         }
-        
+
         return html;
     }
 
