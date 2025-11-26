@@ -1,20 +1,6 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
-
-$session = new Session();
-$control = new ControlUsuario();
-
-$usuario = null;
-$idUsuario = $session->getIdUsuario();
-
-if ($idUsuario) {
-    $lista = $control->listarUsuarios("idusuario = $idUsuario");
-    if (count($lista) > 0) {
-        $usuario = $lista[0];
-    }
-}
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/listarUsuariosCuenta.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -100,8 +86,8 @@ if ($idUsuario) {
               <div class="d-flex align-items-center mb-3">
                 <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
                 <div class="ms-3">
-                  <h3 class="fw-bold mb-0"><?= htmlspecialchars($usuario->getUsnombre()) ?></h3>
-                  <p class="text-muted mb-0"><?= htmlspecialchars($usuario->getUsmail()) ?></p>
+                  <h3 class="fw-bold mb-0"><?= htmlspecialchars($nombreUsuario) ?></h3>
+                  <p class="text-muted mb-0"><?= htmlspecialchars($mailUsuario) ?></p>
                 </div>
               </div>
               <a href="/PWD-TP-FINAL/Vista/private/modificarCuenta.php" class="btn btn-outline-primary w-100">
