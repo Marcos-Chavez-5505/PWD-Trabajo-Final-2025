@@ -1,13 +1,8 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPermitidos.php";
-
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-
-$session = new Session();
-$session->validar();
-
-$usuarioActual = $session->getUsuario() ?? null;
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/obtenerNombreUsuario.php";
 ?>
 
 <!DOCTYPE html>
