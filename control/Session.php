@@ -113,9 +113,6 @@ class Session{
 
         if ($this->activa()) {
 
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
-
             $idUsuario = $_SESSION['idusuario'];
             $usuarioRol = new UsuarioRol();
             $listaRoles = $usuarioRol->listar("idusuario = {$idUsuario}");
@@ -123,7 +120,7 @@ class Session{
             if (count($listaRoles) > 0) {
                 $objUsuarioRol = $listaRoles[0];
                 $rol = $objUsuarioRol->getObjRol();
-                $resultado = $rol->getDescripcionRol();  // "admin" | "cliente"
+                $resultado = $rol->getDescripcionRol();  // "Administrador" | "Cliente"
             }
         }
 

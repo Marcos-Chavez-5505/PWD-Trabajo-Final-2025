@@ -1,13 +1,11 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPermitidos.php";
-
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-
 require_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/listarUsuarios.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 ?>
 
 <!DOCTYPE html>
-<?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php'; ?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +15,19 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/listarUsuar
     <link rel="stylesheet" href="/PWD-TP-FINAL/home/fonts/css/all.min.css">
 </head>
 <body>
+
+<?php if (isset($_GET['exito']) && $_GET['exito'] === 'Usuario actualizado correctamente'): ?>
+    <div class="alert alert-success text-center">
+        Usuario actualizado correctamente.
+    </div>
+
+<?php elseif (isset($_GET['error']) && $_GET['error'] === 'No se pudo actualizar el usuario'): ?>
+    <div class="alert alert-warning text-center">
+        No se pudo actualizar el usuario.
+    </div>
+
+<?php endif; ?>
+
 <main class="container py-5 my-5">
     <div class="card p-4 shadow-sm">
         <h2 class="text-center mb-4">Usuarios Registrados</h2>
@@ -47,7 +58,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/listarUsuar
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <form action="/PWD-TP-FINAL/Vista/action/actualizarLogin.php" method="get" class="d-inline">
+                                    <form action="/PWD-TP-FINAL/Vista/admin/actualizarLogin.php" method="get" class="d-inline">
                                         <input type="hidden" name="idUsuario" value="<?= $usuario->getIdusuario(); ?>">
                                         <button type="submit" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square"></i> Actualizar

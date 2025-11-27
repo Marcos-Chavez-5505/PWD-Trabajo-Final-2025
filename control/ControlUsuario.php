@@ -106,5 +106,16 @@ class ControlUsuario {
         return $retorno;
     }
 
+    public function obtenerDatosParaVista(Usuario $usuario) {
+        $datosVista = [
+            'idusuario' => $usuario->getIdusuario(),
+            'usnombre' => $usuario->getUsnombre(),
+            'uspass' => $usuario->getUspass(), 
+            'usmail' => $usuario->getUsmail(),
+            'usdeshabilitado' => $usuario->getUsdeshabilitado()
+        ];
+        return $datosVista;
+    }
+
 }
 ?>
