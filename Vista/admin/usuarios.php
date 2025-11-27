@@ -3,8 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPe
 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
-$controlUsuario = new ControlUsuario();
-$listaUsuarios = $controlUsuario->listarUsuarios();
+require_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/listarUsuarios.php";
 ?>
 
 <!DOCTYPE html>

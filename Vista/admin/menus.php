@@ -4,18 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT']."/PWD-TP-FINAL/Vista/action/accionRolesPe
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 
-//por alguna razon si lo muevo a un action no funciona
-$objControl = new AbmMenu();
-$List_Menu = $objControl->buscar(null);
+require_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/crearCombo.php";
 
-$combo = '<select class="easyui-combobox" id="idpadre" name="idpadre" label="Submenú de?:" labelPosition="top" style="width:90%;">
-<option></option>';
 
-foreach ($List_Menu as $objMenu) {
-    $combo .= '<option value="' . $objMenu->getIdmenu() . '">' . $objMenu->getMenombre() . ': ' . $objMenu->getMedescripcion() . '</option>';
-}
-
-$combo .= '</select>';
 ?>
 
 <!DOCTYPE html>
