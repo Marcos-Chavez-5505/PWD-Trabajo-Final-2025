@@ -1,6 +1,5 @@
 <?php
 $session = new Session();
-$iniciarSesion = true;
 
 if (!$session->activa()) {
     echo
@@ -10,7 +9,4 @@ if (!$session->activa()) {
     include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/footer.php";
     exit;
 }
-$idUsuario = $session->getIdUsuario();
-$controlCarrito = new ControlCarrito();
-$itemsCarrito = $controlCarrito->obtenerItemsSinEstado($idUsuario);
 ?>

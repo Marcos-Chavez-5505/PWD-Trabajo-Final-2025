@@ -136,5 +136,20 @@ class Session{
         $_SESSION = [];
         return true;
     }
+
+    public static function getFlashMessage() {
+        return $_SESSION['flash_msg'] ?? null;
+    }
+
+    public static function clearFlashMessage() {
+        unset($_SESSION['flash_msg']);
+    }
+
+    public static function setFlashMessage($tipo, $texto) {
+        $_SESSION['flash_msg'] = [
+            'tipo'  => $tipo,
+            'texto' => $texto
+        ];
+    }
 }
 ?>

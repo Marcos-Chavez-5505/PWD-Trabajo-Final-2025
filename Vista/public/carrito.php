@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/verificarSesionActivaCarrito.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/elementosCarrito.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -27,12 +28,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/verificarSe
   <main class="container py-5 min-vh-100 d-flex flex-column">
     <h2 class="text-center mb-4">🛒 Mi Carrito</h2>
     
-    <?php if (isset($_SESSION['flash_msg'])): ?>
-      <div class="alert alert-<?= $_SESSION['flash_msg']['tipo']; ?> alert-dismissible fade show text-center shadow-sm mx-auto" style="max-width:600px;">
-        <?= $_SESSION['flash_msg']['texto']; ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-      </div>
-      <?php unset($_SESSION['flash_msg']); ?>
+      <?php if (!empty($flashMessage)): ?>
+          <div class="alert alert-<?= htmlspecialchars($flashMessage['tipo']); ?> alert-dismissible fade show text-center shadow-sm mx-auto" style="max-width:600px;">
+              <?= htmlspecialchars($flashMessage['texto']); ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
       <?php endif; ?>
       <?php if (empty($itemsCarrito)): ?>
         <div class="alert alert-info text-center">Tu carrito está vacío.</div>
@@ -50,40 +50,55 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/verificarSe
                 </tr>
               </thead>
               <tbody>
-                <?php
-          $total = 0;
-          foreach ($itemsCarrito as $item):
-            $producto = $item->getObjProducto();
-            $subtotal = $producto->getProprecio() * $item->getCicantidad();
-            $total += $subtotal;
-            ?>
-          <tr data-id-producto="<?= $producto->getIdproducto(); ?>" data-precio="<?= $producto->getProprecio(); ?>">
-            <td><?= htmlspecialchars($producto->getPronombre()); ?></td>
-            <td><?= htmlspecialchars($producto->getProdetalle()); ?></td>
-            <td>$<?= number_format($producto->getProprecio(), 2, ',', '.'); ?></td>
-            <td class="cantidad"><?= $item->getCicantidad(); ?></td>
-            <td class="subtotal">$<?= number_format($subtotal, 2, ',', '.'); ?></td>
-            <td>
-              <div class="d-flex justify-content-center align-items-center gap-1">
-                <button class="btn btn-sm btn-outline-secondary reducir-cantidad" data-id-producto="<?= $producto->getIdproducto(); ?>">-</button>
-                <button class="btn btn-sm btn-outline-secondary aumentar-cantidad" data-id-producto="<?= $producto->getIdproducto(); ?>">+</button>
-              </div>
-            </td>
-          </tr>
-          <?php endforeach; ?>
-          
-          <tr class="table-secondary fw-bold">
-            <td colspan="4" class="text-end">Total:</td>
-            <td id="total-carrito">$<?= number_format($total, 2, ',', '.'); ?></td>
-            <td>
-              <button id="finalizar-compra"
-              class="btn btn-success btn-sm"
-              data-usuario-id="<?php echo $idUsuario; ?>">
-              <i class="bi bi-bag-check"></i> Finalizar Compra
-            </button>
-          </td>
-        </tr>
-      </tbody>
+                <?php foreach ($itemsCarrito as $item): ?>
+
+                    <tr data-id-producto="<?= $item['producto']['id'] ?>" 
+                        data-precio="<?= $item['producto']['precio'] ?>">
+
+                        <td><?= htmlspecialchars($item['producto']['nombre']); ?></td>
+
+                        <td><?= htmlspecialchars($item['producto']['detalle']); ?></td>
+
+                        <td>
+                            $<?= number_format($item['producto']['precio'], 2, ',', '.'); ?>
+                        </td>
+
+                        <td class="cantidad">
+                            <?= $item['item']['cantidad']; ?>
+                        </td>
+
+                        <td class="subtotal">
+                            $<?= number_format($item['subtotal'], 2, ',', '.'); ?>
+                        </td>
+
+                        <td>
+                            <div class="d-flex justify-content-center align-items-center gap-1">
+                                <button class="btn btn-sm btn-outline-secondary reducir-cantidad"
+                                        data-id-producto="<?= $item['producto']['id']; ?>">-</button>
+
+                                <button class="btn btn-sm btn-outline-secondary aumentar-cantidad"
+                                        data-id-producto="<?= $item['producto']['id']; ?>">+</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                <?php endforeach; ?>
+
+
+                <tr class="table-secondary fw-bold">
+                    <td colspan="4" class="text-end">Total:</td>
+                    <td id="total-carrito">
+                        $<?= number_format($total, 2, ',', '.'); ?>
+                    </td>
+                    <td>
+                        <button id="finalizar-compra"
+                                class="btn btn-success btn-sm"
+                                data-usuario-id="<?= $idUsuario; ?>">
+                            <i class="bi bi-bag-check"></i> Finalizar Compra
+                        </button>
+                    </td>
+                </tr>
+              </tbody>
     </table>
   </div>
   <?php endif; ?>

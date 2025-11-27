@@ -1,19 +1,8 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/control/controlProducto.php';
-
-$session = new Session();
-$usuarioActivo = $session->activa();
-$nombreUsuario = $usuarioActivo ? $session->getUsuario() : null;
-$rolUsuario = $usuarioActivo ? $session->getRol() : null;
-
-$controlProducto = new ControlProducto();
-$productos = $controlProducto->listarProductos();
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/action/obtenerNombreUsuario.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/action/listarProductos.php';
 ?>
 
 <!DOCTYPE html>
@@ -31,68 +20,52 @@ $productos = $controlProducto->listarProductos();
 
 <div class="container my-5">
     <h1 class="mb-4 text-center">Productos Disponibles</h1>
+
     <div class="row">
+
         <?php foreach ($productos as $p): ?>
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm product-card">
-                    <?php if ($p->getProimagen()): ?>
-                        <img src="../image/<?= htmlspecialchars($p->getProimagen()); ?>" 
-                             class="card-img-top" alt="Imagen del producto">
+
+                    <?php if ($p['imagen']): ?>
+                        <img src="../image/<?= htmlspecialchars($p['imagen']); ?>" class="card-img-top">
                     <?php else: ?>
-                        <img src="https://via.placeholder.com/300x200.png?text=Sin+Imagen" 
-                             class="card-img-top" alt="Sin imagen">
+                        <img src="https://via.placeholder.com/300x200.png?text=Sin+Imagen" class="card-img-top">
                     <?php endif; ?>
+
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title product-title"><?= htmlspecialchars($p->getPronombre()); ?></h5>
-                        <p class="card-text text-muted flex-grow-1 product-description"><?= htmlspecialchars($p->getProdetalle()); ?></p>
-                        <p class="product-price"><strong>Precio:</strong> $<?= number_format($p->getProprecio(), 2); ?></p>
-                        <p class="product-stock">
-                            <strong>Stock:</strong> <?= (int)$p->getProcantstock(); ?>
+                        <h5 class="card-title"><?= htmlspecialchars($p['nombre']); ?></h5>
+
+                        <p class="card-text text-muted flex-grow-1">
+                            <?= htmlspecialchars($p['detalle']); ?>
                         </p>
 
+                        <p><strong>Precio:</strong> $<?= number_format($p['precio'], 2); ?></p>
+                        <p class="product-stock"><strong>Stock:</strong> <?= $p['stock']; ?></p>
+
                         <?php if ($usuarioActivo): ?>
-                            <button class="btn btn-compra mt-auto w-100 agregar-carrito" data-id="<?= $p->getIdproducto(); ?>">
+                            <button class="btn btn-compra mt-auto w-100 agregar-carrito"
+                                data-id="<?= $p['id']; ?>">
                                 <i class="bi bi-cart-fill"></i> Agregar al carrito
                             </button>
                         <?php else: ?>
-                            <a class="btn btn-secondary mt-auto w-100 disabled">Inicia sesión para comprar</a>
+                            <button class="btn btn-secondary mt-auto w-100" disabled>Inicia sesión para comprar</button>
                         <?php endif; ?>
+
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
+
     </div>
 </div>
+
 
 <?php include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  const BASE_URL = "<?= BASE_URL ?>";
-  document.addEventListener("DOMContentLoaded", function(){
-    document.querySelectorAll('.product-stock').forEach((stockElement) => {
-        const stockText = stockElement.textContent || stockElement.innerText;
-        const stockMatch = stockText.match(/\d+/);
-        const stock = stockMatch ? parseInt(stockMatch[0]) : NaN;
-        
-        if (!isNaN(stock) && stock === 0) {
-            const productCard = stockElement.closest(".card, .product-card, .product-item");
-            if (productCard) {
-                productCard.classList.add('border-danger','text-white');
-                
-                const addButton = productCard.querySelector('.agregar-carrito');
-                if (addButton) {
-                    addButton.disabled = true;
-                    addButton.textContent = ' Sin stock';
-                    addButton.classList.remove('btn-primary', 'btn-success', 'btn-compra');
-                    addButton.classList.remove('btn-compra');
-                    addButton.classList.add('btn-danger');
-                }
-            }
-        }
-    });
-});
-    
+  const BASE_URL = "<?= BASE_URL ?>";    
 </script>
 <script src="/PWD-TP-FINAL/Vista/js/agregarProducto.js"></script>
 

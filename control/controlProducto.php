@@ -77,4 +77,24 @@ class ControlProducto {
         }
         return $resultado;
     }
+
+    public function productosParaVista(){
+        $productos = $this->listarProductos();
+        
+        $salida = [];
+
+        foreach ($productos as $p) {
+            $salida[] = [
+                'id' => $p->getIdproducto(),
+                'nombre' => $p->getPronombre(),
+                'detalle' => $p->getProdetalle(),
+                'precio' => $p->getProprecio(),
+                'stock' => $p->getProcantstock(),
+                'imagen' => $p->getProimagen(),
+            ];
+        }
+
+        return $salida;
+    }
 }
+?>

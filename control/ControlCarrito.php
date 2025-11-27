@@ -189,6 +189,53 @@ class ControlCarrito {
         return $total;
     }
 
+    /** Obtiene los items del carrito del usuario y calcula su total */
+    public function obtenerCarritoUsuario($idUsuario) {
+        $respuesta = [
+            'items' => [],
+            'total' => 0
+        ];
+
+        if ($idUsuario) {
+            $compra = new Compra();
+            $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario);
+    
+            if ($idCompra) {
+                $compraItem = new CompraItem();
+                $items = $compraItem->listar("idcompra = $idCompra");
+        
+                if ($items) {
+                    $total = 0;
+                    foreach ($items as $item) {
+                        $producto = $item->getObjProducto();
+
+                        $precio = (float)$producto->getProprecio();
+                        $cantidad = (int)$item->getCicantidad();
+                        $subtotal = $precio * $cantidad;
+
+                        $detalles[] = [
+                            'producto' => [
+                                'id'      => $producto->getIdproducto(),
+                                'nombre'  => $producto->getPronombre(),
+                                'detalle' => $producto->getProdetalle(),
+                                'precio'  => $precio
+                            ],
+                            'item' => [
+                                'cantidad' => $cantidad,
+                                'idcompraitem' => $item->getIdcompraitem()
+                            ],
+                            'subtotal' => $subtotal
+                        ];
+                        $total += $subtotal;
+                    }
+                    $respuesta['items'] = $detalles;
+                    $respuesta['total'] = $total;
+                }
+            }
+        }
+        return $respuesta;
+    }
+
     /** Procesa la compra actual del usuario */
     public function comprarCarrito($idUsuario) {
         $controlCompraEstado = new ControlCompraEstado();

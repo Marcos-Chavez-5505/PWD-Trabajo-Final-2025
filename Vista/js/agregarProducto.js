@@ -63,5 +63,30 @@ function inicializarBotonesCarrito() {
   });
 }
 
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll('.product-stock').forEach((stockElement) => {
+      const stockText = stockElement.textContent || stockElement.innerText;
+      const stockMatch = stockText.match(/\d+/);
+      const stock = stockMatch ? parseInt(stockMatch[0]) : NaN;
+      
+      if (!isNaN(stock) && stock === 0) {
+          const productCard = stockElement.closest(".card, .product-card, .product-item");
+          if (productCard) {
+              productCard.classList.add('border-danger','text-white');
+              
+              const addButton = productCard.querySelector('.agregar-carrito');
+              if (addButton) {
+                  addButton.disabled = true;
+                  addButton.textContent = ' Sin stock';
+                  addButton.classList.remove('btn-primary', 'btn-success', 'btn-compra');
+                  addButton.classList.remove('btn-compra');
+                  addButton.classList.add('btn-danger');
+              }
+          }
+      }
+  });
+});
+
+
 // Escuchar evento del menú cargado
 document.addEventListener('menuListo', inicializarBotonesCarrito);
