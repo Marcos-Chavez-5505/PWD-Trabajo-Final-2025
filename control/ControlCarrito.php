@@ -271,20 +271,40 @@ class ControlCarrito {
     }
 
 
-    public function eliminarDelCarrito($idUsuario, $idProducto) {
-        $resultado = false;
+    public function eliminarDelCarrito($idUsuario, $idProducto){
 
-        $idCompra = $this->buscarCarritoAbierto($idUsuario);
+    $response = ['ok' => false, 'msg' => 'Error desconocido'];
 
-        if ($idCompra !== null) {
-            $compraItem = new compraItem();
-            $resultado = $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
-        } else {
-            $resultado = false;
-        }
-
-        return $resultado;
+    if (!$idUsuario || !$idProducto) {
+        $response = ['ok' => false, 'msg' => 'Datos incompletos'];
     }
+    else {
+        $compra = new Compra();
+        $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario);
+
+        if(!$idCompra){
+            $response = ['ok' => false, 'msg' => 'Carrito no encontrado'];
+        }
+        else{
+            $compraItem = new CompraItem();
+            $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
+
+            if (!$item) {
+                $response = ['ok' => false, 'msg' => 'Producto no encontrado en el carrito'];
+            }
+            else {
+                $ok = $compraItem->borrarItem($idCompra, $idProducto);
+
+                if($ok){
+                    $response = ['ok' => true, 'msg' => 'Producto eliminado correctamente'];
+                }else{
+                    $response = ['ok' => false, 'msg' => 'No se pudo eliminar el producto'];
+                }
+            }
+        }
+    }
+        return $response;
+    } 
 
     public function procesarCompra($idUsuario) {
         if (!$idUsuario) {

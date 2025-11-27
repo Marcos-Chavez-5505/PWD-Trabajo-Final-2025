@@ -1,7 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/control/ControlMenu.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/vista/estructura/menuHeader.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/menuHeader.php";
 
 $ctrl = new ControlMenu();
 $menus = $ctrl->obtenerMenuParaHeader();
