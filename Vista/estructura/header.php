@@ -21,7 +21,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     
-    <a class="navbar-brand" href="<?= $inicioLink ?>">El Guapo Gamer</a>
+    <a class="navbar-brand" href="<?= $salida['inicioLink'] ?>">El Guapo Gamer</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -32,13 +32,13 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
       </ul>
 
       <div class="ms-3">
-        <?php if ($usuarioActivo): ?>
+        <?php if ($salida['usuarioActivo']): ?>
             <div class="dropdown">
                 <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle"></i> <?= htmlspecialchars($nombreUsuario); ?>
+                    <i class="bi bi-person-circle"></i> <?= htmlspecialchars($salida['nombreUsuario']); ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <?php if ($rolUsuario === "Administrador"): ?>
+                    <?php if (strtolower($salida['rolUsuario']) === "administrador"): ?>
                         <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Mi Cuenta</a></li>
                         <li><hr class="dropdown-divider"></li>
                     <?php else: ?>

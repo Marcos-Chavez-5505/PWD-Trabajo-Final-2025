@@ -159,5 +159,23 @@ class Session{
         echo json_encode(['ok' => false, 'cantidad' => 0]);
     }
 
+    /** Se usa en inicioLinkHeader.php */
+    public function linkLogoHeader(){
+        $usuarioActivo = $this->activa();
+        $nombreUsuario = $usuarioActivo ? $this->getUsuario() : null;
+        $rolUsuario = $usuarioActivo ? $this->getRol() : null;
+
+        $inicioLink = ($usuarioActivo && $rolUsuario === "Administrador") 
+            ? "/PWD-TP-FINAL/Vista/admin/usuarios.php" 
+            : "/PWD-TP-FINAL/Vista/public/index.php";
+
+        $salida = [
+            'usuarioActivo' => $usuarioActivo,
+            'nombreUsuario' => $nombreUsuario,
+            'rolUsuario' => $rolUsuario,
+            'inicioLink' => $inicioLink
+        ];
+        return $salida;
+    }
 }
 ?>

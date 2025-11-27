@@ -13,4 +13,4 @@ if ($idUsuario){
     $control = new ControlCarrito();
     $control->obtenerCantidadTotalCarritoAction($idUsuario);
 }
-
+?>
