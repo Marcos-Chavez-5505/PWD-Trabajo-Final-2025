@@ -43,13 +43,17 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/action/listarProdu
                         <p><strong>Precio:</strong> $<?= number_format($p['precio'], 2); ?></p>
                         <p class="product-stock"><strong>Stock:</strong> <?= $p['stock']; ?></p>
 
-                        <?php if ($usuarioActivo): ?>
+                        <?php if (!$usuarioActivo): ?>
+                            <button class="btn btn-secondary mt-auto w-100" disabled>Inicia sesión para comprar</button>
+                            
+                        <?php elseif (strtolower($rol) == 'administrador'): ?>
+                            <button class="btn btn-secondary mt-auto w-100" disabled>El admin no puede comprar</button>
+                                
+                        <?php else: ?>
                             <button class="btn btn-compra mt-auto w-100 agregar-carrito"
                                 data-id="<?= $p['id']; ?>">
                                 <i class="bi bi-cart-fill"></i> Agregar al carrito
                             </button>
-                        <?php else: ?>
-                            <button class="btn btn-secondary mt-auto w-100" disabled>Inicia sesión para comprar</button>
                         <?php endif; ?>
 
                     </div>

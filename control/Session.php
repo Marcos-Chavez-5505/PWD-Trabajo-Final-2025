@@ -111,7 +111,7 @@ class Session{
     public function getRol() {
         $resultado = null;
 
-        if ($this->validar()) {
+        if ($this->activa()) {
 
             include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/usuarioRol.php';
             include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/modelo/rol.php';
