@@ -21,8 +21,8 @@ if (!$usuario) {
 
 $session->iniciarSesion($usuario);
 
-$usuarioRol = new UsuarioRol();
-$listaRoles = $usuarioRol->listar("idusuario = " . $usuario->getIdusuario());
+$controlRolUsuario = new controlUsuarioRol();
+$listaRoles = $controlRolUsuario->listarUsuarios($usuario->getIdusuario());
 
 $rol = "cliente";
 if (count($listaRoles) > 0) {
