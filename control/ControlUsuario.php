@@ -117,5 +117,68 @@ class ControlUsuario {
         return $datosVista;
     }
 
+
+    public function manejarEdicion($data){
+        $respuesta = [
+            'tipo' => null,
+            'destino' => null,
+            'usuario' => null,
+            'roles' => null,
+            'rolActual' => null,
+            'datosVista' => null
+        ];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+            // Validación inicial
+            if (!isset($data['idUsuario'])) {
+                $respuesta['tipo'] = 'redirect';
+                $respuesta['destino'] = '/PWD-TP-FINAL/Vista/admin/usuarios.php?error=' . urlencode('ID inválido');
+                return $respuesta;
+            }
+
+            $idUsuario = intval($data['idUsuario']);
+            $usuario = $this->buscarUsuario($idUsuario);
+
+            if (!$usuario) {
+                $respuesta['tipo'] = 'redirect';
+                $respuesta['destino'] = '/PWD-TP-FINAL/Vista/admin/usuarios.php?error=' . urlencode('Usuario no encontrado');
+                return $respuesta;
+            }
+
+            // Si llegó hasta acá, hay que cargar la vista
+            $controlRol = new ControlRol();
+            $controlUsuarioRol = new ControlUsuarioRol();
+            $roles = $controlRol->listarRoles();
+            $rolActual = $controlUsuarioRol->listarUsuarios($idUsuario); // arreglo con roles asociados al usuario (solo asumimos que 1)
+            $rolActual = $rolActual[0]->getIdrol();
+
+            $respuesta['tipo'] = 'vista';
+            $respuesta['usuario'] = $usuario;
+            $respuesta['roles'] = $roles;
+            $respuesta['rolActual'] = $rolActual;
+            $respuesta['datosVista'] = $this->obtenerDatosParaVista($usuario);
+        
+        } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $datos = [
+                'idusuario' => intval($data['idUsuario']),
+                'usnombre' => trim($data['usnombre']),
+                'uspass' => trim($data['uspass']),
+                'usmail' => trim($data['usmail']),
+                'usdeshabilitado' => isset($data['usdeshabilitado']) ? null : date('Y-m-d H:i:s'),
+                'idrol' => intval($data['idrol'])
+            ];
+
+            $resultado = $this->modificarUsuario($datos);
+
+            $respuesta['tipo'] = 'redirect';
+            $respuesta['destino'] = $resultado
+                ? '/PWD-TP-FINAL/Vista/admin/usuarios.php?exito=' . urlencode('Usuario actualizado')
+                : '/PWD-TP-FINAL/Vista/admin/usuarios.php?error=' . urlencode('No se pudo actualizar');
+        }
+
+        return $respuesta;
+    }
 }
 ?>
