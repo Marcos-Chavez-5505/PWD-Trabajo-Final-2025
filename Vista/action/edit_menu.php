@@ -1,23 +1,23 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+
 $data = data_submitted();
 $respuesta = false;
-if (isset($data['idmenu'])){
-    $objC = new AbmMenu();
-    $respuesta = $objC->modificacion($data);
-    
-    if (!$respuesta){
+$mensaje = null;
 
-        $sms_error = " La accion  MODIFICACION No pudo concretarse";
-        
-    }else $respuesta =true;
-    
+if (isset($data['idmenu'])) {
+    $objC = new AbmMenu();
+    $resultado = $objC->modificacion($data);
+
+    $respuesta = $resultado['respuesta'];
+    $mensaje = $resultado['mensaje'];
 }
+
 $retorno['respuesta'] = $respuesta;
-if (isset($mensaje)){
-    
-    $retorno['errorMsg']=$sms_error;
-    
+
+if (!empty($mensaje)) {
+    $retorno['errorMsg'] = $mensaje;
 }
+
 echo json_encode($retorno);
 ?>

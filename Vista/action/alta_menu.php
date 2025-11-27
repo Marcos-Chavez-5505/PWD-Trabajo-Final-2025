@@ -1,20 +1,23 @@
 <?php 
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+
 $data = data_submitted();
-$respuesta = false;
-if (isset($data['menombre'])){
-        $objC = new AbmMenu();
-        $respuesta = $objC->alta($data);
-        if (!$respuesta){
-            $mensaje = " La accion  ALTA No pudo concretarse";
-            
-        }
+$retorno = [];
+$mensaje = null;
+
+if (isset($data['menombre'])) {
+    $objC = new AbmMenu();
+    $resultado = $objC->alta($data);
+
+    $respuesta = $resultado['respuesta'];
+    $mensaje = $resultado['mensaje'];
 }
-$retorno['respuesta'] = $respuesta;
-if (isset($mensaje)){
-    
-    $retorno['errorMsg']=$mensaje;
-   
+
+$retorno['respuesta'] = $respuesta ?? false;
+
+if (!empty($mensaje)) {
+    $retorno['errorMsg'] = $mensaje;
 }
- echo json_encode($retorno);
+
+echo json_encode($retorno);
 ?>

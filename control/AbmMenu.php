@@ -59,57 +59,64 @@ class AbmMenu{
         return $resp;
     }
     
-    /**
-     * 
-     * @param array $param
-     */
     public function alta($param){
-        $resp = false;
-        $param['idmenu'] =null;
+        $param['idmenu'] = null;
         $param['medeshabilitado'] = null;
-        $elObjtTabla = $this->cargarObjeto($param);
-//        verEstructura($elObjtTabla);
-        if ($elObjtTabla!=null and $elObjtTabla->insertar()){
-            $resp = true;
+
+        $obj = $this->cargarObjeto($param);
+
+        if ($obj != null && $obj->insertar()) {
+            return [
+                'respuesta' => true,
+                'mensaje'   => ''
+            ];
+        } else {
+            return [
+                'respuesta' => false,
+                'mensaje'   => 'La acción ALTA no pudo concretarse'
+            ];
         }
-      return $resp;
-     
     }
-    /**
-     * permite eliminar un objeto 
-     * @param array $param
-     * @return boolean
-     */
+
     public function baja($param){
-        $resp = false;
-      
-        if ($this->seteadosCamposClaves($param)){
-            $elObjtTabla = $this->cargarObjetoConClave($param);
-            if ($elObjtTabla!=null and $elObjtTabla->eliminar()){
-                $resp = true;
+        $respuesta = false;
+        $mensaje = 'La acción ELIMINACION no pudo concretarse';
+
+        if ($this->seteadosCamposClaves($param)) {
+
+            $obj = $this->cargarObjetoConClave($param);
+
+            if ($obj != null && $obj->eliminar()) {
+                $respuesta = true;
+                $mensaje = '';
             }
         }
-        
-        return $resp;
+
+        return [
+            'respuesta' => $respuesta,
+            'mensaje'   => $mensaje
+        ];
     }
-    
-    /**
-     * permite modificar un objeto
-     * @param array $param
-     * @return boolean
-     */
+
     public function modificacion($param){
-       
-        $resp = false;
-        if ($this->seteadosCamposClaves($param)){
-            $elObjtMenu = $this->cargarObjeto($param);
-            if($elObjtMenu!=null and $elObjtMenu->modificar()){
-                $resp = true;
+        $respuesta = false;
+        $mensaje = 'La acción MODIFICACION no pudo concretarse';
+
+        if ($this->seteadosCamposClaves($param)) {
+            $obj = $this->cargarObjeto($param);
+
+            if ($obj != null && $obj->modificar()) {
+                $respuesta = true;
+                $mensaje = '';
             }
         }
-        return $resp;
+
+        return [
+            'respuesta' => $respuesta,
+            'mensaje'   => $mensaje
+        ];
     }
-    
+
     /**
      * permite buscar un objeto
      * @param array $param
