@@ -153,5 +153,11 @@ class Session{
     public function mensajeIniciarSesion(){
         echo json_encode(['ok' => false, 'msg' => 'Debes iniciar sesión.']);
     }
+
+    /** Este mensaje se una en action cantidadCarrito.php */
+    public function mensajeIniciarSesionCantidadCero(){
+        echo json_encode(['ok' => false, 'cantidad' => 0]);
+    }
+
 }
 ?>

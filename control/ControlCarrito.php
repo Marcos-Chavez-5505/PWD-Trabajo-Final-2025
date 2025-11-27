@@ -328,5 +328,16 @@ class ControlCarrito {
         }
     }
 
+    public function obtenerCantidadTotalCarritoAction($idUsuario) {
+        $items = $this->obtenerItemsSinEstado($idUsuario);
+
+        $cantidad = 0;
+        foreach ($items as $item) {
+            $cantidad += (int)$item->getCicantidad();
+        }
+
+        echo json_encode(['ok' => true, 'cantidad' => $cantidad]);
+    }
+
 }
 ?>
