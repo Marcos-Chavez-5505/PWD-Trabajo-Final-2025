@@ -141,5 +141,24 @@ class AbmMenu{
 
         return $combo;
     }
+
+    public function obtenerDatosMenu($filtros = []) {
+        $lista = $this->buscar($filtros);
+        $salida = [];
+
+        foreach ($lista as $elem) {
+            $salida[] = [
+                'idmenu'         => $elem->getIdMenu(),
+                'menombre'       => $elem->getMenombre(),
+                'medescripcion'  => $elem->getMedescripcion(),
+                'meurl'          => $elem->getMeurl(),
+                'idpadre'        => $elem->getObjMenu() ? $elem->getObjMenu()->getMenombre() : null,
+                'medeshabilitado'=> $elem->getMedeshabilitado()
+            ];
+        }
+
+        return $salida;
+    }
+
 }
 ?>

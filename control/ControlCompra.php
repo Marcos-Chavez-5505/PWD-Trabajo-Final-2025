@@ -195,41 +195,64 @@ class ControlCompra{
     *Esta funcion lo que hace es devolver todas las compras del usuario ya armadas
     */ 
     public function obtenerComprasDetalladasPorUsuario($idUsuario) {
-    $comprasObj = $this->obtenerComprasPorUsuario($idUsuario);
-    $controlEstado = new ControlCompraEstado();
-    $detalladas = [];
+        $comprasObj = $this->obtenerComprasPorUsuario($idUsuario);
+        $controlEstado = new ControlCompraEstado();
+        $detalladas = [];
 
-    foreach ($comprasObj as $compraObj) {
-        $idCompra = $compraObj->getIdcompra();
+        foreach ($comprasObj as $compraObj) {
+            $idCompra = $compraObj->getIdcompra();
 
-        $estadoObj = $controlEstado->obtenerEstadoActual($idCompra);
-        $estado = $estadoObj ? $estadoObj->getObjCompraEstadoTipo()->getCETdescripcion() : "Sin estado";
+            $estadoObj = $controlEstado->obtenerEstadoActual($idCompra);
+            $estado = $estadoObj ? $estadoObj->getObjCompraEstadoTipo()->getCETdescripcion() : "Sin estado";
 
-        $itemObj = new compraItem();
-        $itemsBD = $itemObj->listar("idcompra = {$idCompra}");
+            $itemObj = new compraItem();
+            $itemsBD = $itemObj->listar("idcompra = {$idCompra}");
 
-        $items = [];
-        foreach ($itemsBD as $it) {
-            $producto = $it->getObjProducto();
+            $items = [];
+            foreach ($itemsBD as $it) {
+                $producto = $it->getObjProducto();
 
-            $items[] = [
-                'producto' => [
-                    'nombre' => $producto->getPronombre(),
-                    'precio' => $producto->getProprecio()
-                ],
-                'cantidad' => $it->getCicantidad(),
-                'subtotal' => $it->getCicantidad() * $producto->getProprecio()
+                $items[] = [
+                    'producto' => [
+                        'nombre' => $producto->getPronombre(),
+                        'precio' => $producto->getProprecio()
+                    ],
+                    'cantidad' => $it->getCicantidad(),
+                    'subtotal' => $it->getCicantidad() * $producto->getProprecio()
+                ];
+            }
+            
+            $detalladas[] = [
+                'id'     => $idCompra,
+                'fecha'  => $compraObj->getCofecha(),
+                'estado' => $estado,
+                'items'  => $items
             ];
         }
-        
-        $detalladas[] = [
-            'id'     => $idCompra,
-            'fecha'  => $compraObj->getCofecha(),
-            'estado' => $estado,
-            'items'  => $items
-        ];
+        return $detalladas;
     }
-    return $detalladas;
-}
+
+
+    public function procesarDisminuirProducto($idUsuario, $idProducto) {
+        if (!$idUsuario || !$idProducto) {
+            return ['ok' => false, 'msg' => 'Datos incompletos'];
+        }
+
+        $res = $this->disminuirCantidadProducto($idUsuario, $idProducto);
+
+        switch ($res['code']) {
+            case 1: return ['ok' => false, 'msg' => 'Datos incompletos'];
+            case 2: return ['ok' => false, 'msg' => 'Carrito no encontrado'];
+            case 3: return ['ok' => false, 'msg' => 'Producto no encontrado'];
+            case 4: return ['ok' => false, 'msg' => 'Error al actualizar el producto'];
+            case 5: return [
+                'ok' => true,
+                'cantidad' => $res['cantidad'],
+                'precio' => $res['precio']
+            ];
+            default: return ['ok' => false, 'msg' => 'Error inesperado'];
+        }
+    }
+
 }
 ?>

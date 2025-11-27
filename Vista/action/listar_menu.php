@@ -1,24 +1,14 @@
-<?php 
+<?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-$data = data_submitted();
-$objControl = new AbmMenu();
-$list = $objControl->buscar($data);
-$arreglo_salida =  array();
-foreach ($list as $elem ){
-    
-    $nuevoElem['idmenu'] = $elem->getIdMenu();
-    $nuevoElem["menombre"]=$elem->getMenombre();
-    $nuevoElem["medescripcion"]=$elem->getMedescripcion();
-    $nuevoElem["meurl"]=$elem->getMeurl();
-    $nuevoElem["idpadre"]=$elem->getObjMenu();
-    if($elem->getObjMenu()!=null){
-        $nuevoElem["idpadre"]=$elem->getObjMenu()->getMeNombre();
-    }
-    $nuevoElem["medeshabilitado"]=$elem->getMedeshabilitado();
-   
-    array_push($arreglo_salida,$nuevoElem);
-}
-//verEstructura($arreglo_salida);
-echo json_encode($arreglo_salida,null,2);
+header('Content-Type: application/json; charset=utf-8');
 
+try {
+    $data = data_submitted();
+    $ctrl = new AbmMenu();
+    $resultado = $ctrl->obtenerDatosMenu($data);
+
+    echo json_encode($resultado, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
+}
 ?>

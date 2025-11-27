@@ -285,5 +285,23 @@ class ControlCarrito {
 
         return $resultado;
     }
+
+    public function procesarCompra($idUsuario) {
+        if (!$idUsuario) {
+            throw new Exception("ID de usuario no recibido.");
+        }
+
+        $exito = $this->comprarCarrito($idUsuario);
+
+        return [
+            'flash' => [
+                'tipo' => $exito ? 'success' : 'danger',
+                'texto' => $exito
+                    ? '✅ La compra se realizó correctamente.'
+                    : '❌ No hay compras pendientes o hubo un error al procesarlas.'
+            ]
+        ];
+    }
+
 }
 ?>

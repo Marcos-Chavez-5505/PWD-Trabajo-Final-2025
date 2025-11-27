@@ -1,82 +1,18 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
+header('Content-Type: application/json');
 
-$idProducto = $_POST['idproducto'] ?? null;
+try {
+    $idProducto = $_POST['idproducto'] ?? null;
 
-$session = new Session();
-$idUsuario = $session->getIdUsuario();
+    $session = new Session();
+    $idUsuario = $session->getIdUsuario();
 
-$control = new ControlCompra();
-$res = $control->disminuirCantidadProducto($idUsuario, $idProducto);
+    $ctrl = new ControlCompra();
+    $respuesta = $ctrl->procesarDisminuirProducto($idUsuario, $idProducto);
 
-switch ($res['code']){
-    case 1:
-        echo json_encode(['ok' => false, 'msg' => 'Datos incompletos']);
-        break;
-    case 2:
-        echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']);
-        break;
-    case 3:
-        echo json_encode(['ok' => false, 'msg' => 'Producto no encontrado']);
-        break;
-    case 4:
-        echo json_encode(['ok' => false, 'msg' => 'Error al actualizar el producto']);
-        break;
-    case 5:
-        echo json_encode(['ok' => true, 'cantidad' => $res['cantidad'], 'precio' => $res['precio']
-        ]);
-        break;
-    default:
-        echo json_encode(['ok' => false, 'msg' => 'Error inesperado']);
+    echo json_encode($respuesta);
+} catch (Exception $e) {
+    echo json_encode(['ok' => false, 'msg' => $e->getMessage()]);
 }
-
-
-
-
-
-
-
-
-
-
-
-// include_once '../../../configuracion.php';
-// $base = new bdCarritoCompras();
-
-// $idProducto = $_POST['idproducto'] ?? null;
-// $session = new Session();
-// $idUsuario = $session->getIdUsuario();
-
-// if (!$idProducto || !$idUsuario) {
-//     echo json_encode(['ok' => false, 'msg' => 'Datos incompletos']);
-//     exit;
-// }
-
-// $compra = new Compra();
-// $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario) ?? null;
-
-// if (!$idCompra) { 
-//     echo json_encode(['ok' => false, 'msg' => 'Carrito no encontrado']); 
-//     exit; 
-// }
-
-// $compraItem = new CompraItem();
-// $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
-
-// if (!$item) { 
-//     echo json_encode(['ok'=>false,'msg'=>'Producto no encontrado']); 
-//     exit; 
-// }
-
-// $nuevaCantidad = $item['cicantidad'] - 1;
-
-// if ($nuevaCantidad > 0) {
-//     $compraItem->setCicantidad($nuevaCantidad);
-//     $compraItem->modificar();
-// } else {
-//     $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
-// }
-
-// echo json_encode(['ok'=>true,'cantidad'=>max(0,$nuevaCantidad),'precio'=>$item['proprecio']]);
-
 ?>

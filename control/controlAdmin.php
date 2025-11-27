@@ -127,5 +127,29 @@ class controlAdmin{
         $this->actualizarProducto($id, ['proimagen' => $nombreImagen]);
     }
 
+
+    public function procesarAccionProducto($data) {
+        $accion = $data['action'] ?? '';
+        $id = $data['id'] ?? null;
+        $resultado = false;
+
+        switch ($accion) {
+            case 'create':
+                $resultado = $this->añadirProducto($data);
+                break;
+            case 'update':
+                $resultado = $this->actualizarProducto($id, $data);
+                break;
+            case 'delete':
+                $resultado = $this->eliminarProducto($id);
+                break;
+            default:
+                throw new Exception("Acción no válida");
+        }
+
+        return ['success' => $resultado];
+    }
+
+
 }
 ?>
