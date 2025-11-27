@@ -1,32 +1,36 @@
-<?php 
+<?php
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
-header('Content-Type: application/json');
+header("Content-Type: application/json");
 
+$data = data_submitted();
 $session = new Session();
 
+$retorno = ['ok' => false];
+
 if (!$session->activa()) {
-    echo json_encode(['ok' => false, 'msg' => 'Debes iniciar sesión.']);
+    $retorno['msg'] = 'Debes iniciar sesión.';
+    echo json_encode($retorno);
     exit;
 }
 
-if ($_POST){
-    $usuarioSolicitado = $_POST['username'];
-    $usuarioLogueado = $session->getUsuario(); 
-    $idUsuarioLogueado = $session->getIdUsuario(); 
-    
-    if ($usuarioSolicitado !== $usuarioLogueado) {
-        echo json_encode(['ok' => false, 'msg' => 'No tienes permisos para modificar esta cuenta.']);
-        exit;
-    }
+$usuarioLogueado = $session->getUsuario(); 
 
-    $contraseñaActual = $_POST['currentPassword'];
-    $nuevaContraseña = $_POST['newPassword'];
-
-    $controlUsuario = new ControlUsuario;
-    if($controlUsuario->cambiarContraseña($usuarioSolicitado, $contraseñaActual, $nuevaContraseña)){
-        echo json_encode(['ok' => true, 'msg' => 'Los cambios se aplicaron exitosamente.']);
-    }else{
-        echo json_encode(['ok' => false, 'msg' => 'Hubo un error en el proceso.']);
-    }
+if (!isset($data['username'], $data['currentPassword'], $data['newPassword'])) {
+    $retorno['msg'] = 'Datos incompletos.';
+    echo json_encode($retorno);
+    exit;
 }
-?>
+
+if ($data['username'] !== $usuarioLogueado) {
+    $retorno['msg'] = 'No tienes permisos para modificar esta cuenta.';
+    echo json_encode($retorno);
+    exit;
+}
+
+$control = new ControlUsuario();
+$ok = $control->cambiarContraseña($data['username'], $data['currentPassword'], $data['newPassword']);
+
+$retorno['ok'] = $ok;
+$retorno['msg'] = $ok ? 'Contraseña modificada correctamente.' : 'La contraseña actual no coincide.';
+
+echo json_encode($retorno);
