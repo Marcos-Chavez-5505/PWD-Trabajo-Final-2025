@@ -124,43 +124,44 @@ class ControlCompra{
      *  6 = ok
      */
     public function aumentarCantidadProducto($idUsuario, $idProducto) {
+        $response = [
+            'ok' => false,
+            'msg' => 'Error desconocido'
+        ];
 
-        $response = ['code' => 0];
-
-        if (!$idUsuario || !$idProducto){
-            $response = ['code' => 1];
-        }
+        if (!$idUsuario || !$idProducto) {
+            $response = ['ok' => false, 'msg' => 'Datos incompletos'];
+        } 
         else {
             $compra = new Compra();
             $idCompra = $compra->listarIDComprasSinEstadoNiFecha($idUsuario);
 
             if (!$idCompra) {
-                $response = ['code' => 2];
-            }
+                $response = ['ok' => false, 'msg' => 'Carrito no encontrado'];
+            } 
             else {
                 $compraItem = new CompraItem();
                 $item = $compraItem->obtenerDatosItem($idCompra, $idProducto);
 
-                if (!$item){
-                    $response = ['code' => 3];
-                }
+                if (!$item) {
+                    $response = ['ok' => false, 'msg' => 'Producto no encontrado'];
+                } 
                 else {
                     $nuevaCantidad = $item['cicantidad'] + 1;
 
-                    if ($nuevaCantidad > $item['procantstock']){
-                        $response = ['code' => 4];
-
-                    }
+                    if ($nuevaCantidad > $item['procantstock']) {
+                        $response = ['ok' => false, 'msg' => 'Stock insuficiente'];
+                    } 
                     else {
 
                         $compraItem->setCicantidad($nuevaCantidad);
                         $ok = $compraItem->modificar();
 
-                        if (!$ok){
-                            $response = ['code' => 5];
+                        if (!$ok) {
+                            $response = ['ok' => false, 'msg' => 'Error al modificar la cantidad'];
                         } else {
                             $response = [
-                                'code' => 6,
+                                'ok' => true,
                                 'cantidad' => $nuevaCantidad,
                                 'precio' => $item['proprecio']
                             ];
