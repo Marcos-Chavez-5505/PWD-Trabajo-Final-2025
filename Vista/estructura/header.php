@@ -39,7 +39,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <?php if ($rolUsuario === "Administrador"): ?>
-                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/admin/cuenta.php">Mi Cuenta</a></li>
+                        <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Mi Cuenta</a></li>
                         <li><hr class="dropdown-divider"></li>
                     <?php else: ?>
                         <li><a class="dropdown-item" href="/PWD-TP-FINAL/Vista/public/cuenta.php">Mi Cuenta</a></li>
