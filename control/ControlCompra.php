@@ -71,6 +71,43 @@ class ControlCompra{
         return $arreglo;
     }
 
+    /** Es utilizado por compraAdmin.php */
+    public function obtenerComprasConEstadoAdmin() {
+        $response = [
+            'success' => false,
+            'total' => 0,
+            'rows' => [],
+            'message' => ''
+        ];
+
+        try {
+            $compras = $this->obtenerComprasConEstadoYUsuario();
+
+            // Filtrar compras con estado
+            $comprasConEstado = array_filter($compras, function($compra) {
+                return $compra['tiene_estado'];
+            });
+
+            // Reindexar
+            $comprasConEstado = array_values($comprasConEstado);
+
+            $response['success'] = true;
+            $response['rows'] = $comprasConEstado;
+            $response['total'] = count($comprasConEstado);
+
+            if ($response['total'] === 0) {
+                $response['message'] = 'No hay compras con estados asignados';
+            }
+
+        } catch (Exception $e) {
+            $response['success'] = false;
+            $response['message'] = 'Error al obtener compras: ' . $e->getMessage();
+        }
+
+        return $response;
+    }
+
+
     public function obtenerComprasPorUsuario($idUsuario){
         $compra = new compra();
         return $compra->listar("idusuario = " . strval($idUsuario));

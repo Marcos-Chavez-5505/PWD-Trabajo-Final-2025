@@ -223,5 +223,9 @@ class ControlCompraEstado {
     return $response;
 }
 
+public function procesar($idCompra, $accion) {
+    return $this->procesarEstadoCompra($idCompra, $accion);
+}
+
 }
 ?>

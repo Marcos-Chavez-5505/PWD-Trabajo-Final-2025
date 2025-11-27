@@ -2,16 +2,13 @@
 
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 
-$response = ['success' => false];
+$valor = new ValorEncapsulado();
 
-if (isset($_POST['idcompra']) && isset($_POST['accion'])) {
-    $idCompra = $_POST['idcompra'];
-    $accion = $_POST['accion'];
-    $controlCompraEstado = new ControlCompraEstado();
-    $response = $controlCompraEstado->procesarEstadoCompra($idCompra, $accion);
-} else {
-    $response['error'] = 'Datos incompletos';
-}
+$idCompra = $valor->obtenerValor('idcompra');
+$accion = $valor->obtenerValor('accion');
+
+$control = new ControlCompraEstado();
+$response = $control->procesar($idCompra, $accion);
 
 header('Content-Type: application/json');
 echo json_encode($response);
