@@ -25,7 +25,7 @@
   // Carga del menú dinámico y actualización del contador cuando termine
   $(document).ready(function() {
     $.ajax({
-      url: "/PWD-TP-FINAL/Vista/action/menuHeader.php",
+      url: "/PWD-TP-FINAL/Vista/action/armarMenuHeader.php",
       method: "GET",
       success: function(response) {
         $("#menu-dinamico").html(response);

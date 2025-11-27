@@ -77,6 +77,7 @@ function uploadImage(){
 
 function saveImage() {
     var formData = new FormData($('#fm-img')[0]);
+console.log("Enviando imagen a:", baseUrl + 'upload_imagen.php');
 
     $.ajax({
         url: baseUrl + 'upload_imagen.php',

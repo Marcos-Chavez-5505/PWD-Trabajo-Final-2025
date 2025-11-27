@@ -1,58 +1,22 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/util/vendor/autoload.php';
+include_once ROOT . 'control/ControlAdmin.php';
+require ROOT . 'util/vendor/autoload.php';
+
 header('Content-Type: application/json');
-
-use Intervention\Image\ImageManager;
-
-$id = $_POST['idproducto_img'] ?? null;
-
-if (!$id) {
-    echo json_encode(['success' => false, 'errorMsg' => 'ID de producto no recibido']);
-    exit;
-}
-
-if (!isset($_FILES['proimagen']) || $_FILES['proimagen']['error'] !== UPLOAD_ERR_OK) {
-    echo json_encode(['success' => false, 'errorMsg' => 'No se subió ninguna imagen']);
-    exit;
-}
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 try {
-    $dir = $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/image';
-    if (!file_exists($dir)) {
-        mkdir($dir, 0777, true);
-    }
+    $id = $_POST['idproducto_img'] ?? null;
+    if (!$id) throw new Exception("ID de producto no recibido.");
+    if (!isset($_FILES['proimagen']) || $_FILES['proimagen']['error'] !== UPLOAD_ERR_OK)
+        throw new Exception("No se subió ninguna imagen válida.");
 
-    $ext = pathinfo($_FILES['proimagen']['name'], PATHINFO_EXTENSION);
-    $nombreImagen = $_FILES['proimagen']['name'];
+    $admin = new ControlAdmin();
+    $admin->actualizarImagenProducto($id, $_FILES);
 
-    move_uploaded_file($_FILES['proimagen']['tmp_name'], $dir . '/' . $nombreImagen);
-
-    modificarImagenExistente($dir . '/' . $nombreImagen);
-
-    // Actualizar BD
-    $controlAdmin = new controlAdmin();
-    $controlAdmin->actualizarProducto($id, [
-        'proimagen' => $nombreImagen
-    ]);
-
-    echo json_encode(['success' => true]);
-
+    echo json_encode(['success' => true, 'mensaje' => 'Imagen actualizada correctamente.']);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'errorMsg' => $e->getMessage()]);
 }
-
-
-function modificarImagenExistente($rutaImagen, $ancho = 300, $alto = 300, $calidad = 80) {
-    if (!file_exists($rutaImagen) || !is_readable($rutaImagen)) {
-        throw new Exception("La imagen no existe o no se puede leer: $rutaImagen");
-    }
-
-    $manager = ImageManager::gd();
-
-    // Cargar, modificar y sobrescribir
-    $manager->read($rutaImagen)
-            ->cover($ancho, $alto)
-            ->save($rutaImagen, $calidad);
-}
-?>

@@ -102,5 +102,30 @@ class controlAdmin{
         }
         return $resultado;
     }
+
+
+    public function actualizarImagenProducto($id, $archivo) {
+        if (!$id || !isset($archivo['proimagen'])) {
+            throw new Exception("Datos incompletos para actualizar la imagen.");
+        }
+
+        $dir = ROOT . 'vista/image/';
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        $nombreImagen = $archivo['proimagen']['name'];
+        $rutaDestino = $dir . $nombreImagen;
+
+        if (!move_uploaded_file($archivo['proimagen']['tmp_name'], $rutaDestino)) {
+            throw new Exception("Error al mover la imagen al destino.");
+        }
+
+        require_once ROOT . 'util/ImagenHelper.php';
+        ImagenHelper::modificarImagen($rutaDestino);
+
+        $this->actualizarProducto($id, ['proimagen' => $nombreImagen]);
+    }
+
 }
 ?>
