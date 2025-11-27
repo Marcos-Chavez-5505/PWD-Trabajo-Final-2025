@@ -303,5 +303,30 @@ class ControlCarrito {
         ];
     }
 
+    public function agregarProductoCarritoAction($idUsuario){
+        $valorEncapsulado = new ValorEncapsulado();
+        $idProducto = $valorEncapsulado->obtenerValor('idproducto');
+
+        if ($idProducto > 0) {
+            if ($this->agregarAlCarrito($idUsuario, $idProducto, 1)) {
+                $items = $this->obtenerItemsSinEstado($idUsuario);
+                $cantidadTotal = 0;
+                foreach ($items as $item) {
+                    $cantidadTotal += $item->getCicantidad();
+                }
+
+                echo json_encode([
+                    'ok' => true,
+                    'msg' => 'Producto añadido al carrito.',
+                    'cantidad' => $cantidadTotal 
+                ]);
+            } else {
+                echo json_encode(['ok' => false, 'msg' => 'No hay suficiente stock.']);
+            }
+        } else {
+            echo json_encode(['ok' => false, 'msg' => 'Producto no válido.']);
+        }
+    }
+
 }
 ?>

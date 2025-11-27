@@ -148,5 +148,10 @@ class Session{
             'texto' => $texto
         ];
     }
+
+    /** Este mensaje se una en action agregarProducto.php */
+    public function mensajeIniciarSesion(){
+        echo json_encode(['ok' => false, 'msg' => 'Debes iniciar sesión.']);
+    }
 }
 ?>
