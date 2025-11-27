@@ -339,5 +339,23 @@ class ControlCarrito {
         echo json_encode(['ok' => true, 'cantidad' => $cantidad]);
     }
 
+    /** Se usa en get_productos */
+    public function listarProductosAction() {
+        $controlAdmin = new controlAdmin();
+        $productos = $controlAdmin->obtenerProductos();
+
+        if ($productos !== false) {
+            echo json_encode([
+                'total' => count($productos),
+                'rows' => $productos
+            ]);
+        } else {
+            echo json_encode([
+                'total' => 0,
+                'rows' => []
+            ]);
+        }
+    }
+
 }
 ?>
