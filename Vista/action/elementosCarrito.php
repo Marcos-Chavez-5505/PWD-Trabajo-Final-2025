@@ -11,5 +11,4 @@ $itemsCarrito = $data['items'];
 $total = $data['total'];
 
 $flashMessage = session::getFlashMessage();
-session::clearFlashMessage();
 ?>

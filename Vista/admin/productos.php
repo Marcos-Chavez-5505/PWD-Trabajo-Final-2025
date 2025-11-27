@@ -71,7 +71,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/Vista/estructura/header.
           </div>
 
           <div style="margin-bottom:10px">
-            <input name="procantstock" class="easyui-numberbox" required="true" label="Stock:" style="width:100%">
+            <input name="procantstock" class="easyui-numberbox" required="true" label="Stock:" style="width:100%" min="0">
           </div>
 
           <div style="margin-bottom:10px">

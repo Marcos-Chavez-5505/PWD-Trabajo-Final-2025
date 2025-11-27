@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/estructura/header.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/verificarSesionActivaCarrito.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/elementosCarrito.php";
@@ -20,7 +21,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/elementosCa
   <script>
     const BASE_URL = "/PWD-TP-FINAL/";
   </script>
-
+  
   <script src="<?= BASE_URL ?>Vista/js/carrito.js?v=<?= time() ?>"></script>
 </head>
 
@@ -33,7 +34,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/Vista/action/elementosCa
               <?= htmlspecialchars($flashMessage['texto']); ?>
               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
           </div>
+      <?php session::clearFlashMessage(); ?>
       <?php endif; ?>
+      
       <?php if (empty($itemsCarrito)): ?>
         <div class="alert alert-info text-center">Tu carrito está vacío.</div>
         <?php else: ?>

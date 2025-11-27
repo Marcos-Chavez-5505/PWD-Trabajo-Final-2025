@@ -193,22 +193,29 @@ class ControlCompraEstado {
             break;
             
         case 'cancelar':
-            if ($controlCompraEstado->cancelarCompra($idCompra)) {
-                $response['success'] = true;
-                $response['message'] = "Compra cancelada exitosamente";
 
-                $mail = new MailerService();
-                $mail->generarMail($idCompra, 4);
-            } else {
-                $estadoActual = $controlCompraEstado->obtenerIdCompraEstadoTipo($idCompra);
-                if ($estadoActual == 4) {
-                    $response['error'] = "La compra ya está cancelada";                    
+            $idEstado = $controlCompraEstado->obtenerIdCompraEstadoTipo($idCompra);
+            $estadoActual = intval($idEstado);
+            if (!is_null($estadoActual) && $estadoActual !== 3) {
+                if ($controlCompraEstado->cancelarCompra($idCompra)) {
+                    $response['success'] = true;
+                    $response['message'] = "Compra cancelada exitosamente";
+
+                    $mail = new MailerService();
+                    $mail->generarMail($idCompra, 4);
                 } else {
-                    $response['error'] = "No se pudo cancelar la compra";
+                    $estadoActual = $controlCompraEstado->obtenerIdCompraEstadoTipo($idCompra);
+                    if ($estadoActual == 4) {
+                        $response['error'] = "La compra ya está cancelada";                    
+                    } else {
+                        $response['error'] = "No se pudo cancelar la compra";
+                    }
                 }
+            }else{
+                $response['error'] = "La compra ya se envió, no se puede cancelar";
             }
-            break;
             
+            break;
         default:
             $response['error'] = "Acción no válida";
     }
