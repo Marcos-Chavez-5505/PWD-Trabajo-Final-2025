@@ -42,10 +42,10 @@ class Compra{
         $rta = false;
         if ($this->objPdo->Iniciar()) {
             $idusuario = $this->getObjUsuario()->getIdusuario() ?? NULL;
-            $sql = "UPDATE usuario SET 
+            $sql = "UPDATE compra SET 
                         idcompra = '{$this->getIdcompra()}',
                         cofecha = '{$this->getCofecha()}',
-                        idusuario = '{$idusuario}',
+                        idusuario = '{$idusuario}'
                     WHERE idcompra = {$this->getIdcompra()}";
             $rta = $this->objPdo->Ejecutar($sql);
         }

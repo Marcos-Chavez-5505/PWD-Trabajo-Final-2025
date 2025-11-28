@@ -247,6 +247,8 @@ class ControlCarrito {
         $producto = new Producto();
         $mail = new MailerService();
         $exito = false;
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date('Y-m-d H:i:s');
 
         $compras = $controlCompra->obtenerComprasPorUsuario($idUsuario);
 
@@ -258,8 +260,10 @@ class ControlCarrito {
                     foreach ($items as $prod) {
                         $producto->reducirStock($prod['idproducto'], $prod['cicantidad']);
                     }
+
                     $mail->generarMail($idCompra, 1);
                     $exito = true;
+                    $controlCompra->modificarFechaCompra($idCompra, $fecha);
                 }
             }
             else {

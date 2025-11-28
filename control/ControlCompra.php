@@ -305,5 +305,11 @@ class ControlCompra{
         return $resultado;
     }
 
+    public function modificarFechaCompra($idCompra, $fecha){
+        $objCompra = $this->buscarCompra($idCompra);
+        $objCompra->setCofecha($fecha);
+        $objCompra->modificar();
+    }
+
 }
 ?>
