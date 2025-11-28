@@ -2,21 +2,14 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/PWD-TP-FINAL/configuracion.php';
 
 $data = data_submitted();
-$respuesta = false;
-$mensaje = null;
+$retorno = ['respuesta' => false];
 
-if (isset($data['idmenu'])) {
-    $objC = new AbmMenu();
-    $resultado = $objC->modificacion($data);
-
-    $respuesta = $resultado['respuesta'];
-    $mensaje = $resultado['mensaje'];
-}
-
-$retorno['respuesta'] = $respuesta;
-
-if (!empty($mensaje)) {
-    $retorno['errorMsg'] = $mensaje;
+if (!empty($data['idmenu'])) {
+    $resultado = (new AbmMenu())->modificacion($data);
+    $retorno = [
+        'respuesta' => $resultado['respuesta'],
+        'errorMsg' => $resultado['mensaje'] ?? null
+    ];
 }
 
 echo json_encode($retorno);

@@ -1,5 +1,4 @@
 <?php
-// Este archivo se usa en carrito.php
 $session = new Session();
 $idUsuario = $session->getIdUsuario();
 
