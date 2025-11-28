@@ -113,16 +113,7 @@ class ControlCompra{
         return $compra->listar("idusuario = " . strval($idUsuario));
     }
 
-    /**
-     * Aumenta la cantidad de un producto en el carrito.
-     * Códigos:
-     *  1 = falta de datos
-     *  2 = carrito no encontrado
-     *  3 = producto no encontrado
-     *  4 = sin stock disponible
-     *  5 = error al modificar
-     *  6 = ok
-     */
+    
     public function aumentarCantidadProducto($idUsuario, $idProducto) {
         $response = [
             'ok' => false,
