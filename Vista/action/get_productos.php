@@ -9,5 +9,5 @@ if (!$session->activa()) {
 }
 
 $control = new ControlCarrito();
-$control->listarProductosAction();
+echo json_encode($control->listarProductosAction());
 ?>

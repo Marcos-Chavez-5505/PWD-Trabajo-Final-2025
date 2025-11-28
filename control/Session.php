@@ -151,12 +151,14 @@ class Session{
 
     /** Este mensaje se una en action agregarProducto.php */
     public function mensajeIniciarSesion(){
-        echo json_encode(['ok' => false, 'msg' => 'Debes iniciar sesión.']);
+        $respuesta = ['ok' => false, 'msg' => 'Debes iniciar sesión.'];
+        return $respuesta;
     }
 
     /** Este mensaje se una en action cantidadCarrito.php */
     public function mensajeIniciarSesionCantidadCero(){
-        echo json_encode(['ok' => false, 'cantidad' => 0]);
+        $respuesta = ['ok' => false, 'cantidad' => 0];
+        return $respuesta;
     }
 
     /** Se usa en inicioLinkHeader.php */

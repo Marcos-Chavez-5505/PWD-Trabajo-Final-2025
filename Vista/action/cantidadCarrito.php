@@ -5,12 +5,12 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/PWD-TP-FINAL/configuracion.php";
 $session = new Session();
 
 if (!$session->activa()) {
-    $session->mensajeIniciarSesionCantidadCero();
+    echo json_encode($session->mensajeIniciarSesionCantidadCero());
     exit;
 }
 $idUsuario = $session->getIdUsuario();
 if ($idUsuario){
     $control = new ControlCarrito();
-    $control->obtenerCantidadTotalCarritoAction($idUsuario);
+    echo json_encode($control->obtenerCantidadTotalCarritoAction($idUsuario));
 }
 ?>

@@ -323,31 +323,49 @@ class ControlCarrito {
         ];
     }
 
-    public function agregarProductoCarritoAction($idUsuario){
+    /** Se usa en agregarProducto.php */
+    public function agregarProductoCarritoAction($idUsuario) {
         $valorEncapsulado = new ValorEncapsulado();
         $idProducto = $valorEncapsulado->obtenerValor('idproducto');
 
+        $respuesta = [
+            'ok' => false,
+            'msg' => 'Error desconocido.'
+        ];
+
         if ($idProducto > 0) {
             if ($this->agregarAlCarrito($idUsuario, $idProducto, 1)) {
+
                 $items = $this->obtenerItemsSinEstado($idUsuario);
                 $cantidadTotal = 0;
+
                 foreach ($items as $item) {
                     $cantidadTotal += $item->getCicantidad();
                 }
 
-                echo json_encode([
+                $respuesta = [
                     'ok' => true,
                     'msg' => 'Producto añadido al carrito.',
-                    'cantidad' => $cantidadTotal 
-                ]);
+                    'cantidad' => $cantidadTotal
+                ];
+
             } else {
-                echo json_encode(['ok' => false, 'msg' => 'No hay suficiente stock.']);
+                $respuesta = [
+                    'ok' => false,
+                    'msg' => 'No hay suficiente stock.'
+                ];
             }
         } else {
-            echo json_encode(['ok' => false, 'msg' => 'Producto no válido.']);
+            $respuesta = [
+                'ok' => false,
+                'msg' => 'Producto no válido.'
+            ];
         }
+
+        return $respuesta;
     }
 
+    /** Se usa en cantidadCarrito.php */
     public function obtenerCantidadTotalCarritoAction($idUsuario) {
         $items = $this->obtenerItemsSinEstado($idUsuario);
 
@@ -356,7 +374,10 @@ class ControlCarrito {
             $cantidad += (int)$item->getCicantidad();
         }
 
-        echo json_encode(['ok' => true, 'cantidad' => $cantidad]);
+        return [
+            'ok' => true,
+            'cantidad' => $cantidad
+        ];
     }
 
     /** Se usa en get_productos */
@@ -364,17 +385,17 @@ class ControlCarrito {
         $controlAdmin = new controlAdmin();
         $productos = $controlAdmin->obtenerProductos();
 
+        $respuesta = [
+            'total' => 0,
+            'rows' => []
+        ];
+
         if ($productos !== false) {
-            echo json_encode([
-                'total' => count($productos),
-                'rows' => $productos
-            ]);
-        } else {
-            echo json_encode([
-                'total' => 0,
-                'rows' => []
-            ]);
+            $respuesta['total'] = count($productos);
+            $respuesta['rows'] = $productos;
         }
+
+        return $respuesta;
     }
 
 }
