@@ -149,6 +149,13 @@ class Session{
         ];
     }
 
+    /** Se usa en realizarCompra.php */
+    public function manejarFlash($flash = null) {
+        if (isset($flash['tipo']) && isset($flash['texto'])) {
+            $this->setFlashMessage($flash['tipo'], $flash['texto']);
+        }
+    }
+
     /** Este mensaje se una en action agregarProducto.php */
     public function mensajeIniciarSesion(){
         $respuesta = ['ok' => false, 'msg' => 'Debes iniciar sesión.'];

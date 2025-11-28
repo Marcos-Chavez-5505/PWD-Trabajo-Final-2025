@@ -306,19 +306,42 @@ class ControlCarrito {
         return $response;
     } 
 
+    // public function procesarCompra($idUsuario) {
+    //     if (!$idUsuario) {
+    //         throw new Exception("ID de usuario no recibido.");
+    //     }
+
+    //     $exito = $this->comprarCarrito($idUsuario);
+
+    //     return [
+    //         'flash' => [
+    //             'tipo' => $exito ? 'success' : 'danger',
+    //             'texto' => $exito
+    //                 ? '✅ La compra se realizó correctamente.'
+    //                 : '❌ No hay compras pendientes o hubo un error al procesarlas.'
+    //         ]
+    //     ];
+    // }
     public function procesarCompra($idUsuario) {
         if (!$idUsuario) {
-            throw new Exception("ID de usuario no recibido.");
+            return [
+                'ok' => false,
+                'flash' => [
+                    'tipo' => 'danger',
+                    'texto' => 'ID de usuario inválido.'
+                ]
+            ];
         }
 
         $exito = $this->comprarCarrito($idUsuario);
 
         return [
+            'ok' => $exito,
             'flash' => [
                 'tipo' => $exito ? 'success' : 'danger',
                 'texto' => $exito
-                    ? '✅ La compra se realizó correctamente.'
-                    : '❌ No hay compras pendientes o hubo un error al procesarlas.'
+                    ? 'La compra se realizó correctamente.'
+                    : 'No hay compras pendientes o ocurrió un error.'
             ]
         ];
     }

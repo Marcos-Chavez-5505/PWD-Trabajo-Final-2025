@@ -273,23 +273,36 @@ class ControlCompra{
 
     public function procesarDisminuirProducto($idUsuario, $idProducto) {
         if (!$idUsuario || !$idProducto) {
-            return ['ok' => false, 'msg' => 'Datos incompletos'];
+            $resultado = ['ok' => false, 'msg' => 'Datos incompletos'];
+        } else {
+            $res = $this->disminuirCantidadProducto($idUsuario, $idProducto);
+
+            switch ($res['code']) {
+                case 1:
+                    $resultado = ['ok' => false, 'msg' => 'Datos incompletos'];
+                    break;
+                case 2:
+                    $resultado = ['ok' => false, 'msg' => 'Carrito no encontrado'];
+                    break;
+                case 3:
+                    $resultado = ['ok' => false, 'msg' => 'Producto no encontrado'];
+                    break;
+                case 4:
+                    $resultado = ['ok' => false, 'msg' => 'Error al actualizar el producto'];
+                    break;
+                case 5:
+                    $resultado = [
+                        'ok' => true,
+                        'cantidad' => $res['cantidad'],
+                        'precio' => $res['precio']
+                    ];
+                    break;
+                default:
+                    $resultado = ['ok' => false, 'msg' => 'Error inesperado'];
+            }
         }
 
-        $res = $this->disminuirCantidadProducto($idUsuario, $idProducto);
-
-        switch ($res['code']) {
-            case 1: return ['ok' => false, 'msg' => 'Datos incompletos'];
-            case 2: return ['ok' => false, 'msg' => 'Carrito no encontrado'];
-            case 3: return ['ok' => false, 'msg' => 'Producto no encontrado'];
-            case 4: return ['ok' => false, 'msg' => 'Error al actualizar el producto'];
-            case 5: return [
-                'ok' => true,
-                'cantidad' => $res['cantidad'],
-                'precio' => $res['precio']
-            ];
-            default: return ['ok' => false, 'msg' => 'Error inesperado'];
-        }
+        return $resultado;
     }
 
 }
