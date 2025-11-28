@@ -293,7 +293,7 @@ class ControlCarrito {
                 $response = ['ok' => false, 'msg' => 'Producto no encontrado en el carrito'];
             }
             else {
-                $ok = $compraItem->borrarItem($idCompra, $idProducto);
+                $ok = $compraItem->eliminarPorCompraYProducto($idCompra, $idProducto);
 
                 if($ok){
                     $response = ['ok' => true, 'msg' => 'Producto eliminado correctamente'];
