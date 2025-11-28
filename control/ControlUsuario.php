@@ -245,5 +245,21 @@ class ControlUsuario {
         return strtolower($roles[0]->getObjRol()->getDescripcionRol() ?? 'cliente');
     }
 
+    public function eliminarUsuarioDesdeAction($idUsuario) {
+        $respuesta = ['redirect' => '/PWD-TP-FINAL/Vista/admin/usuarios.php?error=ID de usuario no especificado'];
+        
+        if ($idUsuario) {
+            $ok = $this->eliminarUsuario((int)$idUsuario);
+    
+            $param = $ok
+                ? 'exito=Usuario eliminado correctamente'
+                : 'error=No se pudo eliminar el usuario';
+
+            $respuesta = ['redirect' => "/PWD-TP-FINAL/Vista/admin/usuarios.php?$param"];
+        }
+
+        return $respuesta;
+    }
+
 }
 ?>
