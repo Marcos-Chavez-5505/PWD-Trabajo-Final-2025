@@ -76,6 +76,7 @@ function verSession(){
 }
 // verSession();
 
+//Esta funcion devuelve los datos en un array no importa si fue por $_POST o $_GET
 function data_submitted() {
     
     $_AAux= array();
