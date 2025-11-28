@@ -180,5 +180,39 @@ class ControlUsuario {
 
         return $respuesta;
     }
+
+    public function loginDesdeAction($data) {
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return ['redirect' => '/PWD-TP-FINAL/Vista/public/cuenta.php?err=401'];
+        }
+
+        $nombre = $data['nombreUsuario'] ?? '';
+        $pass   = $data['password'] ?? '';
+
+        $usuario = $this->autenticar($nombre, $pass);
+        if (!$usuario) {
+            return ['redirect' => '/PWD-TP-FINAL/Vista/public/cuenta.php?errLogin=1'];
+        }
+
+        $session = new Session();
+        $session->iniciarSesion($usuario);
+
+        $rol = $this->obtenerRolUsuario($usuario);
+
+        return [
+            'redirect' => ($rol === 'administrador')
+                ? '/PWD-TP-FINAL/Vista/admin/usuarios.php'
+                : '/PWD-TP-FINAL/Vista/public/index.php'
+        ];
+    }
+
+    private function obtenerRolUsuario($usuario) {
+        $ctrlRol = new ControlUsuarioRol();
+        $roles = $ctrlRol->listarUsuarios($usuario->getIdusuario());
+
+        return strtolower($roles[0]->getObjRol()->getDescripcionRol() ?? 'cliente');
+    }
+
 }
 ?>
