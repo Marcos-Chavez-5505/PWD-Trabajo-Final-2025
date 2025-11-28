@@ -213,29 +213,31 @@ class ControlUsuario {
     }
 
     public function loginDesdeAction($data) {
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return ['redirect' => '/PWD-TP-FINAL/Vista/public/cuenta.php?err=401'];
+        $redirect = '/PWD-TP-FINAL/Vista/public/cuenta.php?err=401';
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $redirect = '/PWD-TP-FINAL/Vista/public/cuenta.php?errLogin=1';
+            
+            $nombre = $data['nombreUsuario'] ?? '';
+            $pass = $data['password'] ?? '';
+            $usuario = $this->autenticar($nombre, $pass);
+            
+            if ($usuario) {
+                $redirect = '/PWD-TP-FINAL/Vista/public/cuenta.php?errLogin=deshabilitado';
+                
+                if ($usuario->getUsdeshabilitado() === null) {
+                    $session = new Session();
+                    $session->iniciarSesion($usuario);
+                    $rol = $this->obtenerRolUsuario($usuario);
+                    
+                    $redirect = ($rol === 'administrador')
+                        ? '/PWD-TP-FINAL/Vista/admin/usuarios.php'
+                        : '/PWD-TP-FINAL/Vista/public/index.php';
+                }
+            }
         }
-
-        $nombre = $data['nombreUsuario'] ?? '';
-        $pass   = $data['password'] ?? '';
-
-        $usuario = $this->autenticar($nombre, $pass);
-        if (!$usuario) {
-            return ['redirect' => '/PWD-TP-FINAL/Vista/public/cuenta.php?errLogin=1'];
-        }
-
-        $session = new Session();
-        $session->iniciarSesion($usuario);
-
-        $rol = $this->obtenerRolUsuario($usuario);
-
-        return [
-            'redirect' => ($rol === 'administrador')
-                ? '/PWD-TP-FINAL/Vista/admin/usuarios.php'
-                : '/PWD-TP-FINAL/Vista/public/index.php'
-        ];
+        
+        return ['redirect' => $redirect];
     }
 
     private function obtenerRolUsuario($usuario) {
