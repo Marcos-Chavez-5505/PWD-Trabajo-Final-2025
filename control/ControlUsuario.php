@@ -106,6 +106,37 @@ class ControlUsuario {
         return $retorno;
     }
 
+    /** Se usa en cambiarContraseña.php */
+    public function cambiarPassDesdeAction($session, $data) {
+
+        if (!$session->activa()) {
+            return ['ok' => false, 'msg' => 'Debes iniciar sesión.'];
+        }
+
+        $usuario = $session->getUsuario();
+
+        if (!isset($data['username'], $data['currentPassword'], $data['newPassword'])) {
+            return ['ok' => false, 'msg' => 'Datos incompletos.'];
+        }
+
+        if ($data['username'] !== $usuario) {
+            return ['ok' => false, 'msg' => 'No tienes permisos para modificar esta cuenta.'];
+        }
+
+        $ok = $this->cambiarContraseña(
+            $data['username'],
+            $data['currentPassword'],
+            $data['newPassword']
+        );
+
+        return [
+            'ok' => $ok,
+            'msg' => $ok
+                ? 'Contraseña modificada correctamente.'
+                : 'La contraseña actual no coincide.'
+        ];
+    }
+
     public function obtenerDatosParaVista(Usuario $usuario) {
         $datosVista = [
             'idusuario' => $usuario->getIdusuario(),
