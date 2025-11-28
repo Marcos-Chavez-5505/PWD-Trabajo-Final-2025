@@ -104,20 +104,25 @@ class controlAdmin{
     }
 
 
-    public function actualizarImagenProducto($id, $archivo) {
-        if (!$id || !isset($archivo['proimagen'])) {
-            throw new Exception("Datos incompletos para actualizar la imagen.");
+    public function actualizarImagenProducto($id, $archivos) {
+        
+        if (!$id) {
+            throw new Exception("ID de producto no recibido.");
+        }
+        
+        if (!isset($archivos['proimagen']) || $archivos['proimagen']['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception("No se subió ninguna imagen válida.");
         }
 
-        $dir = ROOT . 'vista/image/';
+        $dir = ROOT . 'Vista/image/';
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
 
-        $nombreImagen = $archivo['proimagen']['name'];
+        $nombreImagen = $archivos['proimagen']['name'];
         $rutaDestino = $dir . $nombreImagen;
-
-        if (!move_uploaded_file($archivo['proimagen']['tmp_name'], $rutaDestino)) {
+        
+        if (!move_uploaded_file($archivos['proimagen']['tmp_name'], $rutaDestino)) {
             throw new Exception("Error al mover la imagen al destino.");
         }
 
@@ -125,6 +130,8 @@ class controlAdmin{
         ImagenHelper::modificarImagen($rutaDestino);
 
         $this->actualizarProducto($id, ['proimagen' => $nombreImagen]);
+        
+        return ['success' => true, 'mensaje' => 'Imagen actualizada correctamente.'];
     }
 
 
